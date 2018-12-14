@@ -3,4 +3,61 @@
   <groupId>org.getaviz</groupId>
   <artifactId>jqa-cpp-plugin</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  
+  <properties>
+  	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+
+	<dependencies>
+	    <dependency>
+	        <groupId>com.buschmais.jqassistant.core</groupId>
+	        <artifactId>scanner</artifactId>
+	        <version>1.4.0</version>
+	        <scope>provided</scope>
+	    </dependency>
+	    <dependency>
+	        <groupId>com.buschmais.jqassistant.plugin</groupId>
+	        <artifactId>common</artifactId>
+	        <version>1.4</version>
+	        <scope>provided</scope>
+	    </dependency>
+	    <dependency>
+	        <groupId>com.buschmais.jqassistant.core</groupId>
+	        <artifactId>plugin</artifactId>
+	        <version>1.4.0</version>
+	        <scope>test</scope>
+	    </dependency>
+	    <dependency>
+	        <groupId>com.buschmais.jqassistant.neo4jserver</groupId>
+	        <artifactId>neo4jv3</artifactId>
+	        <version>1.4.0</version>
+	        <scope>test</scope>
+	    </dependency>
+	    <dependency>
+	        <groupId>com.buschmais.jqassistant.plugin</groupId>
+	        <artifactId>common</artifactId>
+	        <type>test-jar</type>
+	        <version>1.4</version>
+	        <scope>test</scope>
+	    </dependency>
+	    <dependency>
+	        <groupId>junit</groupId>
+	        <artifactId>junit</artifactId>
+	        <version>4.12</version>
+	        <scope>test</scope>
+	    </dependency>
+	    <dependency>
+	        <groupId>org.slf4j</groupId>
+	        <artifactId>slf4j-simple</artifactId>
+	        <version>1.7.13</version>
+	        <scope>test</scope>
+	    </dependency>
+		<dependency>
+		    <groupId>com.buschmais.jqassistant.plugin</groupId>
+		    <artifactId>jqassistant.plugin.xml</artifactId>
+		    <version>1.1.4</version>
+		</dependency> 
+	</dependencies>
 </project>
