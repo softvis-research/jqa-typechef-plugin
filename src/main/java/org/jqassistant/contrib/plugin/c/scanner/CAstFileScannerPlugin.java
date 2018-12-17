@@ -51,7 +51,7 @@ public class CAstFileScannerPlugin extends AbstractXmlFileScannerPlugin<CAstFile
                 int eventType = streamReader.getEventType();
                 switch (eventType) {
                 	case XMLStreamConstants.START_ELEMENT:
-                	if(streamReader.getLocalName().equals("translationUnit")) {
+                	if(streamReader.getLocalName().equals("de.fosd.typechef.parser.c.TranslationUnit")) {
                 		TranslationUnitDescriptor translationUnit = store.create(TranslationUnitDescriptor.class);
                 		cAstFileDescriptor.setTranslationUnit(translationUnit);
                 	}
