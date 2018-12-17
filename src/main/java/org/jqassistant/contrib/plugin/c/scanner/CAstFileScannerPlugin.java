@@ -18,11 +18,11 @@ import com.buschmais.jqassistant.core.scanner.api.Scope;
 import com.buschmais.jqassistant.core.scanner.api.ScannerPlugin.Requires;
 import com.buschmais.jqassistant.core.store.api.Store;
 import com.buschmais.jqassistant.plugin.common.api.model.FileDescriptor;
+import com.buschmais.jqassistant.plugin.common.api.scanner.AbstractScannerPlugin;
 import com.buschmais.jqassistant.plugin.common.api.scanner.filesystem.FileResource;
-import com.buschmais.jqassistant.plugin.xml.api.scanner.AbstractXmlFileScannerPlugin;
 
 @Requires(FileDescriptor.class)
-public class CAstFileScannerPlugin extends AbstractXmlFileScannerPlugin<CAstFileDescriptor>{
+public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, CAstFileDescriptor>{
 
 	private static final Logger logger = LoggerFactory.getLogger(CAstFileScannerPlugin.class);
 	private XMLInputFactory inputFactory;
@@ -39,11 +39,14 @@ public class CAstFileScannerPlugin extends AbstractXmlFileScannerPlugin<CAstFile
 	}
 
 	@Override
-	public CAstFileDescriptor scan(FileResource item, CAstFileDescriptor cAstFileDescriptor, String path, Scope scope,
+	public CAstFileDescriptor scan(FileResource item, String path, Scope scope,
 			Scanner scanner) throws IOException {
 		ScannerContext context = scanner.getContext();
         Store store = context.getStore();
         Source source = new StreamSource(item.createStream());
+        final FileDescriptor fileDescriptor = context.getCurrentDescriptor();
+        // Add the C label.
+        final CAstFileDescriptor cAstFileDescriptor = store.addDescriptorType(fileDescriptor, CAstFileDescriptor.class);
         try {
             XMLStreamReader streamReader = inputFactory.createXMLStreamReader(source);
 
