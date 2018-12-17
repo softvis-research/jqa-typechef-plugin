@@ -23,9 +23,7 @@ public class CAstFileScannerPluginTest extends AbstractPluginIT{
         File testFile = new File(getClassesDirectory(CAstFileScannerPluginTest.class), "/main_function.ast");
         Scanner scanner = getScanner();
         CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
-        scanner.getContext().push(CAstFileDescriptor.class, fileDescriptor);
         Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);
-        scanner.getContext().pop(CAstFileDescriptor.class);
         
         // Scan the xml file and assert that the returned descriptor is a CAstFileDescriptor
         assertThat(returnedDescriptor, CoreMatchers.<Descriptor>instanceOf(CAstFileDescriptor.class));
