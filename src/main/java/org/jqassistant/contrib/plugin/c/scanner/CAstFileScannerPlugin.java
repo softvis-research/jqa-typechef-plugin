@@ -39,12 +39,11 @@ public class CAstFileScannerPlugin extends AbstractXmlFileScannerPlugin<CAstFile
 	}
 
 	@Override
-	public CAstFileDescriptor scan(FileResource item, CAstFileDescriptor descriptor, String path, Scope scope,
+	public CAstFileDescriptor scan(FileResource item, CAstFileDescriptor cAstFileDescriptor, String path, Scope scope,
 			Scanner scanner) throws IOException {
 		ScannerContext context = scanner.getContext();
         Store store = context.getStore();
         Source source = new StreamSource(item.createStream());
-        CAstFileDescriptor fileDescriptor = context.peek(CAstFileDescriptor.class);
         try {
             XMLStreamReader streamReader = inputFactory.createXMLStreamReader(source);
 
@@ -54,7 +53,7 @@ public class CAstFileScannerPlugin extends AbstractXmlFileScannerPlugin<CAstFile
                 	case XMLStreamConstants.START_ELEMENT:
                 	if(streamReader.getLocalName().equals("translationUnit")) {
                 		TranslationUnitDescriptor translationUnit = store.create(TranslationUnitDescriptor.class);
-                		fileDescriptor.setTranslationUnit(translationUnit);
+                		cAstFileDescriptor.setTranslationUnit(translationUnit);
                 	}
                 	break;
                 	
@@ -64,7 +63,6 @@ public class CAstFileScannerPlugin extends AbstractXmlFileScannerPlugin<CAstFile
         } catch (Exception e){
         	logger.error(e.getMessage());
         }
-		return fileDescriptor;
+		return cAstFileDescriptor;
 	}
-
 }
