@@ -1,4 +1,4 @@
-package org.jqassistant.contrib.plugin.c.scanner;
+package org.jqassistant.contrib.plugin.c.impl.scanner;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
@@ -6,7 +6,7 @@ import static org.junit.Assert.assertThat;
 import java.io.File;
 
 import org.hamcrest.CoreMatchers;
-import org.jqassistant.contrib.plugin.c.model.CAstFileDescriptor;
+import org.jqassistant.contrib.plugin.c.api.model.CAstFileDescriptor;
 import org.junit.Test;
 
 import com.buschmais.jqassistant.core.scanner.api.DefaultScope;

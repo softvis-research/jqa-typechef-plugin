@@ -2,12 +2,12 @@
         xmlns:jqa-plugin="http://www.buschmais.com/jqassistant/core/plugin/schema/v1.1" name="C AST">
     <description>Provides a scanner for C source code as XML file.</description>
     <model>
-        <class>org.jqassistant.contrib.plugin.c.model.CAstFileDescriptor</class>
-        <class>org.jqassistant.contrib.plugin.c.model.CDescriptor</class>
-        <class>org.jqassistant.contrib.plugin.c.model.TranslationUnitDescriptor</class>
+        <class>org.jqassistant.contrib.plugin.c.api.model.CAstFileDescriptor</class>
+        <class>org.jqassistant.contrib.plugin.c.api.model.CDescriptor</class>
+        <class>org.jqassistant.contrib.plugin.c.api.model.TranslationUnitDescriptor</class>
     </model>
     <scanner>
-        <class>org.jqassistant.contrib.plugin.c.scanner.CAstFileScannerPlugin</class>
+        <class>org.jqassistant.contrib.plugin.c.impl.scanner.CAstFileScannerPlugin</class>
     </scanner>
 </jqa-plugin:jqassistant-plugin>
 

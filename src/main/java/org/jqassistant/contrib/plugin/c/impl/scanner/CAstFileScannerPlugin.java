@@ -1,4 +1,4 @@
-package org.jqassistant.contrib.plugin.c.scanner;
+package org.jqassistant.contrib.plugin.c.impl.scanner;
 
 import java.io.IOException;
 import javax.xml.stream.XMLInputFactory;
@@ -7,8 +7,8 @@ import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
-import org.jqassistant.contrib.plugin.c.model.CAstFileDescriptor;
-import org.jqassistant.contrib.plugin.c.model.TranslationUnitDescriptor;
+import org.jqassistant.contrib.plugin.c.api.model.CAstFileDescriptor;
+import org.jqassistant.contrib.plugin.c.api.model.TranslationUnitDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
