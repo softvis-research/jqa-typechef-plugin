@@ -9,13 +9,16 @@ import com.buschmais.xo.neo4j.api.annotation.Relation;
 @Label("Function")
 public interface FunctionDescriptor extends CDescriptor, NamedDescriptor{
 	
+	/*@Relation.Incoming
+	TranslationUnitDescriptor getDeclaringTranslationUnit();*/
+	
 	@Relation("HAS")
 	List<ParameterDescriptor> getParameters();
 	void setParameters(List<ParameterDescriptor> parameters);
 	
 	@Relation("RETURNS")
-	TypeDescriptor getReturnType();
-	void setReturnType(TypeDescriptor returnType);
+	List<TypeDescriptor> getReturnType();
+	void setReturnType(List<TypeDescriptor> returnType);
 	
 	@Relation("DECLARES")
 	List<VariableDescriptor> getDeclaredVariables();

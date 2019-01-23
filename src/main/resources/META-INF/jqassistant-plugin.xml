@@ -5,6 +5,14 @@
         <class>org.jqassistant.contrib.plugin.c.api.model.CAstFileDescriptor</class>
         <class>org.jqassistant.contrib.plugin.c.api.model.CDescriptor</class>
         <class>org.jqassistant.contrib.plugin.c.api.model.TranslationUnitDescriptor</class>
+    	<class>org.jqassistant.contrib.plugin.c.api.model.FunctionDescriptor</class>
+    	<class>org.jqassistant.contrib.plugin.c.api.model.EnumDescriptor</class>
+    	<class>org.jqassistant.contrib.plugin.c.api.model.ParameterDescriptor</class>
+    	<class>org.jqassistant.contrib.plugin.c.api.model.StructDescriptor</class>
+    	<class>org.jqassistant.contrib.plugin.c.api.model.TypedDescriptor</class>
+    	<class>org.jqassistant.contrib.plugin.c.api.model.TypeDescriptor</class>
+    	<class>org.jqassistant.contrib.plugin.c.api.model.UnionDescriptor</class>
+    	<class>org.jqassistant.contrib.plugin.c.api.model.VariableDescriptor</class>
     </model>
     <scanner>
         <class>org.jqassistant.contrib.plugin.c.impl.scanner.CAstFileScannerPlugin</class>
