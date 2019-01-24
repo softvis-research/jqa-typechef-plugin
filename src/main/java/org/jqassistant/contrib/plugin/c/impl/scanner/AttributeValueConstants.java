@@ -4,6 +4,15 @@ public class AttributeValueConstants {
 	public static final String FUNCTIONDEFINITION = "de.fosd.typechef.parser.c.FunctionDef";
 	public static final String INTSPECIFIER = "de.fosd.typechef.parser.c.IntSpecifier";
 	public static final String DOUBLESPECIFIER = "de.fosd.typechef.parser.c.DoubleSpecifier";
+	public static final String VOIDSPECIFIER = "de.fosd.typechef.parser.c.VoidSpecifier";
+	public static final String SHORTSPECIFIER = "de.fosd.typechef.parser.c.ShortSpecifier";
+	public static final String LONGSPECIFIER = "de.fosd.typechef.parser.c.LongSpecifier";
+	public static final String FLOATSPECIFIER = "de.fosd.typechef.parser.c.FloatSpecifier";
+	public static final String SIGNEDSPECIFIER = "de.fosd.typechef.parser.c.SignedSpecifier";
+	public static final String UNSIGNEDSPECIFIER = "de.fosd.typechef.parser.c.UnsignedSpecifier";
+	public static final String CHARSPECIFIER = "de.fosd.typechef.parser.c.CharSpecifier";
+	public static final String POINTER = "de.fosd.typechef.parser.c.Pointer";
+	public static final String ARRAY = "de.fosd.typechef.parser.c.DeclArrayAccess";
 	public static final String PARAMETERDECLARATION = "de.fosd.typechef.parser.c.ParameterDeclarationD";
 
 }

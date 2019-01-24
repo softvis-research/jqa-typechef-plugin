@@ -29,6 +29,7 @@ import com.buschmais.jqassistant.core.scanner.api.ScannerPlugin.Requires;
 import com.buschmais.jqassistant.plugin.common.api.model.FileDescriptor;
 import com.buschmais.jqassistant.plugin.common.api.scanner.AbstractScannerPlugin;
 import com.buschmais.jqassistant.plugin.common.api.scanner.filesystem.FileResource;
+import com.sun.xml.internal.rngom.digested.DDataPattern.Param;
 
 @Requires(FileDescriptor.class)
 public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, CAstFileDescriptor>{
@@ -161,6 +162,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 		}
 	}
 
+	//TODO: make setting of return type and parameter type to new function 
 	private void handleEntryElement() {
 		switch (streamReader.getAttributeValue(0)) {
 		case AttributeValueConstants.FUNCTIONDEFINITION:
@@ -178,6 +180,65 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				storeReturnType("double");
 			} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
 				storeParameterType("double");
+			}
+			break;
+		case AttributeValueConstants.VOIDSPECIFIER:
+			if(descriptorDeque.peekFirst() instanceof Specifier) {
+				storeReturnType("void");
+			}
+			break;
+		case AttributeValueConstants.SHORTSPECIFIER:
+			if(descriptorDeque.peekFirst() instanceof Specifier) {
+				storeReturnType("short");
+			} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
+				storeParameterType("short");
+			}
+			break;
+		case AttributeValueConstants.LONGSPECIFIER:
+			if(descriptorDeque.peekFirst() instanceof Specifier) {
+				storeReturnType("long");
+			} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
+				storeParameterType("long");
+			}
+			break;
+		case AttributeValueConstants.FLOATSPECIFIER:
+			if(descriptorDeque.peekFirst() instanceof Specifier) {
+				storeReturnType("float");
+			} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
+				storeParameterType("float");
+			}
+			break;
+		case AttributeValueConstants.SIGNEDSPECIFIER:
+			if(descriptorDeque.peekFirst() instanceof Specifier) {
+				storeReturnType("signed");
+			} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
+				storeParameterType("signed");
+			}
+			break;
+		case AttributeValueConstants.UNSIGNEDSPECIFIER:
+			if(descriptorDeque.peekFirst() instanceof Specifier) {
+				storeReturnType("unsigned");
+			} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
+				storeParameterType("unsigned");
+			}
+			break;
+		case AttributeValueConstants.CHARSPECIFIER:
+			if(descriptorDeque.peekFirst() instanceof Specifier) {
+				storeReturnType("char");
+			} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
+				storeParameterType("char");
+			}
+			break;
+		case AttributeValueConstants.POINTER:
+			if(descriptorDeque.peekFirst() instanceof Declarator) {
+				storeReturnType("*");
+			} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
+				storeParameterType("*");
+			}
+			break;
+		case AttributeValueConstants.ARRAY:
+			if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
+				storeParameterType("[]");
 			}
 			break;
 		case AttributeValueConstants.PARAMETERDECLARATION:
@@ -229,7 +290,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 		ParameterDescriptor descriptor = (ParameterDescriptor) descriptorDeque.getFirst();
 		TypeDescriptor typeDescriptor = context.getStore().create(TypeDescriptor.class);
 		typeDescriptor.setName(type);
-		descriptor.setType(typeDescriptor);
+		descriptor.getTypeSpecifiers().add(typeDescriptor);
 	}
 	
 	protected ArrayDeque<Object> getDescriptorDeque(){
