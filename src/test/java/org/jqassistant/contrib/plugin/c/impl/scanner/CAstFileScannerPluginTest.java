@@ -144,7 +144,7 @@ public class CAstFileScannerPluginTest extends AbstractPluginIT{
         CAstFileDescriptor castFileDescriptor = (CAstFileDescriptor) returnedDescriptor;
         TranslationUnitDescriptor translationUnitDescriptor = castFileDescriptor.getTranslationUnit();
         List<FunctionDescriptor> declaredFunctions = translationUnitDescriptor.getDeclaredFunctions();
-        assertEquals(5, declaredFunctions.size());
+        assertEquals(6, declaredFunctions.size());
         for(FunctionDescriptor functionDescriptor : declaredFunctions) {
         	switch (functionDescriptor.getName()) {
 			case "getCharArray":
@@ -174,6 +174,10 @@ public class CAstFileScannerPluginTest extends AbstractPluginIT{
 				assertEquals("*", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(1).getName());
 				assertEquals("short", functionDescriptor.getParameters().get(1).getTypeSpecifiers().get(0).getName());
 				assertEquals("int", functionDescriptor.getParameters().get(1).getTypeSpecifiers().get(1).getName());
+				break;
+			case "getCharArraySized":
+				assertEquals("char", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
+				assertEquals("[5]", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(1).getName());
 				break;
 			default:
 				break;
