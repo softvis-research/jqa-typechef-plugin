@@ -18,6 +18,8 @@ public class AttributeValueConstants {
 	public static final String CHARSPECIFIER = "de.fosd.typechef.parser.c.CharSpecifier";
 	public static final String POINTER = "de.fosd.typechef.parser.c.Pointer";
 	public static final String ARRAY = "de.fosd.typechef.parser.c.DeclArrayAccess";
+	public static final String CONSTSPECIFIER = "de.fosd.typechef.parser.c.ConstSpecifier";
+	public static final String VOLATILESPECIFIER = "de.fosd.typechef.parser.c.VolatileSpecifier";
 	public static final String PARAMETERDECLARATION = "de.fosd.typechef.parser.c.ParameterDeclarationD";
 	public static final String VARIABLEDECLARATION = "de.fosd.typechef.parser.c.Declaration";
 }

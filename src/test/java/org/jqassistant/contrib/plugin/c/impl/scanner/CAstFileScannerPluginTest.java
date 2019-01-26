@@ -11,7 +11,6 @@ import org.hamcrest.CoreMatchers;
 import org.jqassistant.contrib.plugin.c.api.model.CAstFileDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.FunctionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.TranslationUnitDescriptor;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.buschmais.jqassistant.core.scanner.api.DefaultScope;
@@ -131,7 +130,6 @@ public class CAstFileScannerPluginTest extends AbstractPluginIT{
         store.commitTransaction();
     }
     
-    @Ignore
     @Test
     public void testReturnTypesComplex(){
     	store.beginTransaction();
@@ -148,36 +146,24 @@ public class CAstFileScannerPluginTest extends AbstractPluginIT{
         for(FunctionDescriptor functionDescriptor : declaredFunctions) {
         	switch (functionDescriptor.getName()) {
 			case "getCharArray":
-				assertEquals("char", functionDescriptor.getReturnType().get(0).getName());
-				assertEquals("*", functionDescriptor.getReturnType().get(1).getName());
-				assertEquals("char", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
-				assertEquals("[]", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(1).getName());
+				assertEquals("char *", functionDescriptor.getReturnType().get(0).getName());
+				assertEquals("char []", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
 				break;
 			case "getUnsignedInt":
-				assertEquals("unsigned", functionDescriptor.getReturnType().get(0).getName());
-				assertEquals("int", functionDescriptor.getReturnType().get(1).getName());
-				assertEquals("*", functionDescriptor.getReturnType().get(2).getName());
-				assertEquals("unsigned", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
-				assertEquals("int", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(1).getName());
-				assertEquals("*", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(2).getName());
+				assertEquals("unsigned int *", functionDescriptor.getReturnType().get(0).getName());
+				assertEquals("unsigned int *", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
 				break;
 			case "getSignedInt":
-				assertEquals("signed", functionDescriptor.getReturnType().get(0).getName());
-				assertEquals("int", functionDescriptor.getReturnType().get(1).getName());
-				assertEquals("signed", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
-				assertEquals("int", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(1).getName());
+				assertEquals("signed int", functionDescriptor.getReturnType().get(0).getName());
+				assertEquals("signed int", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
 				break;
 			case "getPointerToInt":
-				assertEquals("int", functionDescriptor.getReturnType().get(0).getName());
-				assertEquals("*", functionDescriptor.getReturnType().get(1).getName());
-				assertEquals("int", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
-				assertEquals("*", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(1).getName());
-				assertEquals("short", functionDescriptor.getParameters().get(1).getTypeSpecifiers().get(0).getName());
-				assertEquals("int", functionDescriptor.getParameters().get(1).getTypeSpecifiers().get(1).getName());
+				assertEquals("int *", functionDescriptor.getReturnType().get(0).getName());
+				assertEquals("int *", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
+				assertEquals("short int", functionDescriptor.getParameters().get(1).getTypeSpecifiers().get(0).getName());
 				break;
 			case "getCharArraySized":
-				assertEquals("char", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
-				assertEquals("[5]", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(1).getName());
+				assertEquals("char [5]", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
 				break;
 			default:
 				break;

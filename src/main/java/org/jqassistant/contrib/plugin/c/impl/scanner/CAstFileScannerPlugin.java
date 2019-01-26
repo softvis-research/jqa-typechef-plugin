@@ -136,9 +136,12 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				descriptorDeque.push(innerStatements);
 				break;
 			case TagNameConstants.VALUE:
-				if(descriptorDeque.peekFirst() instanceof TypeDescriptor && streamReader.getAttributeCount() == 0) {
-					setInitValueOfArray();
+				if(streamReader.getAttributeCount() == 0) {
+					if(DequeUtils.getElementAt(1, descriptorDeque) instanceof TypeDescriptor || DequeUtils.getElementAt(0, descriptorDeque) instanceof TypeDescriptor  ) {
+						setInitValueOfArray();
+					}
 				}
+				break;
 			default:
 				break;
 		}
@@ -229,8 +232,20 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 		case AttributeValueConstants.ARRAY:
 			storeType("[]");
 			break;
+		case AttributeValueConstants.CONSTSPECIFIER:
+			storeType("const");
+			break;
+		case AttributeValueConstants.VOLATILESPECIFIER:
+			storeType("volatile");
+			break;
 		case AttributeValueConstants.PARAMETERDECLARATION:
 			if(descriptorDeque.peekFirst() instanceof Declarator) {
+				TypeDescriptor currentlyStoredType = (TypeDescriptor) DequeUtils.getFirstOfType(TypeDescriptor.class, descriptorDeque);
+				FunctionDescriptor currentFunction = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, descriptorDeque);
+				if(currentlyStoredType != null) {
+					currentFunction.getReturnType().add(currentlyStoredType);
+					descriptorDeque.remove(currentlyStoredType);
+				}
 				ParameterDescriptor parameterDescriptor = context.getStore().create(ParameterDescriptor.class);
 				descriptorDeque.push(parameterDescriptor);
 			}
@@ -263,13 +278,19 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 	 * @return void
 	 */
 	private void storeType(String type) {
-		if(descriptorDeque.peekFirst() instanceof Specifier || (descriptorDeque.peekFirst() instanceof Declarator && (DequeUtils.getElementAt(1, descriptorDeque) instanceof FunctionDescriptor))) {
-			storeReturnType(type);
-		} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor || (descriptorDeque.peekFirst() instanceof Declarator && (DequeUtils.getElementAt(1, descriptorDeque) instanceof ParameterDescriptor))) {
-			storeParameterType(type);
-		} else if(descriptorDeque.peekFirst() instanceof VariableDescriptor || (descriptorDeque.peekFirst() instanceof Declarator && (DequeUtils.getElementAt(1, descriptorDeque) instanceof VariableDescriptor))) {
-			storeVariableType(type);
-		}
+		if(DequeUtils.getFirstOfType(InnerStatements.class, descriptorDeque) == null) {
+			TypeDescriptor typeDescriptor = (TypeDescriptor) DequeUtils.getFirstOfType(TypeDescriptor.class, descriptorDeque);
+			//if there is already a typedescriptor add type part to it
+			if(typeDescriptor != null) {
+				String firstPart = typeDescriptor.getName();
+				typeDescriptor.setName(firstPart + " " + type); 
+			//if there was no type part yet create new type descriptor
+			} else {
+				TypeDescriptor newTypeDescriptor = context.getStore().create(TypeDescriptor.class);
+				newTypeDescriptor.setName(type);
+				descriptorDeque.push(newTypeDescriptor);
+			}
+		}	
 	}
 	
 	/**
@@ -295,6 +316,11 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				descriptorDeque.remove(currentObject);
 				break;
 			} else if(currentObject instanceof FunctionDescriptor && !DequeUtils.before(InnerStatements.class, FunctionDescriptor.class, descriptorDeque)) {
+				TypeDescriptor typeDescriptor = (TypeDescriptor) DequeUtils.getFirstOfType(TypeDescriptor.class, descriptorDeque);
+				if(typeDescriptor != null) {
+					((FunctionDescriptor) currentObject).getReturnType().add(typeDescriptor);
+					descriptorDeque.remove(typeDescriptor);
+				}
 				//if we're already in the inner statements of the function the function name is already set
 				((FunctionDescriptor) currentObject).setName(name);
 				break;
@@ -314,56 +340,6 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 	}
 	
 	/**
-	 * Gets return type as String and adds it to the currently active function descriptor
-	 * 
-	 * @param returnType return type as String
-	 * 
-	 * @return void
-	 */
-	private void storeReturnType(String returnType) {
-		FunctionDescriptor functionDescriptor = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, descriptorDeque);
-		TypeDescriptor typeDescriptor = context.getStore().create(TypeDescriptor.class);
-		typeDescriptor.setName(returnType);
-		functionDescriptor.getReturnType().add(typeDescriptor);		
-	}
-	
-	/**
-	 * Gets type as String and adds it to the currently processed parameter
-	 * 
-	 * @param type type as String
-	 * 
-	 * @return void
-	 */
-	private void storeParameterType(String type) {
-		ParameterDescriptor descriptor = (ParameterDescriptor) descriptorDeque.getFirst();
-		TypeDescriptor typeDescriptor = context.getStore().create(TypeDescriptor.class);
-		typeDescriptor.setName(type);
-		if(type.equals("[]")) {
-			descriptorDeque.push(typeDescriptor);
-		} else {
-			descriptor.getTypeSpecifiers().add(typeDescriptor);
-		}
-	}
-	
-	/**
-	 * Gets type as String and adds it to the currently processed variable
-	 * 
-	 * @param type type as String
-	 * 
-	 * @return void
-	 */
-	private void storeVariableType(String type) {
-		VariableDescriptor descriptor = (VariableDescriptor) DequeUtils.getFirstOfType(VariableDescriptor.class, descriptorDeque);
-		TypeDescriptor typeDescriptor = context.getStore().create(TypeDescriptor.class);
-		typeDescriptor.setName(type);
-		if(type.equals("[]")) {
-			descriptorDeque.push(typeDescriptor);
-		} else {
-			descriptor.getTypeSpecifiers().add(typeDescriptor);
-		}
-	}
-	
-	/**
 	 * Sets the size of the array that is currently processed when it was set at declaration
 	 * 
 	 * @return void
@@ -375,11 +351,21 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 		} catch (XMLStreamException e) {
 			logger.error(e.getMessage());
 		}
-		TypeDescriptor typeDescriptor = (TypeDescriptor) descriptorDeque.peekFirst();
-		if(typeDescriptor.getName().equals("[]")) {
-			typeDescriptor.setName("[" + initValue + "]");
+		TypeDescriptor typeDescriptor = (TypeDescriptor) DequeUtils.getFirstOfType(TypeDescriptor.class, descriptorDeque);
+		if(typeDescriptor.getName().contains("[]")) {
+			
+			String[] parts = typeDescriptor.getName().split("\\[");
+			String fullType = "";
+			//if there is no part after the array initializer
+			if(parts[1].equals("]")){
+				fullType = parts[0] + "[" + initValue + "]";
+			//if there is a part after the array initializer put this part at the end of it
+			} else {
+				String[] secondPart = parts[1].split("\\]");
+				fullType = parts[0] + "[" + initValue + "]" + secondPart[1];
+			}
+			typeDescriptor.setName(fullType);
 		}
-		
 	}
 	
 	/**

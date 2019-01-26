@@ -88,20 +88,16 @@ public class GlobalVariablesIT extends AbstractPluginIT{
         			assertEquals("int", variableDescriptor.getTypeSpecifiers().get(0).getName());
         			break;
         		case "ptr":
-        			assertEquals("int", variableDescriptor.getTypeSpecifiers().get(0).getName());
-        			assertEquals("*", variableDescriptor.getTypeSpecifiers().get(1).getName());
+        			assertEquals("int *", variableDescriptor.getTypeSpecifiers().get(0).getName());
         			break;
         		case "text":
-        			assertEquals("char", variableDescriptor.getTypeSpecifiers().get(0).getName());
-        			assertEquals("*", variableDescriptor.getTypeSpecifiers().get(1).getName());
+        			assertEquals("char *", variableDescriptor.getTypeSpecifiers().get(0).getName());
         			break;
         		case "doubleArray":
-        			assertEquals("double", variableDescriptor.getTypeSpecifiers().get(0).getName());
-        			assertEquals("[]", variableDescriptor.getTypeSpecifiers().get(1).getName());
+        			assertEquals("double []", variableDescriptor.getTypeSpecifiers().get(0).getName());
         			break;
         		case "intArray":
-        			assertEquals("int", variableDescriptor.getTypeSpecifiers().get(0).getName());
-        			assertEquals("[5]", variableDescriptor.getTypeSpecifiers().get(1).getName());
+        			assertEquals("int [5]", variableDescriptor.getTypeSpecifiers().get(0).getName());
         			break;
         		default:
         			break;
@@ -116,7 +112,7 @@ public class GlobalVariablesIT extends AbstractPluginIT{
 	public void testTypeQualifiers() {
 		store.beginTransaction();
         
-        File testFile = new File(getClassesDirectory(CAstFileScannerPluginTest.class), "/global_variables_complex.ast");
+        File testFile = new File(getClassesDirectory(CAstFileScannerPluginTest.class), "type_qualifiers.ast");
         Scanner scanner = getScanner();
         CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
         Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);
@@ -124,6 +120,30 @@ public class GlobalVariablesIT extends AbstractPluginIT{
         CAstFileDescriptor descriptor = (CAstFileDescriptor) returnedDescriptor;
         TranslationUnitDescriptor translationUnitDescriptor = descriptor.getTranslationUnit();
         List<VariableDescriptor> variableList = translationUnitDescriptor.getDeclaredVariables();
+        for(CDescriptor cDescriptor : variableList) {
+        	if(cDescriptor instanceof VariableDescriptor) {
+        		VariableDescriptor variableDescriptor = (VariableDescriptor) cDescriptor;
+            	switch (variableDescriptor.getName()) {
+    			case "p_ci":
+    				assertEquals("int const *", variableDescriptor.getTypeSpecifiers().get(0).getName());
+    				break;
+    			case "p_ci2":
+    				assertEquals("int const *", variableDescriptor.getTypeSpecifiers().get(0).getName());
+    				break;
+    			case "cp_i":
+    				assertEquals("int * const", variableDescriptor.getTypeSpecifiers().get(0).getName());
+    				break;
+    			case "cp_i2":
+    				assertEquals("int * const", variableDescriptor.getTypeSpecifiers().get(0).getName());
+    				break;
+    			case "vint":
+    				assertEquals("int volatile", variableDescriptor.getTypeSpecifiers().get(0).getName());
+    				break;
+    			default:
+    				break;
+    			}
+        	}
+        }
 	
         store.commitTransaction();
 	}
