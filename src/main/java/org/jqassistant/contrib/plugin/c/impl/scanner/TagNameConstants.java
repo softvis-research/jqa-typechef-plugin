@@ -1,5 +1,10 @@
 package org.jqassistant.contrib.plugin.c.impl.scanner;
 
+/**
+ * Class that holds tag names of the ast for simpler matching
+ * @author Christina Sixtus
+ *
+ */
 public class TagNameConstants {
 	public static final String TRANSLATIONUNIT = "de.fosd.typechef.parser.c.TranslationUnit";
 	public static final String ENTRY = "entry";

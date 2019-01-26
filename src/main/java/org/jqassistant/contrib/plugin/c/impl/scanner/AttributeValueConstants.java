@@ -1,5 +1,10 @@
 package org.jqassistant.contrib.plugin.c.impl.scanner;
 
+/**
+ * Class to store attribute values of the ast for simple matching
+ * @author Christina Sixtus
+ *
+ */
 public class AttributeValueConstants {
 	public static final String FUNCTIONDEFINITION = "de.fosd.typechef.parser.c.FunctionDef";
 	public static final String INTSPECIFIER = "de.fosd.typechef.parser.c.IntSpecifier";

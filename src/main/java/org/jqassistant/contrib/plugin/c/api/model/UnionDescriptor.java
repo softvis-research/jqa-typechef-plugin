@@ -9,7 +9,11 @@ import com.buschmais.xo.neo4j.api.annotation.Relation;
 @Label("Union")
 public interface UnionDescriptor extends CDescriptor, NamedDescriptor, TypedDescriptor{
 
+	/**
+	 * Returns the declared variables of this union
+	 * @return the declared variables
+	 */
 	@Relation("DECLARES")
 	List<VariableDescriptor> getDeclaredVariables();
-	
+	void setDeclaredVariables(List<VariableDescriptor> declaredVariables);
 }

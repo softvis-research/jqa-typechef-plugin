@@ -9,6 +9,10 @@ import com.buschmais.xo.neo4j.api.annotation.Relation;
 @Label("Struct")
 public interface StructDescriptor extends CDescriptor, NamedDescriptor, TypedDescriptor{
 
+	/**
+	 * Returns the variables that were declared in this struct
+	 * @return the declared variables
+	 */
 	@Relation("DECLARES")
 	List<VariableDescriptor> getDeclaredVariables();
 	void setDeclaredVariables(List<VariableDescriptor> declaredVariables);

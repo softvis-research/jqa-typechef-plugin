@@ -111,4 +111,20 @@ public class GlobalVariablesIT extends AbstractPluginIT{
         
         store.commitTransaction();
 	}
+	
+	@Test
+	public void testTypeQualifiers() {
+		store.beginTransaction();
+        
+        File testFile = new File(getClassesDirectory(CAstFileScannerPluginTest.class), "/global_variables_complex.ast");
+        Scanner scanner = getScanner();
+        CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
+        Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);
+
+        CAstFileDescriptor descriptor = (CAstFileDescriptor) returnedDescriptor;
+        TranslationUnitDescriptor translationUnitDescriptor = descriptor.getTranslationUnit();
+        List<VariableDescriptor> variableList = translationUnitDescriptor.getDeclaredVariables();
+	
+        store.commitTransaction();
+	}
 }
