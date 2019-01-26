@@ -42,4 +42,21 @@ public class DequeUtilsTest {
 		assertEquals(false, ((Boolean) DequeUtils.getFirstOfType(Boolean.class, plugin.getDescriptorDeque())).booleanValue());
 		assertEquals(2.5, ((Double) DequeUtils.getFirstOfType(Double.class, plugin.getDescriptorDeque())).doubleValue(), 0);
 	}
+	
+	@Test
+	public void testGetElementAt() {
+		CAstFileScannerPlugin plugin = new CAstFileScannerPlugin();
+		plugin.initialize();
+		Double double1 = new Double(1.5);
+		plugin.getDescriptorDeque().push(double1);
+		Double double2 = new Double(2.5);
+		plugin.getDescriptorDeque().push(double2);
+		Boolean bool1 = new Boolean(true);
+		plugin.getDescriptorDeque().push(bool1);
+		Boolean bool2 = new Boolean(false);
+		plugin.getDescriptorDeque().push(bool2);
+		
+		assertEquals(false, ((Boolean) DequeUtils.getElementAt(0, plugin.getDescriptorDeque())).booleanValue()); 
+		assertEquals(1.5, ((Double) DequeUtils.getElementAt(3, plugin.getDescriptorDeque())).doubleValue(), 0);
+	}
 }

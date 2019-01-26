@@ -20,6 +20,9 @@ import org.jqassistant.contrib.plugin.c.api.model.ParameterDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.Specifier;
 import org.jqassistant.contrib.plugin.c.api.model.TranslationUnitDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.TypeDescriptor;
+import org.jqassistant.contrib.plugin.c.api.model.VariableDescriptor;
+import org.jruby.ir.instructions.StoreLocalVarInstr;
+import org.omg.IOP.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.buschmais.jqassistant.core.scanner.api.Scanner;
@@ -72,10 +75,12 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
                 switch (eventType) {
                 	case XMLStreamConstants.START_ELEMENT:
                 		handleStartElement();
-                	break;
+                		break;
                 	case XMLStreamConstants.END_ELEMENT:
                 		handleEndElement();
-                	break;                	
+                		break;     
+                	default:
+                		break;
                 }
                 streamReader.next();
             }
@@ -112,7 +117,9 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				break;
 			case TagNameConstants.NAME:
 			try {
-				handleNameElement(streamReader.getElementText());
+				if(descriptorDeque.getFirst() instanceof ID) {
+					handleNameElement(streamReader.getElementText());
+				}
 			} catch (XMLStreamException e) {
 				logger.error(e.getMessage());
 			}
@@ -121,6 +128,10 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				InnerStatements innerStatements = new InnerStatements();
 				descriptorDeque.push(innerStatements);
 				break;
+			case TagNameConstants.VALUE:
+				if(descriptorDeque.peekFirst() instanceof TypeDescriptor && streamReader.getAttributeCount() == 0) {
+					setInitValueOfArray();
+				}
 			default:
 				break;
 		}
@@ -161,91 +172,54 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				break;
 		}
 	}
-
-	//TODO: make setting of return type and parameter type to new function 
+ 
 	private void handleEntryElement() {
 		switch (streamReader.getAttributeValue(0)) {
 		case AttributeValueConstants.FUNCTIONDEFINITION:
 			createFunctionDefinition();
 			break;
 		case AttributeValueConstants.INTSPECIFIER:
-			if(descriptorDeque.peekFirst() instanceof Specifier) {
-				storeReturnType("int");
-			} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
-				storeParameterType("int");
-			}
+			storeType("int");
 			break;
 		case AttributeValueConstants.DOUBLESPECIFIER:
-			if(descriptorDeque.peekFirst() instanceof Specifier) {
-				storeReturnType("double");
-			} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
-				storeParameterType("double");
-			}
+			storeType("double");
 			break;
 		case AttributeValueConstants.VOIDSPECIFIER:
-			if(descriptorDeque.peekFirst() instanceof Specifier) {
-				storeReturnType("void");
-			}
+			storeType("void");
 			break;
 		case AttributeValueConstants.SHORTSPECIFIER:
-			if(descriptorDeque.peekFirst() instanceof Specifier) {
-				storeReturnType("short");
-			} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
-				storeParameterType("short");
-			}
+			storeType("short");
 			break;
 		case AttributeValueConstants.LONGSPECIFIER:
-			if(descriptorDeque.peekFirst() instanceof Specifier) {
-				storeReturnType("long");
-			} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
-				storeParameterType("long");
-			}
+			storeType("long");
 			break;
 		case AttributeValueConstants.FLOATSPECIFIER:
-			if(descriptorDeque.peekFirst() instanceof Specifier) {
-				storeReturnType("float");
-			} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
-				storeParameterType("float");
-			}
+			storeType("float");
 			break;
 		case AttributeValueConstants.SIGNEDSPECIFIER:
-			if(descriptorDeque.peekFirst() instanceof Specifier) {
-				storeReturnType("signed");
-			} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
-				storeParameterType("signed");
-			}
+			storeType("signed");
 			break;
 		case AttributeValueConstants.UNSIGNEDSPECIFIER:
-			if(descriptorDeque.peekFirst() instanceof Specifier) {
-				storeReturnType("unsigned");
-			} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
-				storeParameterType("unsigned");
-			}
+			storeType("unsigned");
 			break;
 		case AttributeValueConstants.CHARSPECIFIER:
-			if(descriptorDeque.peekFirst() instanceof Specifier) {
-				storeReturnType("char");
-			} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
-				storeParameterType("char");
-			}
+			storeType("char");
 			break;
 		case AttributeValueConstants.POINTER:
-			if(descriptorDeque.peekFirst() instanceof Declarator) {
-				storeReturnType("*");
-			} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
-				storeParameterType("*");
-			}
+			storeType("*");
 			break;
 		case AttributeValueConstants.ARRAY:
-			if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
-				storeParameterType("[]");
-			}
+			storeType("[]");
 			break;
 		case AttributeValueConstants.PARAMETERDECLARATION:
 			if(descriptorDeque.peekFirst() instanceof Declarator) {
 				ParameterDescriptor parameterDescriptor = context.getStore().create(ParameterDescriptor.class);
 				descriptorDeque.push(parameterDescriptor);
 			}
+			break;
+		case AttributeValueConstants.VARIABLEDECLARATION:
+			VariableDescriptor variableDescriptor = context.getStore().create(VariableDescriptor.class);
+			descriptorDeque.push(variableDescriptor);
 			break;
 		default:
 			break;
@@ -258,11 +232,14 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 		descriptorDeque.push(functionDescriptor);
 	}
 	
-	private void storeReturnType(String returnType) {
-		FunctionDescriptor functionDescriptor = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, descriptorDeque);
-		TypeDescriptor typeDescriptor = context.getStore().create(TypeDescriptor.class);
-		typeDescriptor.setName(returnType);
-		functionDescriptor.getReturnType().add(typeDescriptor);		
+	private void storeType(String type) {
+		if(descriptorDeque.peekFirst() instanceof Specifier || (descriptorDeque.peekFirst() instanceof Declarator && (DequeUtils.getElementAt(1, descriptorDeque) instanceof FunctionDescriptor))) {
+			storeReturnType(type);
+		} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor || (descriptorDeque.peekFirst() instanceof Declarator && (DequeUtils.getElementAt(1, descriptorDeque) instanceof ParameterDescriptor))) {
+			storeParameterType(type);
+		} else if(descriptorDeque.peekFirst() instanceof VariableDescriptor || (descriptorDeque.peekFirst() instanceof Declarator && (DequeUtils.getElementAt(1, descriptorDeque) instanceof VariableDescriptor))) {
+			storeVariableType(type);
+		}
 	}
 	
 	private void handleNameElement(String name) {
@@ -271,26 +248,75 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			Object currentObject = it.next();
 			if(currentObject instanceof ParameterDescriptor) {
 				((ParameterDescriptor) currentObject).setName(name);
+				TypeDescriptor typeDescriptor = (TypeDescriptor) DequeUtils.getFirstOfType(TypeDescriptor.class, descriptorDeque);
+				if(typeDescriptor != null) {
+					((ParameterDescriptor) currentObject).getTypeSpecifiers().add(typeDescriptor);
+					descriptorDeque.remove(typeDescriptor);
+				}
 				FunctionDescriptor functionDescriptor = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, descriptorDeque);
 				functionDescriptor.getParameters().add((ParameterDescriptor) currentObject);
 				descriptorDeque.remove(currentObject);
 				break;
-			}
-			
-			//if we're already in the inner statements of the function the function name is already set
-			if(currentObject instanceof FunctionDescriptor && !DequeUtils.before(InnerStatements.class, FunctionDescriptor.class, descriptorDeque)) {
+			} else if(currentObject instanceof FunctionDescriptor && !DequeUtils.before(InnerStatements.class, FunctionDescriptor.class, descriptorDeque)) {
+				//if we're already in the inner statements of the function the function name is already set
 				((FunctionDescriptor) currentObject).setName(name);
+				break;
+			} else if(currentObject instanceof VariableDescriptor) {
+				((VariableDescriptor) currentObject).setName(name);
+				TypeDescriptor typeDescriptor = (TypeDescriptor) DequeUtils.getFirstOfType(TypeDescriptor.class, descriptorDeque);
+				if(typeDescriptor != null) {
+					((VariableDescriptor) currentObject).getTypeSpecifiers().add(typeDescriptor);
+					descriptorDeque.remove(typeDescriptor);
+				}
+				TranslationUnitDescriptor translationUnitDescriptor = (TranslationUnitDescriptor) DequeUtils.getFirstOfType(TranslationUnitDescriptor.class, descriptorDeque);
+				translationUnitDescriptor.getDeclaredVariables().add((VariableDescriptor) currentObject);
+				descriptorDeque.remove(currentObject);
 				break;
 			}
 		}
-		
+	}
+	
+	private void storeReturnType(String returnType) {
+		FunctionDescriptor functionDescriptor = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, descriptorDeque);
+		TypeDescriptor typeDescriptor = context.getStore().create(TypeDescriptor.class);
+		typeDescriptor.setName(returnType);
+		functionDescriptor.getReturnType().add(typeDescriptor);		
 	}
 	
 	private void storeParameterType(String type) {
 		ParameterDescriptor descriptor = (ParameterDescriptor) descriptorDeque.getFirst();
 		TypeDescriptor typeDescriptor = context.getStore().create(TypeDescriptor.class);
 		typeDescriptor.setName(type);
-		descriptor.getTypeSpecifiers().add(typeDescriptor);
+		if(type.equals("[]")) {
+			descriptorDeque.push(typeDescriptor);
+		} else {
+			descriptor.getTypeSpecifiers().add(typeDescriptor);
+		}
+	}
+	
+	private void storeVariableType(String type) {
+		VariableDescriptor descriptor = (VariableDescriptor) DequeUtils.getFirstOfType(VariableDescriptor.class, descriptorDeque);
+		TypeDescriptor typeDescriptor = context.getStore().create(TypeDescriptor.class);
+		typeDescriptor.setName(type);
+		if(type.equals("[]")) {
+			descriptorDeque.push(typeDescriptor);
+		} else {
+			descriptor.getTypeSpecifiers().add(typeDescriptor);
+		}
+	}
+	
+	private void setInitValueOfArray() {
+		String initValue = "";
+		try {
+			initValue = streamReader.getElementText();
+		} catch (XMLStreamException e) {
+			logger.error(e.getMessage());
+		}
+		TypeDescriptor typeDescriptor = (TypeDescriptor) descriptorDeque.peekFirst();
+		if(typeDescriptor.getName().equals("[]")) {
+			typeDescriptor.setName("[" + initValue + "]");
+		}
+		
 	}
 	
 	protected ArrayDeque<Object> getDescriptorDeque(){

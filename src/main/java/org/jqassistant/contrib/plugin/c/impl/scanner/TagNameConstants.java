@@ -9,8 +9,8 @@ public class TagNameConstants {
 	public static final String NAME = "name";
 	public static final String STATEMENT = "stmt";
 	public static final String INNERSTATEMENTS = "innerStatements";
+	public static final String VALUE = "value";
 	public static final String DECLARATION = "decl";
 	public static final String DECLARATIONSPECIFICATION = "declSpecs";
 	public static final String INIT = "init";
-
 }

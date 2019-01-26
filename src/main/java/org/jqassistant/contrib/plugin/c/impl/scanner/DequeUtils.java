@@ -29,4 +29,16 @@ public class DequeUtils {
 		return null;
 	}
 	
+	public static Object getElementAt(int index, ArrayDeque<? extends Object> deque) {
+		int counter = 0;
+		for(Iterator<? extends Object> it = deque.iterator(); it.hasNext();) {
+			Object currentObject = it.next();
+			if(counter == index) {
+				return currentObject;
+			}
+			counter += 1;
+		}
+		return null;
+	}
+	
 }
