@@ -305,14 +305,17 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 		while(it.hasNext()) {
 			Object currentObject = it.next();
 			if(currentObject instanceof ParameterDescriptor) {
-				((ParameterDescriptor) currentObject).setName(name);
+				ParameterDescriptor parameterDescriptor = (ParameterDescriptor) currentObject;
+				parameterDescriptor.setName(name);
 				TypeDescriptor typeDescriptor = (TypeDescriptor) DequeUtils.getFirstOfType(TypeDescriptor.class, descriptorDeque);
 				if(typeDescriptor != null) {
-					((ParameterDescriptor) currentObject).getTypeSpecifiers().add(typeDescriptor);
+					parameterDescriptor.getTypeSpecifiers().add(typeDescriptor);
 					descriptorDeque.remove(typeDescriptor);
 				}
 				FunctionDescriptor functionDescriptor = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, descriptorDeque);
-				functionDescriptor.getParameters().add((ParameterDescriptor) currentObject);
+				int index = functionDescriptor.getParameters().size();
+				parameterDescriptor.setIndex(index);
+				functionDescriptor.getParameters().add(parameterDescriptor);
 				descriptorDeque.remove(currentObject);
 				break;
 			} else if(currentObject instanceof FunctionDescriptor && !DequeUtils.before(InnerStatements.class, FunctionDescriptor.class, descriptorDeque)) {

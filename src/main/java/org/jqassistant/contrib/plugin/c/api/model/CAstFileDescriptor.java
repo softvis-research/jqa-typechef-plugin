@@ -8,7 +8,7 @@ public interface CAstFileDescriptor extends CDescriptor, FileDescriptor, NamedDe
 	
 	/**
 	 * Returns the contained translation units of the ast file
-	 * @return the contained taranslation units
+	 * @return the contained translation units
 	 */
 	@Relation("CONTAINS")
 	TranslationUnitDescriptor getTranslationUnit();
