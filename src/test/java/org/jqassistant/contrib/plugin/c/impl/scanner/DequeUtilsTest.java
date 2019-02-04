@@ -65,4 +65,17 @@ public class DequeUtilsTest {
 		
 		setup();
 	}
+	
+	@Test
+	public void testGetElementsUnder() {
+		plugin.getDescriptorDeque().push(new Specifier());
+		assertEquals(5, plugin.getDescriptorDeque().size());
+		assertEquals(0, DequeUtils.getElementsUnder(Specifier.class, String.class, plugin.getDescriptorDeque()).size());
+		assertEquals(2, DequeUtils.getElementsUnder(Specifier.class, Boolean.class, plugin.getDescriptorDeque()).size());
+		assertEquals(2, DequeUtils.getElementsUnder(Boolean.class, Double.class, plugin.getDescriptorDeque()).size());
+		assertEquals(0, DequeUtils.getElementsUnder(Double.class, Boolean.class, plugin.getDescriptorDeque()).size());
+		assertEquals(0, DequeUtils.getElementsUnder(String.class, Boolean.class, plugin.getDescriptorDeque()).size());
+		
+		setup();
+	}
 }

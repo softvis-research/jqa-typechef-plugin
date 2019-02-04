@@ -1,7 +1,9 @@
 package org.jqassistant.contrib.plugin.c.impl.scanner;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Utility class to query the {@code ArrayDeque<Object>} that is used in the scanner plugin
@@ -82,6 +84,28 @@ public class DequeUtils {
 		if(dequeElement != null) {
 			deque.remove(dequeElement);
 		}
+	}
+	
+	/**
+	 * Retrieves all elements of type B after the first occurrence of an element of type A in the ArrayDeque
+	 * @param typeOfBaseElement Class of type A
+	 * @param typeOfSearchedElements Class of type B
+	 * @param deque ArrayDeque
+	 * @return List with objects of type B
+	 */
+	public static <A extends Object, B extends Object> List<B> getElementsUnder(Class<A> typeOfBaseElement, Class<B> typeOfSearchedElements, ArrayDeque<? extends Object> deque){
+		boolean baseElementFound = false;
+		List<B> resultList = new ArrayList<>();
+		for(Iterator<? extends Object> it = deque.iterator(); it.hasNext();) {
+			Object currentObject = it.next();
+			if(typeOfBaseElement.isAssignableFrom(currentObject.getClass())) {
+				baseElementFound = true;
+			}
+			if(typeOfSearchedElements.isAssignableFrom(currentObject.getClass()) && baseElementFound) {
+				resultList.add((B) currentObject);
+			}
+		}
+		return resultList;	
 	}
 	
 }
