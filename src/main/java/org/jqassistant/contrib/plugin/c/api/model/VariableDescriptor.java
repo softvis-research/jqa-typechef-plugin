@@ -16,4 +16,8 @@ public interface VariableDescriptor extends CDescriptor, NamedDescriptor{
 	@Relation("OF_TYPE")
 	List<TypeDescriptor> getTypeSpecifiers();
 	void setTypeSpecifiers(List<TypeDescriptor> typeSpecifiers);
+	
+	@Relation("DEPENDS_ON")
+	ConditionDescriptor getCondition();
+	void setCondition(ConditionDescriptor conditionDescriptor);
 }

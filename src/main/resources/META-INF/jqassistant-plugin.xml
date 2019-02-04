@@ -13,6 +13,8 @@
     	<class>org.jqassistant.contrib.plugin.c.api.model.TypeDescriptor</class>
     	<class>org.jqassistant.contrib.plugin.c.api.model.UnionDescriptor</class>
     	<class>org.jqassistant.contrib.plugin.c.api.model.VariableDescriptor</class>
+    	<class>org.jqassistant.contrib.plugin.c.api.model.ConditionDescriptor</class>
+    	<class>org.jqassistant.contrib.plugin.c.api.model.SingleConditionDescriptor</class>
     </model>
     <scanner>
         <class>org.jqassistant.contrib.plugin.c.impl.scanner.CAstFileScannerPlugin</class>

@@ -3,6 +3,7 @@ package org.jqassistant.contrib.plugin.c.impl.scanner;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -11,9 +12,16 @@ import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.lang.StringUtils;
+import org.jqassistant.contrib.plugin.c.api.ConditionsLexer;
+import org.jqassistant.contrib.plugin.c.api.ConditionsParser;
 import org.jqassistant.contrib.plugin.c.api.model.CAstFileDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.Condition;
+import org.jqassistant.contrib.plugin.c.api.model.ConditionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.Declarator;
 import org.jqassistant.contrib.plugin.c.api.model.FunctionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.ID;
@@ -156,7 +164,8 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				try {
 					String elementText = streamReader.getElementText();
 					if(elementText != null && !elementText.equals("1")) {
-						parseCondition(elementText);
+						Condition condition = (Condition) DequeUtils.getFirstOfType(Condition.class, this.descriptorDeque);
+						condition.setConditionText(elementText);
 					}
 				} catch (XMLStreamException e) {
 					logger.info(e.getMessage());
@@ -344,14 +353,22 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			} else if(currentObject instanceof VariableDescriptor) {
 				//if the name belongs to a variable, add it to the variable
 				//and remove the variable from the deque
-				((VariableDescriptor) currentObject).setName(name);
+				VariableDescriptor variableDescriptor = (VariableDescriptor) currentObject;
+				variableDescriptor.setName(name);
 				TypeDescriptor typeDescriptor = (TypeDescriptor) DequeUtils.getFirstOfType(TypeDescriptor.class, descriptorDeque);
 				if(typeDescriptor != null) {
-					((VariableDescriptor) currentObject).getTypeSpecifiers().add(typeDescriptor);
+					variableDescriptor.getTypeSpecifiers().add(typeDescriptor);
 					descriptorDeque.remove(typeDescriptor);
 				}
+				List<Condition> conditionsForVariable = DequeUtils.getElementsUnder(VariableDescriptor.class, Condition.class, this.descriptorDeque);
+				for(Condition condition : conditionsForVariable) {
+					if(!StringUtils.isEmpty(condition.getConditionText())) {
+						ConditionDescriptor conditionDescriptor = parseCondition(condition.getConditionText());
+						variableDescriptor.setCondition(conditionDescriptor);
+					}
+				}
 				TranslationUnitDescriptor translationUnitDescriptor = (TranslationUnitDescriptor) DequeUtils.getFirstOfType(TranslationUnitDescriptor.class, descriptorDeque);
-				translationUnitDescriptor.getDeclaredVariables().add((VariableDescriptor) currentObject);
+				translationUnitDescriptor.getDeclaredVariables().add(variableDescriptor);
 				descriptorDeque.remove(currentObject);
 				break;
 			}
@@ -382,9 +399,20 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 		}
 	}
 	
-	private void parseCondition(String elementText) {
-		
-		
+	/**
+	 * Parses condition with antlr parser and returns subgraph with condition nodes
+	 * @param elementText String to parse
+	 * @return ConditionDescriptor descriptor containing subgraph with condition nodes
+	 */
+	private ConditionDescriptor parseCondition(String elementText) {
+		ConditionsLexer conditionsLexer = new ConditionsLexer(CharStreams.fromString(elementText));
+		CommonTokenStream tokens = new CommonTokenStream(conditionsLexer);
+		ConditionsParser parser = new ConditionsParser(tokens);
+		ParseTree tree = parser.completeCondition();
+		ParseTreeWalker walker = new ParseTreeWalker();
+		CConditionsListener listener = new CConditionsListener(this.context);
+		walker.walk(listener, tree);
+		return listener.getResultCondition();
 	}
 	
 	/**
