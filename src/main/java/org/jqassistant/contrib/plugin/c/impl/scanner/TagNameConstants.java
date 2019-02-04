@@ -18,4 +18,6 @@ public class TagNameConstants {
 	public static final String DECLARATION = "decl";
 	public static final String DECLARATIONSPECIFICATION = "declSpecs";
 	public static final String INIT = "init";
+	public static final String CONDITION = "de.fosd.typechef.conditional.Opt";
+	public static final String FEATUREEXPRESSION = "fexpr";
 }

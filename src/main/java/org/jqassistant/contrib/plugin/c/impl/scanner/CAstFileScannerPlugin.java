@@ -11,7 +11,9 @@ import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.commons.lang.StringUtils;
 import org.jqassistant.contrib.plugin.c.api.model.CAstFileDescriptor;
+import org.jqassistant.contrib.plugin.c.api.model.Condition;
 import org.jqassistant.contrib.plugin.c.api.model.Declarator;
 import org.jqassistant.contrib.plugin.c.api.model.FunctionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.ID;
@@ -30,7 +32,6 @@ import com.buschmais.jqassistant.core.scanner.api.ScannerPlugin.Requires;
 import com.buschmais.jqassistant.plugin.common.api.model.FileDescriptor;
 import com.buschmais.jqassistant.plugin.common.api.scanner.AbstractScannerPlugin;
 import com.buschmais.jqassistant.plugin.common.api.scanner.filesystem.FileResource;
-
 /**
  * Main scanner plugin class that scans C ast files and create a neo4j graph from it
  * @author Christina Sixtus
@@ -123,23 +124,42 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				descriptorDeque.push(id);
 				break;
 			case TagNameConstants.NAME:
-			try {
-				if(descriptorDeque.getFirst() instanceof ID) {
-					handleNameElement(streamReader.getElementText());
+				try {
+					if(descriptorDeque.getFirst() instanceof ID) {
+						handleNameElement(streamReader.getElementText());
+					}
+				} catch (XMLStreamException e) {
+					logger.error(e.getMessage());
 				}
-			} catch (XMLStreamException e) {
-				logger.error(e.getMessage());
-			}
 				break;
 			case TagNameConstants.INNERSTATEMENTS:
 				InnerStatements innerStatements = new InnerStatements();
 				descriptorDeque.push(innerStatements);
 				break;
 			case TagNameConstants.VALUE:
-				if(streamReader.getAttributeCount() == 0) {
-					if(DequeUtils.getElementAt(1, descriptorDeque) instanceof TypeDescriptor || DequeUtils.getElementAt(0, descriptorDeque) instanceof TypeDescriptor  ) {
-						setInitValueOfArray();
+				try {
+					//the element has no attributes and we're currently building a type descriptor
+					if(streamReader.getAttributeCount() == 0 && DequeUtils.getFirstOfType(TypeDescriptor.class, descriptorDeque) != null) {
+						String elementText = streamReader.getElementText();
+						if(!StringUtils.isEmpty(elementText) && DequeUtils.getFirstOfType(Declarator.class, this.descriptorDeque) != null) {
+							setInitValueOfArray(elementText);
+						}
 					}
+				} catch (XMLStreamException e1) {
+					//ignore if the element has no text
+				}
+				break;
+			case TagNameConstants.CONDITION:
+				descriptorDeque.push(new Condition());
+				break;
+			case TagNameConstants.FEATUREEXPRESSION:
+				try {
+					String elementText = streamReader.getElementText();
+					if(elementText != null && !elementText.equals("1")) {
+						parseCondition(elementText);
+					}
+				} catch (XMLStreamException e) {
+					logger.info(e.getMessage());
 				}
 				break;
 			default:
@@ -160,28 +180,20 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				}
 				break;
 			case TagNameConstants.SPECIFIERS:
-				if(descriptorDeque.peekFirst() instanceof Specifier) {
-					descriptorDeque.removeFirst();
-				}
+				DequeUtils.removeFirstOccurrenceOfType(Specifier.class, this.descriptorDeque);
 				break;
 			case TagNameConstants.DECLARATOR:
-				if(descriptorDeque.peekFirst() instanceof Declarator) {
-					descriptorDeque.removeFirst();
-				}
+				DequeUtils.removeFirstOccurrenceOfType(Declarator.class, this.descriptorDeque);
 				break;
 			case TagNameConstants.ID:
-				if(descriptorDeque.peekFirst() instanceof ID) {
-					descriptorDeque.removeFirst();
-				}
+				DequeUtils.removeFirstOccurrenceOfType(ID.class, this.descriptorDeque);
 				break;
 			case TagNameConstants.INNERSTATEMENTS:
-				if(descriptorDeque.peekFirst() instanceof InnerStatements) {
-					descriptorDeque.removeFirst();
-					//after the end of the inner statements the whole function is finished
-					if(descriptorDeque.peekFirst() instanceof FunctionDescriptor) {
-						descriptorDeque.removeFirst();
-					}
-				}
+				DequeUtils.removeFirstOccurrenceOfType(InnerStatements.class, this.descriptorDeque);
+				DequeUtils.removeFirstOccurrenceOfType(FunctionDescriptor.class, this.descriptorDeque);
+				break;
+			case TagNameConstants.CONDITION:
+				DequeUtils.removeFirstOccurrenceOfType(Condition.class, this.descriptorDeque);
 				break;
 			default:
 				break;
@@ -239,16 +251,14 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			storeType("volatile");
 			break;
 		case AttributeValueConstants.PARAMETERDECLARATION:
-			if(descriptorDeque.peekFirst() instanceof Declarator) {
-				TypeDescriptor currentlyStoredType = (TypeDescriptor) DequeUtils.getFirstOfType(TypeDescriptor.class, descriptorDeque);
-				FunctionDescriptor currentFunction = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, descriptorDeque);
-				if(currentlyStoredType != null) {
-					currentFunction.getReturnType().add(currentlyStoredType);
-					descriptorDeque.remove(currentlyStoredType);
-				}
-				ParameterDescriptor parameterDescriptor = context.getStore().create(ParameterDescriptor.class);
-				descriptorDeque.push(parameterDescriptor);
+			TypeDescriptor currentlyStoredType = (TypeDescriptor) DequeUtils.getFirstOfType(TypeDescriptor.class, descriptorDeque);
+			FunctionDescriptor currentFunction = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, descriptorDeque);
+			if(currentlyStoredType != null) {
+				currentFunction.getReturnType().add(currentlyStoredType);
+				descriptorDeque.remove(currentlyStoredType);
 			}
+			ParameterDescriptor parameterDescriptor = context.getStore().create(ParameterDescriptor.class);
+			descriptorDeque.push(parameterDescriptor);
 			break;
 		case AttributeValueConstants.VARIABLEDECLARATION:
 			VariableDescriptor variableDescriptor = context.getStore().create(VariableDescriptor.class);
@@ -305,6 +315,8 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 		while(it.hasNext()) {
 			Object currentObject = it.next();
 			if(currentObject instanceof ParameterDescriptor) {
+				//if the name tag belongs to a parameter, build that parameter,
+				//add it to a function and remove it from the deque
 				ParameterDescriptor parameterDescriptor = (ParameterDescriptor) currentObject;
 				parameterDescriptor.setName(name);
 				TypeDescriptor typeDescriptor = (TypeDescriptor) DequeUtils.getFirstOfType(TypeDescriptor.class, descriptorDeque);
@@ -319,6 +331,8 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				descriptorDeque.remove(currentObject);
 				break;
 			} else if(currentObject instanceof FunctionDescriptor && !DequeUtils.before(InnerStatements.class, FunctionDescriptor.class, descriptorDeque)) {
+				//if the name belongs to a function, add the return type to that function and remove
+				//it from the deque
 				TypeDescriptor typeDescriptor = (TypeDescriptor) DequeUtils.getFirstOfType(TypeDescriptor.class, descriptorDeque);
 				if(typeDescriptor != null) {
 					((FunctionDescriptor) currentObject).getReturnType().add(typeDescriptor);
@@ -328,6 +342,8 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				((FunctionDescriptor) currentObject).setName(name);
 				break;
 			} else if(currentObject instanceof VariableDescriptor) {
+				//if the name belongs to a variable, add it to the variable
+				//and remove the variable from the deque
 				((VariableDescriptor) currentObject).setName(name);
 				TypeDescriptor typeDescriptor = (TypeDescriptor) DequeUtils.getFirstOfType(TypeDescriptor.class, descriptorDeque);
 				if(typeDescriptor != null) {
@@ -344,16 +360,11 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 	
 	/**
 	 * Sets the size of the array that is currently processed when it was set at declaration
+	 * @param elementText 
 	 * 
 	 * @return void
 	 */
-	private void setInitValueOfArray() {
-		String initValue = "";
-		try {
-			initValue = streamReader.getElementText();
-		} catch (XMLStreamException e) {
-			logger.error(e.getMessage());
-		}
+	private void setInitValueOfArray(String initValue) {
 		TypeDescriptor typeDescriptor = (TypeDescriptor) DequeUtils.getFirstOfType(TypeDescriptor.class, descriptorDeque);
 		if(typeDescriptor.getName().contains("[]")) {
 			
@@ -369,6 +380,11 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			}
 			typeDescriptor.setName(fullType);
 		}
+	}
+	
+	private void parseCondition(String elementText) {
+		
+		
 	}
 	
 	/**
