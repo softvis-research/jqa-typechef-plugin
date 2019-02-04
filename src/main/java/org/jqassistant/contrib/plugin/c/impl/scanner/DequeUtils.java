@@ -71,4 +71,17 @@ public class DequeUtils {
 		return null;
 	}
 	
+	/**
+	 * Function retrieves first occurrence of type A if objects exists in deque
+	 * and removes it.
+	 * @param a Class of type A
+	 * @param deque ArrayDeque that contains instances of Object
+	 */
+	public static <A extends Object> void removeFirstOccurrenceOfType(Class<A> a, ArrayDeque<? extends Object> deque) {
+		A dequeElement = (A) getFirstOfType(a, deque);
+		if(dequeElement != null) {
+			deque.remove(dequeElement);
+		}
+	}
+	
 }
