@@ -1,6 +1,6 @@
 grammar Conditions;
 
-completeCondition: singleCondition;
+completeCondition: singleCondition || negativeCondition;
 
 
 

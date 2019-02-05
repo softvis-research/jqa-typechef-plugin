@@ -410,7 +410,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 		ConditionsParser parser = new ConditionsParser(tokens);
 		ParseTree tree = parser.completeCondition();
 		ParseTreeWalker walker = new ParseTreeWalker();
-		CConditionsListener listener = new CConditionsListener(this.context);
+		CConditionsListener listener = new CConditionsListener(this.context.getStore());
 		walker.walk(listener, tree);
 		return listener.getResultCondition();
 	}
