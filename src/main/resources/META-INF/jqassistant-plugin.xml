@@ -17,6 +17,7 @@
     	<class>org.jqassistant.contrib.plugin.c.api.model.SingleConditionDescriptor</class>
     	<class>org.jqassistant.contrib.plugin.c.api.model.NegationDescriptor</class>
     	<class>org.jqassistant.contrib.plugin.c.api.model.AndDescriptor</class>
+    	<class>org.jqassistant.contrib.plugin.c.api.model.OrDescriptor</class>
     </model>
     <scanner>
         <class>org.jqassistant.contrib.plugin.c.impl.scanner.CAstFileScannerPlugin</class>
