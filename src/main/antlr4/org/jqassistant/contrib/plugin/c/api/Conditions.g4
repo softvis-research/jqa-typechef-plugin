@@ -2,7 +2,7 @@ grammar Conditions;
 
 completeCondition : singleCondition | negativeCondition | andExpression;
 
-andExpression : '(' expression AND expression ')';
+andExpression : '(' expression (AND expression)+ ')';
 
 expression : singleCondition | negativeCondition | andExpression;
 
@@ -13,5 +13,5 @@ singleCondition : DEFINEDEX MACRONAME ')' | DEFINED MACRONAME ')';
 DEFINED : 'defined(';
 DEFINEDEX : 'definedEx(';
 AND : '&amp;&amp;' | '&&';
-MACRONAME : [a-zA-Z0-9]+ ;
+MACRONAME : [a-zA-Z0-9_]+ ;
 WS : [ \r\t\n]+ -> skip;
