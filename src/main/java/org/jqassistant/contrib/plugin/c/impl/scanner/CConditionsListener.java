@@ -1,9 +1,12 @@
 package org.jqassistant.contrib.plugin.c.impl.scanner;
 
 import org.jqassistant.contrib.plugin.c.api.ConditionsBaseListener;
+import org.jqassistant.contrib.plugin.c.api.ConditionsParser.AndExpressionContext;
 import org.jqassistant.contrib.plugin.c.api.ConditionsParser.CompleteConditionContext;
+import org.jqassistant.contrib.plugin.c.api.ConditionsParser.ExpressionContext;
 import org.jqassistant.contrib.plugin.c.api.ConditionsParser.NegativeConditionContext;
 import org.jqassistant.contrib.plugin.c.api.ConditionsParser.SingleConditionContext;
+import org.jqassistant.contrib.plugin.c.api.model.AndDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.ConditionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.NegationDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.SingleConditionDescriptor;
@@ -21,6 +24,7 @@ public class CConditionsListener extends ConditionsBaseListener{
 	
 	@Override
 	public void enterCompleteCondition(CompleteConditionContext ctx) {
+		//The uppermost expression can be a SingleCondition, a NegativeCondition or an AndCondition
 		if(ctx.singleCondition() != null) {
 			SingleConditionDescriptor descriptor = buildSingleConditionDescriptor(ctx.singleCondition());
 			this.resultCondition = descriptor;
@@ -30,8 +34,49 @@ public class CConditionsListener extends ConditionsBaseListener{
 			NegationDescriptor descriptor = buildNegationDescriptor(ctx.negativeCondition());
 			this.resultCondition = descriptor;
 		}
+		
+		if(ctx.andExpression() != null) {
+			AndDescriptor descriptor = buildAndDescriptor(ctx.andExpression());
+			this.resultCondition = descriptor;
+		}
 	}
 	
+	/**
+	 * Given an AndExpressionContext build an AndDescriptor and treat children.
+	 * @param andExpression AndExpressionContext
+	 * @return AndDescriptor with children
+	 */
+	private AndDescriptor buildAndDescriptor(AndExpressionContext andExpression) {
+		AndDescriptor andDescriptor = this.store.create(AndDescriptor.class);
+		if(andExpression.expression() != null) {
+			for(ExpressionContext expression : andExpression.expression()) {
+				andDescriptor.getConnectedConditions().add(handleExpression(expression));
+			}
+		}
+		return andDescriptor;
+	}
+	
+	/**
+	 * Checks which type of expression the expression is and treats it accordingly. 
+	 * @param expression ExpressionContext
+	 * @return Descriptor of a type that extends ConditionDescriptor,
+	 * it can be AndDescriptor, SingleConditionDescriptor and NegationDescriptor 
+	 */
+	private ConditionDescriptor handleExpression(ExpressionContext expression) {
+		if(expression.andExpression() != null) {
+			AndDescriptor andDescriptor = buildAndDescriptor(expression.andExpression());
+			return andDescriptor;
+		} else if(expression.singleCondition() != null) {
+			SingleConditionDescriptor singleConditionDescriptor = buildSingleConditionDescriptor(expression.singleCondition());
+			return singleConditionDescriptor;
+		} else if(expression.negativeCondition() != null) {
+			NegationDescriptor negationDescriptor = buildNegationDescriptor(expression.negativeCondition());
+			return negationDescriptor;
+		} else {
+			return null;
+		}
+	}
+
 	/**
 	 * Builds a SingleConditionDescriptor for a single condition,
 	 * e.g. definedEx(FLAG)
