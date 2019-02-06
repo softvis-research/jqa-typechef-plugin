@@ -302,7 +302,10 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			//if there is already a typedescriptor add type part to it
 			if(typeDescriptor != null) {
 				String firstPart = typeDescriptor.getName();
-				typeDescriptor.setName(firstPart + " " + type); 
+				//error in ast -> sometimes type occurs twice
+				if(!firstPart.contains(type)) {
+					typeDescriptor.setName(firstPart + " " + type); 
+				}
 			//if there was no type part yet create new type descriptor
 			} else {
 				TypeDescriptor newTypeDescriptor = context.getStore().create(TypeDescriptor.class);

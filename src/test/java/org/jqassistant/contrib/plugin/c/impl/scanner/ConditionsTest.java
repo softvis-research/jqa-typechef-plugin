@@ -44,5 +44,21 @@ public class ConditionsTest extends AbstractPluginIT{
         
         store.commitTransaction();
 	}
+	
+	@Test
+	public void testIfElifUndefined() {
+		store.beginTransaction();
+        
+        File testFile = new File(getClassesDirectory(CAstFileScannerPluginTest.class), "/ifelif_undefined.ast");
+        Scanner scanner = getScanner();
+        CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
+        Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);
+
+        CAstFileDescriptor descriptor = (CAstFileDescriptor) returnedDescriptor;
+        TranslationUnitDescriptor translationUnitDescriptor = descriptor.getTranslationUnit();
+        List<VariableDescriptor> variableList = translationUnitDescriptor.getDeclaredVariables();
+        
+        store.commitTransaction();
+	}
 
 }
