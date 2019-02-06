@@ -13,7 +13,10 @@ import org.jqassistant.contrib.plugin.c.api.model.NegationDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.OrDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.SingleConditionDescriptor;
 
+import com.buschmais.jqassistant.core.scanner.api.ScannerContext;
 import com.buschmais.jqassistant.core.store.api.Store;
+import com.buschmais.xo.api.Query.Result;
+import com.buschmais.xo.api.Query.Result.CompositeRowObject;
 
 public class CConditionsListener extends ConditionsBaseListener{
 
@@ -104,8 +107,15 @@ public class CConditionsListener extends ConditionsBaseListener{
 	 * @return SingleConditionDescriptor a descriptor for a single condition
 	 */
 	private SingleConditionDescriptor buildSingleConditionDescriptor(SingleConditionContext singleConditionCtx) {
-		SingleConditionDescriptor singleConditionDescriptor = this.store.create(SingleConditionDescriptor.class);
-		singleConditionDescriptor.setMacroName(singleConditionCtx.MACRONAME().toString());
+		SingleConditionDescriptor singleConditionDescriptor = this.store.find(SingleConditionDescriptor.class, singleConditionCtx.MACRONAME().toString());
+		//if singleconditiondescriptor doesn't exist yet create a new one, otherwise
+		//return the existing descriptor
+		if(singleConditionDescriptor == null) {
+			singleConditionDescriptor = this.store.create(SingleConditionDescriptor.class);
+			singleConditionDescriptor.setMacroName(singleConditionCtx.MACRONAME().toString());
+			singleConditionDescriptor.setFullQualifiedName(singleConditionCtx.MACRONAME().toString());
+		}
+		
 		return singleConditionDescriptor;
 	}
 	
