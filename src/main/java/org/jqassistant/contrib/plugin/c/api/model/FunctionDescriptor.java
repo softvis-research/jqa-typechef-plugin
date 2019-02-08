@@ -41,4 +41,12 @@ public interface FunctionDescriptor extends CDescriptor, NamedDescriptor{
 	List<FunctionDescriptor> getInvokedFunctions();
 	void setInvokedFunctions(List<FunctionDescriptor> invokedFunctions);
 	
+	/**
+	 * Stores presence conditions for this function
+	 * @return a presence condition, can be a SingleConditionDescriptor, a NegationDescriptor,
+	 * an AndDescriptor or an OrDescriptor
+	 */
+	@Relation("DEPENDS_ON")
+	ConditionDescriptor getCondition();
+	void setCondition(ConditionDescriptor conditionDescriptor);
 }

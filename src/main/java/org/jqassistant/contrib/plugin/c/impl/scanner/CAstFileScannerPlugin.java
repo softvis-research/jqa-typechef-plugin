@@ -199,7 +199,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				break;
 			case TagNameConstants.INNERSTATEMENTS:
 				DequeUtils.removeFirstOccurrenceOfType(InnerStatements.class, this.descriptorDeque);
-				DequeUtils.removeFirstOccurrenceOfType(FunctionDescriptor.class, this.descriptorDeque);
+				checkConditionsForFunction();
 				break;
 			case TagNameConstants.CONDITION:
 				DequeUtils.removeFirstOccurrenceOfType(Condition.class, this.descriptorDeque);
@@ -376,6 +376,23 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				break;
 			}
 		}
+	}
+	
+	/**
+	 * Checks if there is a condition defined for this function and if that's the case,
+	 * parses the condition and stores it in the function object.
+	 * @return void
+	 */
+	private void checkConditionsForFunction() {
+		FunctionDescriptor functionDescriptor = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, this.descriptorDeque);
+		List<Condition> conditionsForVariable = DequeUtils.getElementsUnder(FunctionDescriptor.class, Condition.class, this.descriptorDeque);
+		for(Condition condition : conditionsForVariable) {
+			if(!StringUtils.isEmpty(condition.getConditionText())) {
+				ConditionDescriptor conditionDescriptor = parseCondition(condition.getConditionText());
+				functionDescriptor.setCondition(conditionDescriptor);
+			}
+		}
+		DequeUtils.removeFirstOccurrenceOfType(FunctionDescriptor.class, this.descriptorDeque);
 	}
 	
 	/**

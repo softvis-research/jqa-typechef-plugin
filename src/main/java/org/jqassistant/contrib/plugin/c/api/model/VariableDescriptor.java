@@ -17,6 +17,11 @@ public interface VariableDescriptor extends CDescriptor, NamedDescriptor{
 	List<TypeDescriptor> getTypeSpecifiers();
 	void setTypeSpecifiers(List<TypeDescriptor> typeSpecifiers);
 	
+	/**
+	 * Stores presence conditions for this variable
+	 * @return a presence condition, can be a SingleConditionDescriptor, a NegationDescriptor,
+	 * an AndDescriptor or an OrDescriptor
+	 */
 	@Relation("DEPENDS_ON")
 	ConditionDescriptor getCondition();
 	void setCondition(ConditionDescriptor conditionDescriptor);

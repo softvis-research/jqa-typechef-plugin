@@ -13,10 +13,7 @@ import org.jqassistant.contrib.plugin.c.api.model.NegationDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.OrDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.SingleConditionDescriptor;
 
-import com.buschmais.jqassistant.core.scanner.api.ScannerContext;
 import com.buschmais.jqassistant.core.store.api.Store;
-import com.buschmais.xo.api.Query.Result;
-import com.buschmais.xo.api.Query.Result.CompositeRowObject;
 
 public class CConditionsListener extends ConditionsBaseListener{
 
