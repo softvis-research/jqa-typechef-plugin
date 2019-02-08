@@ -117,5 +117,37 @@ public class ConditionsTest extends AbstractPluginIT{
         
         store.commitTransaction();
 	}
+	
+	@Test
+	public void testIfDefTranslationUnit() {
+		store.beginTransaction();
+        
+        File testFile = new File(getClassesDirectory(CAstFileScannerPluginTest.class), "/ifdef_translationUnit.h.ast");
+        Scanner scanner = getScanner();
+        CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
+        Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);
+
+        CAstFileDescriptor descriptor = (CAstFileDescriptor) returnedDescriptor;
+        TranslationUnitDescriptor translationUnitDescriptor = descriptor.getTranslationUnit();
+        List<FunctionDescriptor> members = translationUnitDescriptor.getDeclaredFunctions();
+        assertEquals(2, members.size());
+        for(CDescriptor member : members) {
+        	if(member instanceof VariableDescriptor) {
+        		VariableDescriptor variable = (VariableDescriptor) member;
+        		assertEquals("number", variable.getName());
+        		assertNotNull(variable.getCondition());
+        		SingleConditionDescriptor condition = (SingleConditionDescriptor) variable.getCondition();
+        		assertEquals("FLAG", condition.getMacroName());
+        	} else if(member instanceof FunctionDescriptor) {
+        		FunctionDescriptor function = (FunctionDescriptor) member;
+        		assertEquals("testFunction", function.getName());
+        		assertEquals(1, function.getParameters().size());
+        		//ast has an error here, condition should be set for this function as well
+        	}
+        }
+        
+        
+        store.commitTransaction();
+	}
 
 }

@@ -2,6 +2,9 @@ package org.jqassistant.contrib.plugin.c.impl.scanner;
 
 import java.io.IOException;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 
@@ -54,7 +57,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 	private CAstFileDescriptor cAstFileDescriptor;
 	private TranslationUnitDescriptor translationUnitDescriptor;
 	private ScannerContext context;
-	ArrayDeque<Object> descriptorDeque;
+	private ArrayDeque<Object> descriptorDeque;
 	
     @Override
     public void initialize() {
@@ -204,6 +207,9 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			case TagNameConstants.CONDITION:
 				DequeUtils.removeFirstOccurrenceOfType(Condition.class, this.descriptorDeque);
 				break;
+			case TagNameConstants.TRANSLATIONUNIT:
+				DequeUtils.removeFirstOccurrenceOfType(TranslationUnitDescriptor.class, this.descriptorDeque);
+				break;
 			default:
 				break;
 		}
@@ -260,14 +266,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			storeType("volatile");
 			break;
 		case AttributeValueConstants.PARAMETERDECLARATION:
-			TypeDescriptor currentlyStoredType = (TypeDescriptor) DequeUtils.getFirstOfType(TypeDescriptor.class, descriptorDeque);
-			FunctionDescriptor currentFunction = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, descriptorDeque);
-			if(currentlyStoredType != null) {
-				currentFunction.getReturnType().add(currentlyStoredType);
-				descriptorDeque.remove(currentlyStoredType);
-			}
-			ParameterDescriptor parameterDescriptor = context.getStore().create(ParameterDescriptor.class);
-			descriptorDeque.push(parameterDescriptor);
+			handleParameterDeclaration();
 			break;
 		case AttributeValueConstants.VARIABLEDECLARATION:
 			VariableDescriptor variableDescriptor = context.getStore().create(VariableDescriptor.class);
@@ -283,10 +282,43 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 	 * 
 	 * @return void
 	 */
-	private void createFunctionDefinition() {
+	private FunctionDescriptor createFunctionDefinition() {
 		FunctionDescriptor functionDescriptor = context.getStore().create(FunctionDescriptor.class);
 		this.translationUnitDescriptor.getDeclaredFunctions().add(functionDescriptor);
 		descriptorDeque.push(functionDescriptor);
+		return functionDescriptor;
+	}
+	
+	private void handleParameterDeclaration() {
+		TypeDescriptor currentlyStoredType = (TypeDescriptor) DequeUtils.getFirstOfType(TypeDescriptor.class, descriptorDeque);
+		FunctionDescriptor currentFunction = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, descriptorDeque);
+		if(currentlyStoredType != null && currentFunction != null) {
+			currentFunction.getReturnType().add(currentlyStoredType);
+			descriptorDeque.remove(currentlyStoredType);
+		} else if(currentFunction == null) {
+			//a function declaration looks like a function first, so replace it if you find parameters
+			VariableDescriptor variable = (VariableDescriptor) DequeUtils.getFirstOfType(VariableDescriptor.class, this.descriptorDeque);
+			if(variable != null) {
+				Object[] descriptorArray = this.descriptorDeque.toArray();
+				for(int i = 0; i <= descriptorArray.length-1; i++) {
+					Object currentObject = descriptorArray[i];
+					if(currentObject instanceof VariableDescriptor) {
+						FunctionDescriptor newFunction = createFunctionDefinition();
+						newFunction.getReturnType().add(currentlyStoredType);
+						this.descriptorDeque.remove(currentlyStoredType);
+						if(variable.getName() != null) {
+							newFunction.setName(variable.getName());
+						}
+						descriptorArray[i] = newFunction;
+						List<Object> helperList = Arrays.asList(descriptorArray);
+						this.descriptorDeque = new ArrayDeque<>(helperList);
+						break;
+					}
+				}
+			}
+		}
+		ParameterDescriptor parameterDescriptor = context.getStore().create(ParameterDescriptor.class);
+		descriptorDeque.push(parameterDescriptor);
 	}
 	
 	/**
