@@ -2,9 +2,7 @@ package org.jqassistant.contrib.plugin.c.impl.scanner;
 
 import java.io.IOException;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 
@@ -26,20 +24,24 @@ import org.jqassistant.contrib.plugin.c.api.model.CAstFileDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.Condition;
 import org.jqassistant.contrib.plugin.c.api.model.ConditionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.Declarator;
+import org.jqassistant.contrib.plugin.c.api.model.Enumerators;
 import org.jqassistant.contrib.plugin.c.api.model.FunctionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.ID;
 import org.jqassistant.contrib.plugin.c.api.model.InnerStatements;
 import org.jqassistant.contrib.plugin.c.api.model.ParameterDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.Specifier;
+import org.jqassistant.contrib.plugin.c.api.model.StructDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.TranslationUnitDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.TypeDescriptor;
+import org.jqassistant.contrib.plugin.c.api.model.UnionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.VariableDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.buschmais.jqassistant.core.scanner.api.Scanner;
 import com.buschmais.jqassistant.core.scanner.api.ScannerContext;
-import com.buschmais.jqassistant.core.scanner.api.Scope;
 import com.buschmais.jqassistant.core.scanner.api.ScannerPlugin.Requires;
+import com.buschmais.jqassistant.core.scanner.api.Scope;
 import com.buschmais.jqassistant.plugin.common.api.model.FileDescriptor;
 import com.buschmais.jqassistant.plugin.common.api.scanner.AbstractScannerPlugin;
 import com.buschmais.jqassistant.plugin.common.api.scanner.filesystem.FileResource;
@@ -152,7 +154,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 					//the element has no attributes and we're currently building a type descriptor
 					if(streamReader.getAttributeCount() == 0 && DequeUtils.getFirstOfType(TypeDescriptor.class, descriptorDeque) != null) {
 						String elementText = streamReader.getElementText();
-						if(!StringUtils.isEmpty(elementText) && DequeUtils.getFirstOfType(Declarator.class, this.descriptorDeque) != null) {
+						if(!StringUtils.isEmpty(elementText)) {
 							setInitValueOfArray(elementText);
 						}
 					}
@@ -172,6 +174,16 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 					}
 				} catch (XMLStreamException e) {
 					logger.info(e.getMessage());
+				}
+				break;
+			case TagNameConstants.ENUMERATORS:
+				descriptorDeque.push(new Enumerators());
+				break;
+			case TagNameConstants.ISUNION:
+				try {
+					checkStructOrUnion(streamReader.getElementText());
+				} catch (XMLStreamException e) {
+					logger.error(e.getMessage());
 				}
 				break;
 			default:
@@ -210,11 +222,15 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			case TagNameConstants.TRANSLATIONUNIT:
 				DequeUtils.removeFirstOccurrenceOfType(TranslationUnitDescriptor.class, this.descriptorDeque);
 				break;
+			case TagNameConstants.ENUMERATORS:
+				DequeUtils.removeFirstOccurrenceOfType(Enumerators.class, this.descriptorDeque);
+				checkConditionsForStruct();
+				break;
 			default:
 				break;
 		}
 	}
- 
+
 	/**
 	 * Switches over the attribute values of the entry tag and processes them further 
 	 * because this tag is used for many purposes
@@ -268,12 +284,60 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 		case AttributeValueConstants.PARAMETERDECLARATION:
 			handleParameterDeclaration();
 			break;
-		case AttributeValueConstants.VARIABLEDECLARATION:
+		case AttributeValueConstants.DECLARATION:
 			VariableDescriptor variableDescriptor = context.getStore().create(VariableDescriptor.class);
 			descriptorDeque.push(variableDescriptor);
 			break;
+		case AttributeValueConstants.STRUCTORUNIONSPECIFIER:
+			createStruct();
+			break;
+		case AttributeValueConstants.STRUCTVARIABLEDECLARATION:
+			VariableDescriptor structVariable = context.getStore().create(VariableDescriptor.class);
+			descriptorDeque.push(structVariable);
+			break;
 		default:
 			break;
+		}
+	}
+
+	private void createStruct() {
+		VariableDescriptor variableDescriptor = (VariableDescriptor) DequeUtils.getFirstOfType(VariableDescriptor.class, this.descriptorDeque);
+		if(variableDescriptor != null) {
+			Object[] descriptorArray = this.descriptorDeque.toArray();
+			for(int i = 0; i <= descriptorArray.length-1; i++) {
+				Object currentObject = descriptorArray[i];
+				if(currentObject instanceof VariableDescriptor) {
+					//If a Declaration is detected, a VariableDescriptor is added. Replace it with StructDescriptor if you find struct specifier.
+					StructDescriptor structDescriptor = context.getStore().create(StructDescriptor.class);
+					descriptorArray[i] = structDescriptor;
+					List<Object> helperList = Arrays.asList(descriptorArray);
+					this.descriptorDeque = new ArrayDeque<>(helperList);
+					break;
+				}
+			}
+		}
+	}
+	 
+	private void checkStructOrUnion(String isUnion) {
+		if(isUnion.equals("true")) {
+			UnionDescriptor union = (UnionDescriptor) DequeUtils.getFirstOfType(UnionDescriptor.class, this.descriptorDeque);
+			if(union == null) {
+				StructDescriptor struct = (StructDescriptor) DequeUtils.getFirstOfType(StructDescriptor.class, this.descriptorDeque);
+				if(struct != null) {
+					Object[] descriptorArray = this.descriptorDeque.toArray();
+					for(int i = 0; i <= descriptorArray.length-1; i++) {
+						Object currentObject = descriptorArray[i];
+						if(currentObject instanceof StructDescriptor) {
+							//If structorunion specifier is detected, a struct is created first. After that replace it if it is a union.
+							UnionDescriptor unionDescriptor = context.getStore().create(UnionDescriptor.class);
+							descriptorArray[i] = unionDescriptor;
+							List<Object> helperList = Arrays.asList(descriptorArray);
+							this.descriptorDeque = new ArrayDeque<>(helperList);
+							break;
+						}
+					}
+				}	
+			}
 		}
 	}
 
@@ -296,7 +360,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			currentFunction.getReturnType().add(currentlyStoredType);
 			descriptorDeque.remove(currentlyStoredType);
 		} else if(currentFunction == null) {
-			//a function declaration looks like a function first, so replace it if you find parameters
+			//a function declaration looks like a variable first, so replace it if you find parameters
 			VariableDescriptor variable = (VariableDescriptor) DequeUtils.getFirstOfType(VariableDescriptor.class, this.descriptorDeque);
 			if(variable != null) {
 				Object[] descriptorArray = this.descriptorDeque.toArray();
@@ -402,9 +466,19 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 						variableDescriptor.setCondition(conditionDescriptor);
 					}
 				}
-				TranslationUnitDescriptor translationUnitDescriptor = (TranslationUnitDescriptor) DequeUtils.getFirstOfType(TranslationUnitDescriptor.class, descriptorDeque);
-				translationUnitDescriptor.getDeclaredVariables().add(variableDescriptor);
+				StructDescriptor struct = (StructDescriptor) DequeUtils.getFirstOfType(StructDescriptor.class, this.descriptorDeque);
+				if(struct != null) {
+					struct.getDeclaredVariables().add(variableDescriptor);
+				} else {
+					TranslationUnitDescriptor translationUnitDescriptor = (TranslationUnitDescriptor) DequeUtils.getFirstOfType(TranslationUnitDescriptor.class, descriptorDeque);
+					translationUnitDescriptor.getDeclaredVariables().add(variableDescriptor);
+				}
 				descriptorDeque.remove(currentObject);
+				break;
+			} else if(currentObject instanceof StructDescriptor) {
+				StructDescriptor structDescriptor = (StructDescriptor) currentObject;
+				structDescriptor.setName(name);
+				this.translationUnitDescriptor.getDeclaredStructs().add(structDescriptor);
 				break;
 			}
 		}
@@ -417,14 +491,31 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 	 */
 	private void checkConditionsForFunction() {
 		FunctionDescriptor functionDescriptor = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, this.descriptorDeque);
-		List<Condition> conditionsForVariable = DequeUtils.getElementsUnder(FunctionDescriptor.class, Condition.class, this.descriptorDeque);
-		for(Condition condition : conditionsForVariable) {
+		List<Condition> conditionsForFunction = DequeUtils.getElementsUnder(FunctionDescriptor.class, Condition.class, this.descriptorDeque);
+		for(Condition condition : conditionsForFunction) {
 			if(!StringUtils.isEmpty(condition.getConditionText())) {
 				ConditionDescriptor conditionDescriptor = parseCondition(condition.getConditionText());
 				functionDescriptor.setCondition(conditionDescriptor);
 			}
 		}
 		DequeUtils.removeFirstOccurrenceOfType(FunctionDescriptor.class, this.descriptorDeque);
+	}
+	
+	/**
+	 * Checks if there is a condition defined for this struct and if that's the case,
+	 * parses the condition and stores it in the struct object.
+	 * @return void
+	 */
+	private void checkConditionsForStruct() {
+		StructDescriptor structDescriptor = (StructDescriptor) DequeUtils.getFirstOfType(StructDescriptor.class, this.descriptorDeque);
+		List<Condition> conditionsForStruct = DequeUtils.getElementsUnder(StructDescriptor.class, Condition.class, this.descriptorDeque);
+		for(Condition condition : conditionsForStruct) {
+			if(!StringUtils.isEmpty(condition.getConditionText())) {
+				ConditionDescriptor conditionDescriptor = parseCondition(condition.getConditionText());
+				structDescriptor.setCondition(conditionDescriptor);
+			}
+		}
+		DequeUtils.removeFirstOccurrenceOfType(StructDescriptor.class, this.descriptorDeque);
 	}
 	
 	/**

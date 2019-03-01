@@ -16,4 +16,13 @@ public interface StructDescriptor extends CDescriptor, NamedDescriptor, TypedDes
 	@Relation("DECLARES")
 	List<VariableDescriptor> getDeclaredVariables();
 	void setDeclaredVariables(List<VariableDescriptor> declaredVariables);
+	
+	/**
+	 * Stores presence conditions for this struct
+	 * @return a presence condition, can be a SingleConditionDescriptor, a NegationDescriptor,
+	 * an AndDescriptor or an OrDescriptor
+	 */
+	@Relation("DEPENDS_ON")
+	ConditionDescriptor getCondition();
+	void setCondition(ConditionDescriptor conditionDescriptor);
 }

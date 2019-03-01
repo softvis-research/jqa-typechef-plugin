@@ -20,4 +20,6 @@ public class TagNameConstants {
 	public static final String INIT = "init";
 	public static final String CONDITION = "de.fosd.typechef.conditional.Opt";
 	public static final String FEATUREEXPRESSION = "fexpr";
+	public static final String ISUNION = "isUnion";
+	public static final String ENUMERATORS = "enumerators";
 }

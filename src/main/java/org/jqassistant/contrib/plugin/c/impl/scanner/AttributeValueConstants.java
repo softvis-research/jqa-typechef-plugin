@@ -21,5 +21,7 @@ public class AttributeValueConstants {
 	public static final String CONSTSPECIFIER = "de.fosd.typechef.parser.c.ConstSpecifier";
 	public static final String VOLATILESPECIFIER = "de.fosd.typechef.parser.c.VolatileSpecifier";
 	public static final String PARAMETERDECLARATION = "de.fosd.typechef.parser.c.ParameterDeclarationD";
-	public static final String VARIABLEDECLARATION = "de.fosd.typechef.parser.c.Declaration";
+	public static final String DECLARATION = "de.fosd.typechef.parser.c.Declaration";
+	public static final String STRUCTORUNIONSPECIFIER = "de.fosd.typechef.parser.c.StructOrUnionSpecifier";
+	public static final String STRUCTVARIABLEDECLARATION = "de.fosd.typechef.parser.c.StructDeclaration";
 }
