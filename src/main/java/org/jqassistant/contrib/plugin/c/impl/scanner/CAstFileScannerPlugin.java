@@ -557,13 +557,4 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 		walker.walk(listener, tree);
 		return listener.getResultCondition();
 	}
-	
-	/**
-	 * Returns the descriptor deque that holds the currently processed elements
-	 * 
-	 * @return {@code ArrayDeque<Object>} with the current elements
-	 */
-	protected ArrayDeque<Object> getDescriptorDeque(){
-		return this.descriptorDeque;
-	}
 }
