@@ -2,7 +2,6 @@ package org.jqassistant.contrib.plugin.c.impl.scanner;
 
 import java.io.IOException;
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -289,7 +288,8 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			descriptorDeque.push(variableDescriptor);
 			break;
 		case AttributeValueConstants.STRUCTORUNIONSPECIFIER:
-			createStruct();
+			// At first a declaration is translated in to a VariableDescriptor but after finding out it is a struct, replace it.
+			this.descriptorDeque = DequeUtils.replaceFirstElementOfType(VariableDescriptor.class, StructDescriptor.class, this.descriptorDeque, this.context);
 			break;
 		case AttributeValueConstants.STRUCTVARIABLEDECLARATION:
 			VariableDescriptor structVariable = context.getStore().create(VariableDescriptor.class);
@@ -299,44 +299,13 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			break;
 		}
 	}
-
-	private void createStruct() {
-		VariableDescriptor variableDescriptor = (VariableDescriptor) DequeUtils.getFirstOfType(VariableDescriptor.class, this.descriptorDeque);
-		if(variableDescriptor != null) {
-			Object[] descriptorArray = this.descriptorDeque.toArray();
-			for(int i = 0; i <= descriptorArray.length-1; i++) {
-				Object currentObject = descriptorArray[i];
-				if(currentObject instanceof VariableDescriptor) {
-					//If a Declaration is detected, a VariableDescriptor is added. Replace it with StructDescriptor if you find struct specifier.
-					StructDescriptor structDescriptor = context.getStore().create(StructDescriptor.class);
-					descriptorArray[i] = structDescriptor;
-					List<Object> helperList = Arrays.asList(descriptorArray);
-					this.descriptorDeque = new ArrayDeque<>(helperList);
-					break;
-				}
-			}
-		}
-	}
 	 
 	private void checkStructOrUnion(String isUnion) {
 		if(isUnion.equals("true")) {
 			UnionDescriptor union = (UnionDescriptor) DequeUtils.getFirstOfType(UnionDescriptor.class, this.descriptorDeque);
 			if(union == null) {
-				StructDescriptor struct = (StructDescriptor) DequeUtils.getFirstOfType(StructDescriptor.class, this.descriptorDeque);
-				if(struct != null) {
-					Object[] descriptorArray = this.descriptorDeque.toArray();
-					for(int i = 0; i <= descriptorArray.length-1; i++) {
-						Object currentObject = descriptorArray[i];
-						if(currentObject instanceof StructDescriptor) {
-							//If structorunion specifier is detected, a struct is created first. After that replace it if it is a union.
-							UnionDescriptor unionDescriptor = context.getStore().create(UnionDescriptor.class);
-							descriptorArray[i] = unionDescriptor;
-							List<Object> helperList = Arrays.asList(descriptorArray);
-							this.descriptorDeque = new ArrayDeque<>(helperList);
-							break;
-						}
-					}
-				}	
+				// Struct and Unions share the same declaration element, so replace a struct by a union if you find out it is in fact a union.
+				this.descriptorDeque = DequeUtils.replaceFirstElementOfType(StructDescriptor.class, UnionDescriptor.class, this.descriptorDeque, this.context);
 			}
 		}
 	}
@@ -360,25 +329,18 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			currentFunction.getReturnType().add(currentlyStoredType);
 			descriptorDeque.remove(currentlyStoredType);
 		} else if(currentFunction == null) {
-			//a function declaration looks like a variable first, so replace it if you find parameters
+			//A function declaration looks like a variable first, so replace it if you find parameters.
 			VariableDescriptor variable = (VariableDescriptor) DequeUtils.getFirstOfType(VariableDescriptor.class, this.descriptorDeque);
 			if(variable != null) {
-				Object[] descriptorArray = this.descriptorDeque.toArray();
-				for(int i = 0; i <= descriptorArray.length-1; i++) {
-					Object currentObject = descriptorArray[i];
-					if(currentObject instanceof VariableDescriptor) {
-						FunctionDescriptor newFunction = createFunctionDefinition();
-						newFunction.getReturnType().add(currentlyStoredType);
-						this.descriptorDeque.remove(currentlyStoredType);
-						if(variable.getName() != null) {
-							newFunction.setName(variable.getName());
-						}
-						descriptorArray[i] = newFunction;
-						List<Object> helperList = Arrays.asList(descriptorArray);
-						this.descriptorDeque = new ArrayDeque<>(helperList);
-						break;
-					}
+				String name =  variable.getName();
+				this.descriptorDeque = DequeUtils.replaceFirstElementOfType(VariableDescriptor.class, FunctionDescriptor.class, this.descriptorDeque, this.context);
+				FunctionDescriptor function = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, this.descriptorDeque);
+				if(!StringUtils.isEmpty(name)) {
+					function.setName(name);
 				}
+				function.getReturnType().add(currentlyStoredType);
+				this.descriptorDeque.remove(currentlyStoredType);
+				this.translationUnitDescriptor.getDeclaredFunctions().add(function);
 			}
 		}
 		ParameterDescriptor parameterDescriptor = context.getStore().create(ParameterDescriptor.class);

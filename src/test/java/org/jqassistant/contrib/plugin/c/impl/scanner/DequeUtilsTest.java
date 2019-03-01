@@ -1,14 +1,19 @@
 package org.jqassistant.contrib.plugin.c.impl.scanner;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayDeque;
 import org.jqassistant.contrib.plugin.c.api.model.Declarator;
+import org.jqassistant.contrib.plugin.c.api.model.FunctionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.ID;
 import org.jqassistant.contrib.plugin.c.api.model.InnerStatements;
 import org.jqassistant.contrib.plugin.c.api.model.Specifier;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.buschmais.jqassistant.core.scanner.api.Scanner;
+import com.buschmais.jqassistant.core.scanner.api.ScannerContext;
 import com.buschmais.jqassistant.plugin.common.test.AbstractPluginIT;
 
 public class DequeUtilsTest extends AbstractPluginIT{
@@ -73,5 +78,16 @@ public class DequeUtilsTest extends AbstractPluginIT{
 		assertEquals(2, DequeUtils.getElementsUnder(Boolean.class, Double.class, this.deque).size());
 		assertEquals(0, DequeUtils.getElementsUnder(Double.class, Boolean.class, this.deque).size());
 		assertEquals(0, DequeUtils.getElementsUnder(String.class, Boolean.class, this.deque).size());
+	}
+	
+	@Test
+	public void testReplaceFirstElementOfType() {
+		store.beginTransaction();
+		Scanner scanner = getScanner();
+		ScannerContext context = scanner.getContext();
+		this.deque = DequeUtils.replaceFirstElementOfType(Double.class, FunctionDescriptor.class, this.deque, context);
+		assertTrue(DequeUtils.getFirstOfType(FunctionDescriptor.class, this.deque) != null);
+		assertTrue(DequeUtils.getElementAt(2, this.deque) instanceof FunctionDescriptor);
+		store.commitTransaction();
 	}
 }

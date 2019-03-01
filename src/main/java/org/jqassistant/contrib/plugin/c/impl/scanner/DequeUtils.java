@@ -2,14 +2,21 @@ package org.jqassistant.contrib.plugin.c.impl.scanner;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
+import org.jqassistant.contrib.plugin.c.api.model.StructDescriptor;
+import org.jqassistant.contrib.plugin.c.api.model.UnionDescriptor;
+
+import com.buschmais.jqassistant.core.scanner.api.ScannerContext;
+import com.buschmais.jqassistant.core.store.api.model.Descriptor;
 
 /**
  * Utility class to query the {@code ArrayDeque<Object>} that is used in the scanner plugin
  * @author Christina Sixtus
  */
-public class DequeUtils {
+public class DequeUtils{
 
 	/**
 	 * Iterates over a deque and checks if an object of type A appears before an object 
@@ -106,6 +113,25 @@ public class DequeUtils {
 			}
 		}
 		return resultList;	
+	}
+	
+	public static <A extends Object, B extends Descriptor> ArrayDeque<Object> replaceFirstElementOfType(Class<A> typeOfOldElement, Class<B> typeOfNewElement, ArrayDeque<Object> deque, ScannerContext context) {
+		@SuppressWarnings("unchecked")
+		A oldElement = (A) DequeUtils.getFirstOfType(typeOfOldElement, deque);
+		if(oldElement != null) {
+			Object[] descriptorArray = deque.toArray();
+			for(int i = 0; i <= descriptorArray.length-1; i++) {
+				Object currentObject = descriptorArray[i];
+				if(typeOfOldElement.isAssignableFrom(currentObject.getClass())) {
+					B newElement = context.getStore().create(typeOfNewElement);
+					descriptorArray[i] = newElement;
+					List<Object> helperList = Arrays.asList(descriptorArray);
+					deque = new ArrayDeque<>(helperList);
+					break;
+				}
+			}
+		}
+		return deque;
 	}
 	
 }
