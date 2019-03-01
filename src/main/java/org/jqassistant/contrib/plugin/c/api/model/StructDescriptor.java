@@ -7,7 +7,7 @@ import com.buschmais.xo.neo4j.api.annotation.Label;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
 
 @Label("Struct")
-public interface StructDescriptor extends CDescriptor, NamedDescriptor, TypedDescriptor{
+public interface StructDescriptor extends CDescriptor, NamedDescriptor, DependsOnDescriptor{
 
 	/**
 	 * Returns the variables that were declared in this struct
@@ -16,13 +16,4 @@ public interface StructDescriptor extends CDescriptor, NamedDescriptor, TypedDes
 	@Relation("DECLARES")
 	List<VariableDescriptor> getDeclaredVariables();
 	void setDeclaredVariables(List<VariableDescriptor> declaredVariables);
-	
-	/**
-	 * Stores presence conditions for this struct
-	 * @return a presence condition, can be a SingleConditionDescriptor, a NegationDescriptor,
-	 * an AndDescriptor or an OrDescriptor
-	 */
-	@Relation("DEPENDS_ON")
-	ConditionDescriptor getCondition();
-	void setCondition(ConditionDescriptor conditionDescriptor);
 }

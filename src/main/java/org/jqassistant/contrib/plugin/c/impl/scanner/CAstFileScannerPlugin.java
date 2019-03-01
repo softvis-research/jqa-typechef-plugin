@@ -23,6 +23,7 @@ import org.jqassistant.contrib.plugin.c.api.model.CAstFileDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.Condition;
 import org.jqassistant.contrib.plugin.c.api.model.ConditionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.Declarator;
+import org.jqassistant.contrib.plugin.c.api.model.DependsOnDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.Enumerators;
 import org.jqassistant.contrib.plugin.c.api.model.FunctionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.ID;
@@ -213,7 +214,8 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				break;
 			case TagNameConstants.INNERSTATEMENTS:
 				DequeUtils.removeFirstOccurrenceOfType(InnerStatements.class, this.descriptorDeque);
-				checkConditionsForFunction();
+				checkConditionsForElement(FunctionDescriptor.class);
+				DequeUtils.removeFirstOccurrenceOfType(FunctionDescriptor.class, this.descriptorDeque);
 				break;
 			case TagNameConstants.CONDITION:
 				DequeUtils.removeFirstOccurrenceOfType(Condition.class, this.descriptorDeque);
@@ -223,7 +225,8 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				break;
 			case TagNameConstants.ENUMERATORS:
 				DequeUtils.removeFirstOccurrenceOfType(Enumerators.class, this.descriptorDeque);
-				checkConditionsForStruct();
+				checkConditionsForElement(StructDescriptor.class);
+				DequeUtils.removeFirstOccurrenceOfType(StructDescriptor.class, this.descriptorDeque);
 				break;
 			default:
 				break;
@@ -416,18 +419,15 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				//and remove the variable from the deque
 				VariableDescriptor variableDescriptor = (VariableDescriptor) currentObject;
 				variableDescriptor.setName(name);
+				
 				TypeDescriptor typeDescriptor = (TypeDescriptor) DequeUtils.getFirstOfType(TypeDescriptor.class, descriptorDeque);
 				if(typeDescriptor != null) {
 					variableDescriptor.getTypeSpecifiers().add(typeDescriptor);
 					descriptorDeque.remove(typeDescriptor);
 				}
-				List<Condition> conditionsForVariable = DequeUtils.getElementsUnder(VariableDescriptor.class, Condition.class, this.descriptorDeque);
-				for(Condition condition : conditionsForVariable) {
-					if(!StringUtils.isEmpty(condition.getConditionText())) {
-						ConditionDescriptor conditionDescriptor = parseCondition(condition.getConditionText());
-						variableDescriptor.setCondition(conditionDescriptor);
-					}
-				}
+				
+				checkConditionsForElement(VariableDescriptor.class);
+				
 				StructDescriptor struct = (StructDescriptor) DequeUtils.getFirstOfType(StructDescriptor.class, this.descriptorDeque);
 				if(struct != null) {
 					struct.getDeclaredVariables().add(variableDescriptor);
@@ -445,39 +445,22 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			}
 		}
 	}
-	
+
 	/**
-	 * Checks if there is a condition defined for this function and if that's the case,
-	 * parses the condition and stores it in the function object.
+	 * Checks if there is a condition defined for this element and if that's the case,
+	 * parses the condition and stores it as condition for the object.
+	 * @param typeOfElement The class of the element for which the condition should be checked.
 	 * @return void
 	 */
-	private void checkConditionsForFunction() {
-		FunctionDescriptor functionDescriptor = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, this.descriptorDeque);
-		List<Condition> conditionsForFunction = DequeUtils.getElementsUnder(FunctionDescriptor.class, Condition.class, this.descriptorDeque);
-		for(Condition condition : conditionsForFunction) {
+	private <A extends DependsOnDescriptor> void checkConditionsForElement(Class<A> typeOfElement) {
+		A descriptor = (A) DequeUtils.getFirstOfType(typeOfElement, this.descriptorDeque);
+		List<Condition> conditionsForElement = DequeUtils.getElementsUnder(typeOfElement, Condition.class, this.descriptorDeque);
+		for(Condition condition : conditionsForElement) {
 			if(!StringUtils.isEmpty(condition.getConditionText())) {
 				ConditionDescriptor conditionDescriptor = parseCondition(condition.getConditionText());
-				functionDescriptor.setCondition(conditionDescriptor);
+				descriptor.setCondition(conditionDescriptor);
 			}
 		}
-		DequeUtils.removeFirstOccurrenceOfType(FunctionDescriptor.class, this.descriptorDeque);
-	}
-	
-	/**
-	 * Checks if there is a condition defined for this struct and if that's the case,
-	 * parses the condition and stores it in the struct object.
-	 * @return void
-	 */
-	private void checkConditionsForStruct() {
-		StructDescriptor structDescriptor = (StructDescriptor) DequeUtils.getFirstOfType(StructDescriptor.class, this.descriptorDeque);
-		List<Condition> conditionsForStruct = DequeUtils.getElementsUnder(StructDescriptor.class, Condition.class, this.descriptorDeque);
-		for(Condition condition : conditionsForStruct) {
-			if(!StringUtils.isEmpty(condition.getConditionText())) {
-				ConditionDescriptor conditionDescriptor = parseCondition(condition.getConditionText());
-				structDescriptor.setCondition(conditionDescriptor);
-			}
-		}
-		DequeUtils.removeFirstOccurrenceOfType(StructDescriptor.class, this.descriptorDeque);
 	}
 	
 	/**

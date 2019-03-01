@@ -4,6 +4,6 @@ import com.buschmais.jqassistant.plugin.common.api.model.NamedDescriptor;
 import com.buschmais.xo.neo4j.api.annotation.Label;
 
 @Label("Enum")
-public interface EnumDescriptor extends CDescriptor, NamedDescriptor{
+public interface EnumDescriptor extends CDescriptor, NamedDescriptor, DependsOnDescriptor{
 
 }
