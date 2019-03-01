@@ -25,7 +25,7 @@ public class StructTestIT extends AbstractPluginIT{
 	public void testStructDeclaration() {
 		store.beginTransaction();
         
-        File testFile = new File(getClassesDirectory(CAstFileScannerPluginTest.class), "/struct.ast");
+        File testFile = new File(getClassesDirectory(StructTestIT.class), "/struct.ast");
         Scanner scanner = getScanner();
         CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
         Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);
@@ -70,7 +70,7 @@ public class StructTestIT extends AbstractPluginIT{
 	public void testConditionalStruct() {
 		store.beginTransaction();
         
-        File testFile = new File(getClassesDirectory(CAstFileScannerPluginTest.class), "/conditional_struct.ast");
+        File testFile = new File(getClassesDirectory(StructTestIT.class), "/conditional_struct.ast");
         Scanner scanner = getScanner();
         CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
         Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);

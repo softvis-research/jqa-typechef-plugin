@@ -21,7 +21,7 @@ public class GlobalVariablesIT extends AbstractPluginIT{
 	public void testSimpleGlobalVariables() {
 		store.beginTransaction();
         
-        File testFile = new File(getClassesDirectory(CAstFileScannerPluginTest.class), "/global_variables_simple.ast");
+        File testFile = new File(getClassesDirectory(GlobalVariablesIT.class), "/global_variables_simple.ast");
         Scanner scanner = getScanner();
         CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
         Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);
@@ -71,7 +71,7 @@ public class GlobalVariablesIT extends AbstractPluginIT{
 	public void testComplexGlobalVariables() {
 		store.beginTransaction();
         
-        File testFile = new File(getClassesDirectory(CAstFileScannerPluginTest.class), "/global_variables_complex.ast");
+        File testFile = new File(getClassesDirectory(GlobalVariablesIT.class), "/global_variables_complex.ast");
         Scanner scanner = getScanner();
         CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
         Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);
@@ -112,7 +112,7 @@ public class GlobalVariablesIT extends AbstractPluginIT{
 	public void testTypeQualifiers() {
 		store.beginTransaction();
         
-        File testFile = new File(getClassesDirectory(CAstFileScannerPluginTest.class), "type_qualifiers.ast");
+        File testFile = new File(getClassesDirectory(FunctionTestIT.class), "type_qualifiers.ast");
         Scanner scanner = getScanner();
         CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
         Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);
