@@ -4,11 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayDeque;
-import org.jqassistant.contrib.plugin.c.api.model.Declarator;
 import org.jqassistant.contrib.plugin.c.api.model.FunctionDescriptor;
-import org.jqassistant.contrib.plugin.c.api.model.ID;
-import org.jqassistant.contrib.plugin.c.api.model.InnerStatements;
-import org.jqassistant.contrib.plugin.c.api.model.Specifier;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,17 +30,13 @@ public class DequeUtilsTest extends AbstractPluginIT{
 
 	@Test
 	public void testBefore() {
-		ArrayDeque<Object> deque2 = new ArrayDeque<>();
-		deque2.push(new Specifier());
-		deque2.push(new Declarator());
-		deque2.push(new ID());
+		this.deque.push(new String());
 		
-		assertEquals(true, DequeUtils.before(ID.class, Declarator.class, deque2));
-		assertEquals(true, DequeUtils.before(ID.class, Specifier.class, deque2));
-		assertEquals(false, DequeUtils.before(Specifier.class, ID.class, deque2));
-		assertEquals(false, DequeUtils.before(Declarator.class, ID.class, deque2));
-		assertEquals(false, DequeUtils.before(InnerStatements.class, TagNameConstants.class, deque2));
-		assertEquals(true, DequeUtils.before(Declarator.class, InnerStatements.class, deque2));
+		assertEquals(true, DequeUtils.before(String.class, Boolean.class, this.deque));
+		assertEquals(true, DequeUtils.before(Boolean.class, Double.class, this.deque));
+		assertEquals(false, DequeUtils.before(Integer.class, String.class, this.deque));
+		assertEquals(false, DequeUtils.before(Double.class, String.class, this.deque));
+		assertEquals(true, DequeUtils.before(String.class, Integer.class, this.deque));
 	}
 	
 	@Test
@@ -71,10 +63,10 @@ public class DequeUtilsTest extends AbstractPluginIT{
 	
 	@Test
 	public void testGetElementsUnder() {
-		this.deque.push(new Specifier());
+		this.deque.push(new Boolean(false));
 		assertEquals(5, this.deque.size());
-		assertEquals(0, DequeUtils.getElementsUnder(Specifier.class, String.class, this.deque).size());
-		assertEquals(2, DequeUtils.getElementsUnder(Specifier.class, Boolean.class, this.deque).size());
+		assertEquals(0, DequeUtils.getElementsUnder(Boolean.class, String.class, this.deque).size());
+		assertEquals(2, DequeUtils.getElementsUnder(Boolean.class, Boolean.class, this.deque).size());
 		assertEquals(2, DequeUtils.getElementsUnder(Boolean.class, Double.class, this.deque).size());
 		assertEquals(0, DequeUtils.getElementsUnder(Double.class, Boolean.class, this.deque).size());
 		assertEquals(0, DequeUtils.getElementsUnder(String.class, Boolean.class, this.deque).size());

@@ -105,10 +105,12 @@ public class DequeUtils{
 		List<B> resultList = new ArrayList<>();
 		for(Iterator<? extends Object> it = deque.iterator(); it.hasNext();) {
 			Object currentObject = it.next();
-			if(typeOfBaseElement.isAssignableFrom(currentObject.getClass())) {
+			boolean isFirstObject = false;
+			if(typeOfBaseElement.isAssignableFrom(currentObject.getClass()) && !baseElementFound) {
 				baseElementFound = true;
+				isFirstObject = true;
 			}
-			if(typeOfSearchedElements.isAssignableFrom(currentObject.getClass()) && baseElementFound) {
+			if(typeOfSearchedElements.isAssignableFrom(currentObject.getClass()) && baseElementFound && !isFirstObject) {
 				resultList.add((B) currentObject);
 			}
 		}

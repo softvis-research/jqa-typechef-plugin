@@ -33,7 +33,7 @@ public class StructTestIT extends AbstractPluginIT{
         CAstFileDescriptor descriptor = (CAstFileDescriptor) returnedDescriptor;
         TranslationUnitDescriptor translationUnitDescriptor = descriptor.getTranslationUnit();
         List<StructDescriptor> structList = translationUnitDescriptor.getDeclaredStructs();
-        assertEquals(2, structList.size());
+        assertEquals(3, structList.size());
         
         for(CDescriptor cDescriptor : structList) {
         	if(cDescriptor instanceof StructDescriptor) {

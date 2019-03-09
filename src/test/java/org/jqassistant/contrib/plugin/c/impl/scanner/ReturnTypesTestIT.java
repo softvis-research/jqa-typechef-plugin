@@ -1,8 +1,10 @@
 package org.jqassistant.contrib.plugin.c.impl.scanner;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jqassistant.contrib.plugin.c.api.model.CAstFileDescriptor;
@@ -106,8 +108,11 @@ public class ReturnTypesTestIT extends AbstractPluginIT{
 				break;
 			case "getPointerToInt":
 				assertEquals("int *", functionDescriptor.getReturnType().get(0).getName());
-				assertEquals("int *", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
-				assertEquals("short int", functionDescriptor.getParameters().get(1).getTypeSpecifiers().get(0).getName());
+				List<String> parameterTypeList = new ArrayList<>();
+				parameterTypeList.add("int *");
+				parameterTypeList.add("short int");
+				assertTrue(parameterTypeList.contains(functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName()));
+				assertTrue(parameterTypeList.contains(functionDescriptor.getParameters().get(1).getTypeSpecifiers().get(0).getName()));
 				break;
 			case "getCharArraySized":
 				assertEquals("char [5]", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
