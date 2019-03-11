@@ -174,7 +174,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				break;
 			case TagNameConstants.ISUNION:
 				try {
-					checkStructOrUnion(streamReader.getElementText());
+					storeStructOrUnionType(streamReader.getElementText());
 				} catch (XMLStreamException e) {
 					logger.error(e.getMessage());
 				} finally {
@@ -208,8 +208,17 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 					VariableDescriptor variable = (VariableDescriptor) DequeUtils.getFirstOfType(VariableDescriptor.class, this.descriptorDeque);
 					checkConditionsForElement(VariableDescriptor.class);
 					StructDescriptor struct = (StructDescriptor) DequeUtils.getFirstOfType(StructDescriptor.class, this.descriptorDeque);
-					if(struct != null) {
+					UnionDescriptor union = (UnionDescriptor) DequeUtils.getFirstOfType(UnionDescriptor.class, this.descriptorDeque);
+					if(struct != null && union != null) {
+						if(DequeUtils.before(StructDescriptor.class, UnionDescriptor.class, this.descriptorDeque)) {
+							struct.getDeclaredVariables().add(variable);
+						} else {
+							union.getDeclaredVariables().add(variable);
+						}
+					} else if(struct != null) {
 						struct.getDeclaredVariables().add(variable);
+					} else if(union != null) {
+						union.getDeclaredVariables().add(variable);
 					} else {
 						translationUnit.getDeclaredVariables().add(variable);
 					}
@@ -291,12 +300,9 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			this.descriptorDeque.pop();
 			descriptorDeque.push(variableDescriptor);
 			break;
-		case AttributeValueConstants.STRUCTORUNIONSPECIFIER:
-			// At first a declaration is translated into a VariableDescriptor but after finding out it is a struct, replace it.
-			this.descriptorDeque = DequeUtils.replaceFirstElementOfType(VariableDescriptor.class, StructDescriptor.class, this.descriptorDeque, this.context);
-			break;
 		case AttributeValueConstants.STRUCTVARIABLEDECLARATION:
 			VariableDescriptor structVariable = context.getStore().create(VariableDescriptor.class);
+			checkStructOrUnion();
 			this.descriptorDeque.pop();
 			this.descriptorDeque.push(structVariable);
 			break;
@@ -304,13 +310,37 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			break;
 		}
 	}
-	 
-	private void checkStructOrUnion(String isUnion) {
+
+	/**
+	 * After tag isUnion showed up, check if the current declaration is of type struct or union and store it as type.
+	 * @param isUnion tag content that contains true if it is a union and false if it is a struct
+	 * @return void
+	 */
+	private void storeStructOrUnionType(String isUnion) {
 		if(isUnion.equals("true")) {
-			UnionDescriptor union = (UnionDescriptor) DequeUtils.getFirstOfType(UnionDescriptor.class, this.descriptorDeque);
-			if(union == null) {
-				// Struct and Unions share the same declaration element, so replace a struct by a union if you find out it is in fact a union.
-				this.descriptorDeque = DequeUtils.replaceFirstElementOfType(StructDescriptor.class, UnionDescriptor.class, this.descriptorDeque, this.context);
+			storeType("union");
+		} else {
+			storeType("struct");
+		}
+	}
+	
+	/**
+	 * If a struct or union variable showed up, check if the current declaration is still stored as a variable declaration
+	 * and convert it to a struct or union declaration if necessary.
+	 * @return void
+	 */
+	private void checkStructOrUnion() {
+		VariableDescriptor variable = (VariableDescriptor) DequeUtils.getFirstOfType(VariableDescriptor.class, this.descriptorDeque);
+		if(variable != null) {
+			String type = variable.getTypeSpecifiers().get(0).getName();
+			if(type.equals("struct")) {
+				this.descriptorDeque = DequeUtils.replaceFirstElementOfType(VariableDescriptor.class, StructDescriptor.class, this.descriptorDeque, this.context);
+				StructDescriptor struct = (StructDescriptor) DequeUtils.getFirstOfType(StructDescriptor.class, this.descriptorDeque);
+				struct.setName(variable.getName());
+			} else {
+				this.descriptorDeque = DequeUtils.replaceFirstElementOfType(VariableDescriptor.class, UnionDescriptor.class, this.descriptorDeque, this.context);
+				UnionDescriptor union = (UnionDescriptor) DequeUtils.getFirstOfType(UnionDescriptor.class, this.descriptorDeque);
+				union.setName(variable.getName());
 			}
 		}
 	}
@@ -392,6 +422,11 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				break;
 			} else if(currentObject instanceof VariableDescriptor) {
 				VariableDescriptor variableDescriptor = (VariableDescriptor) currentObject;
+				//If the variable is of type struct or union, the name of the struct or union is stored as name of the variable descriptor.
+				if(variableDescriptor.getName() != null && variableDescriptor.getTypeSpecifiers() != null) {
+					String completeType = variableDescriptor.getTypeSpecifiers().get(0).getName() + " " + variableDescriptor.getName();
+					variableDescriptor.getTypeSpecifiers().get(0).setName(completeType);
+				}
 				variableDescriptor.setName(name);
 				
 				if(this.currentlyStoredType != null) {
@@ -399,9 +434,27 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 					this.currentlyStoredType = null;
 				}
 				break;
+			//If a struct or a union already exist and a name comes up, it is the instantiation of a variable
+			//with the type of this struct or union
 			} else if(currentObject instanceof StructDescriptor) {
 				StructDescriptor structDescriptor = (StructDescriptor) currentObject;
-				structDescriptor.setName(name);
+				VariableDescriptor variable = context.getStore().create(VariableDescriptor.class);
+				variable.setName(name);
+				TypeDescriptor type = context.getStore().create(TypeDescriptor.class);
+				type.setName("struct " + structDescriptor.getName());
+				variable.getTypeSpecifiers().add(type);
+				TranslationUnitDescriptor translationUnit = (TranslationUnitDescriptor) DequeUtils.getFirstOfType(TranslationUnitDescriptor.class, this.descriptorDeque);
+				translationUnit.getDeclaredVariables().add(variable);
+				break;
+			} else if(currentObject instanceof UnionDescriptor) {
+				UnionDescriptor union = (UnionDescriptor) currentObject;
+				VariableDescriptor variable = context.getStore().create(VariableDescriptor.class);
+				variable.setName(name);
+				TypeDescriptor type = context.getStore().create(TypeDescriptor.class);
+				type.setName("union " + union.getName());
+				variable.getTypeSpecifiers().add(type);
+				TranslationUnitDescriptor translationUnit = (TranslationUnitDescriptor) DequeUtils.getFirstOfType(TranslationUnitDescriptor.class, this.descriptorDeque);
+				translationUnit.getDeclaredVariables().add(variable);
 				break;
 			}
 		}

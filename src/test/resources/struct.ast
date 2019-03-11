@@ -1213,6 +1213,103 @@
       </de.fosd.typechef.conditional.Opt>
       <de.fosd.typechef.conditional.Opt>
         <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../de.fosd.typechef.conditional.Opt/condition"/>
+        <entry class="de.fosd.typechef.parser.c.Declaration">
+          <declSpecs class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
+            <scala.collection.immutable.List_-SerializationProxy>
+              <default/>
+              <de.fosd.typechef.conditional.Opt>
+                <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                <entry class="de.fosd.typechef.parser.c.StructOrUnionSpecifier">
+                  <range class="scala.Some">
+                    <value class="scala.Tuple2">
+                      <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../../de.fosd.typechef.conditional.Opt[2]/entry/range/value/__2"/>
+                      <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                        <file>file struct.c</file>
+                        <line>19</line>
+                        <column>15</column>
+                      </__2>
+                    </value>
+                  </range>
+                  <isUnion>false</isUnion>
+                  <id class="scala.Some">
+                    <value class="de.fosd.typechef.parser.c.Id">
+                      <range class="scala.Some">
+                        <value class="scala.Tuple2">
+                          <__1 class="de.fosd.typechef.parser.c.TokenPosition">
+                            <file>file struct.c</file>
+                            <line>19</line>
+                            <column>7</column>
+                          </__1>
+                          <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../range/value/__2"/>
+                        </value>
+                      </range>
+                      <name>adresse</name>
+                    </value>
+                  </id>
+                  <enumerators class="scala.None$" reference="../../../../../../../de.fosd.typechef.conditional.Opt/entry/declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/enumerators/value/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/declaratorList/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/initializer"/>
+                  <attributesBeforeBody class="scala.collection.immutable.Nil$" reference="../../../../../../../de.fosd.typechef.conditional.Opt/entry/declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/enumerators/value/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/declaratorList/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/decl/pointers"/>
+                  <attributesAfterBody class="scala.collection.immutable.Nil$" reference="../../../../../../../de.fosd.typechef.conditional.Opt/entry/declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/enumerators/value/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/declaratorList/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/decl/pointers"/>
+                </entry>
+              </de.fosd.typechef.conditional.Opt>
+              <scala.collection.immutable.ListSerializeEnd_- reference="../../../../../de.fosd.typechef.conditional.Opt/entry/declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/enumerators/value/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/qualifierList/scala.collection.immutable.List_-SerializationProxy/scala.collection.immutable.ListSerializeEnd_-"/>
+            </scala.collection.immutable.List_-SerializationProxy>
+          </declSpecs>
+          <init class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
+            <scala.collection.immutable.List_-SerializationProxy>
+              <default/>
+              <de.fosd.typechef.conditional.Opt>
+                <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                <entry class="de.fosd.typechef.parser.c.InitDeclaratorI">
+                  <declarator class="de.fosd.typechef.parser.c.AtomicNamedDeclarator">
+                    <pointers class="scala.collection.immutable.Nil$" reference="../../../../../../../../de.fosd.typechef.conditional.Opt/entry/declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/enumerators/value/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/declaratorList/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/decl/pointers"/>
+                    <extensions class="scala.collection.immutable.Nil$" reference="../../../../../../../../de.fosd.typechef.conditional.Opt/entry/declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/enumerators/value/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/declaratorList/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/decl/pointers"/>
+                    <range class="scala.Some">
+                      <value class="scala.Tuple2">
+                        <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                        <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                          <file>file struct.c</file>
+                          <line>19</line>
+                          <column>25</column>
+                        </__2>
+                      </value>
+                    </range>
+                    <id>
+                      <range class="scala.Some">
+                        <value class="scala.Tuple2">
+                          <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../../declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                          <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__2"/>
+                        </value>
+                      </range>
+                      <name>newAddress</name>
+                    </id>
+                  </declarator>
+                  <attributes class="scala.collection.immutable.Nil$" reference="../../../../../../../de.fosd.typechef.conditional.Opt/entry/declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/enumerators/value/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/declaratorList/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/decl/pointers"/>
+                  <range class="scala.Some">
+                    <value class="scala.Tuple2">
+                      <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                      <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../declarator/range/value/__2"/>
+                    </value>
+                  </range>
+                  <i class="scala.None$" reference="../../../../../../../de.fosd.typechef.conditional.Opt/entry/declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/enumerators/value/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/declaratorList/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/initializer"/>
+                </entry>
+              </de.fosd.typechef.conditional.Opt>
+              <scala.collection.immutable.ListSerializeEnd_- reference="../../../../../de.fosd.typechef.conditional.Opt/entry/declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/enumerators/value/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/qualifierList/scala.collection.immutable.List_-SerializationProxy/scala.collection.immutable.ListSerializeEnd_-"/>
+            </scala.collection.immutable.List_-SerializationProxy>
+          </init>
+          <range class="scala.Some">
+            <value class="scala.Tuple2">
+              <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../de.fosd.typechef.conditional.Opt[2]/entry/range/value/__2"/>
+              <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                <file>file struct.c</file>
+                <line>21</line>
+                <column>0</column>
+              </__2>
+            </value>
+          </range>
+        </entry>
+      </de.fosd.typechef.conditional.Opt>
+      <de.fosd.typechef.conditional.Opt>
+        <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../de.fosd.typechef.conditional.Opt/condition"/>
         <entry class="de.fosd.typechef.parser.c.FunctionDef">
           <specifiers class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
             <scala.collection.immutable.List_-SerializationProxy>
@@ -1222,10 +1319,10 @@
                 <entry class="de.fosd.typechef.parser.c.IntSpecifier">
                   <range class="scala.Some">
                     <value class="scala.Tuple2">
-                      <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../../de.fosd.typechef.conditional.Opt[2]/entry/range/value/__2"/>
+                      <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../../de.fosd.typechef.conditional.Opt[3]/entry/range/value/__2"/>
                       <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                         <file>file struct.c</file>
-                        <line>19</line>
+                        <line>21</line>
                         <column>4</column>
                       </__2>
                     </value>
@@ -1247,12 +1344,12 @@
                       <value class="scala.Tuple2">
                         <__1 class="de.fosd.typechef.parser.c.TokenPosition">
                           <file>file struct.c</file>
-                          <line>19</line>
+                          <line>21</line>
                           <column>8</column>
                         </__1>
                         <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                           <file>file struct.c</file>
-                          <line>19</line>
+                          <line>21</line>
                           <column>10</column>
                         </__2>
                       </value>
@@ -1300,12 +1397,12 @@
                       <value class="scala.Tuple2">
                         <__1 class="de.fosd.typechef.parser.c.TokenPosition">
                           <file>file struct.c</file>
-                          <line>20</line>
+                          <line>22</line>
                           <column>1</column>
                         </__1>
                         <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                           <file>file struct.c</file>
-                          <line>22</line>
+                          <line>24</line>
                           <column>1</column>
                         </__2>
                       </value>
@@ -1322,7 +1419,7 @@
                                   <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../range/value/__1"/>
                                   <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                                     <file>file struct.c</file>
-                                    <line>20</line>
+                                    <line>22</line>
                                     <column>16</column>
                                   </__2>
                                 </value>
@@ -1334,7 +1431,7 @@
                                     <value class="scala.Tuple2">
                                       <__1 class="de.fosd.typechef.parser.c.TokenPosition">
                                         <file>file struct.c</file>
-                                        <line>20</line>
+                                        <line>22</line>
                                         <column>8</column>
                                       </__1>
                                       <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../range/value/__2"/>
@@ -1365,7 +1462,7 @@
                                     <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
                                     <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                                       <file>file struct.c</file>
-                                      <line>20</line>
+                                      <line>22</line>
                                       <column>26</column>
                                     </__2>
                                   </value>
@@ -1410,7 +1507,7 @@
                         <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
                         <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                           <file>file struct.c</file>
-                          <line>23</line>
+                          <line>25</line>
                           <column>1</column>
                         </__2>
                       </value>
@@ -1428,7 +1525,7 @@
                             <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
                             <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                               <file>file struct.c</file>
-                              <line>22</line>
+                              <line>24</line>
                               <column>7</column>
                             </__2>
                           </value>
@@ -1441,7 +1538,7 @@
                             <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../p/range/value/__2"/>
                             <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                               <file>file struct.c</file>
-                              <line>22</line>
+                              <line>24</line>
                               <column>42</column>
                             </__2>
                           </value>
@@ -1451,12 +1548,12 @@
                             <value class="scala.Tuple2">
                               <__1 class="de.fosd.typechef.parser.c.TokenPosition">
                                 <file>file struct.c</file>
-                                <line>22</line>
+                                <line>24</line>
                                 <column>8</column>
                               </__1>
                               <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                                 <file>file struct.c</file>
-                                <line>22</line>
+                                <line>24</line>
                                 <column>41</column>
                               </__2>
                             </value>
@@ -1472,7 +1569,7 @@
                                       <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../range/value/__1"/>
                                       <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                                         <file>file struct.c</file>
-                                        <line>22</line>
+                                        <line>24</line>
                                         <column>23</column>
                                       </__2>
                                     </value>
@@ -1483,7 +1580,7 @@
                                         <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../range/value/__1"/>
                                         <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                                           <file>file struct.c</file>
-                                          <line>22</line>
+                                          <line>24</line>
                                           <column>18</column>
                                         </__2>
                                       </value>
@@ -1503,7 +1600,7 @@
                                         <value class="scala.Tuple2">
                                           <__1 class="de.fosd.typechef.parser.c.TokenPosition">
                                             <file>file struct.c</file>
-                                            <line>22</line>
+                                            <line>24</line>
                                             <column>19</column>
                                           </__1>
                                           <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../range/value/__2"/>
@@ -1521,7 +1618,7 @@
                                     <value class="scala.Tuple2">
                                       <__1 class="de.fosd.typechef.parser.c.TokenPosition">
                                         <file>file struct.c</file>
-                                        <line>22</line>
+                                        <line>24</line>
                                         <column>25</column>
                                       </__1>
                                       <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../range/value/__2"/>
@@ -1555,7 +1652,7 @@
                         <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../de.fosd.typechef.conditional.Opt[2]/entry/range/value/__2"/>
                         <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                           <file>file struct.c</file>
-                          <line>24</line>
+                          <line>26</line>
                           <column>1</column>
                         </__2>
                       </value>
@@ -1573,7 +1670,7 @@
                             <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../de.fosd.typechef.conditional.Opt[2]/entry/range/value/__2"/>
                             <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                               <file>file struct.c</file>
-                              <line>23</line>
+                              <line>25</line>
                               <column>7</column>
                             </__2>
                           </value>
@@ -1586,7 +1683,7 @@
                             <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../p/range/value/__2"/>
                             <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                               <file>file struct.c</file>
-                              <line>23</line>
+                              <line>25</line>
                               <column>40</column>
                             </__2>
                           </value>
@@ -1596,12 +1693,12 @@
                             <value class="scala.Tuple2">
                               <__1 class="de.fosd.typechef.parser.c.TokenPosition">
                                 <file>file struct.c</file>
-                                <line>23</line>
+                                <line>25</line>
                                 <column>8</column>
                               </__1>
                               <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                                 <file>file struct.c</file>
-                                <line>23</line>
+                                <line>25</line>
                                 <column>39</column>
                               </__2>
                             </value>
@@ -1617,7 +1714,7 @@
                                       <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../range/value/__1"/>
                                       <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                                         <file>file struct.c</file>
-                                        <line>23</line>
+                                        <line>25</line>
                                         <column>26</column>
                                       </__2>
                                     </value>
@@ -1628,7 +1725,7 @@
                                         <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../range/value/__1"/>
                                         <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                                           <file>file struct.c</file>
-                                          <line>23</line>
+                                          <line>25</line>
                                           <column>18</column>
                                         </__2>
                                       </value>
@@ -1648,7 +1745,7 @@
                                         <value class="scala.Tuple2">
                                           <__1 class="de.fosd.typechef.parser.c.TokenPosition">
                                             <file>file struct.c</file>
-                                            <line>23</line>
+                                            <line>25</line>
                                             <column>19</column>
                                           </__1>
                                           <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../range/value/__2"/>
@@ -1666,7 +1763,7 @@
                                     <value class="scala.Tuple2">
                                       <__1 class="de.fosd.typechef.parser.c.TokenPosition">
                                         <file>file struct.c</file>
-                                        <line>23</line>
+                                        <line>25</line>
                                         <column>28</column>
                                       </__1>
                                       <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../range/value/__2"/>
@@ -1700,7 +1797,7 @@
                         <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../de.fosd.typechef.conditional.Opt[3]/entry/range/value/__2"/>
                         <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                           <file>file struct.c</file>
-                          <line>25</line>
+                          <line>27</line>
                           <column>1</column>
                         </__2>
                       </value>
@@ -1718,7 +1815,7 @@
                             <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../de.fosd.typechef.conditional.Opt[3]/entry/range/value/__2"/>
                             <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                               <file>file struct.c</file>
-                              <line>24</line>
+                              <line>26</line>
                               <column>23</column>
                             </__2>
                           </value>
@@ -1729,7 +1826,7 @@
                               <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../de.fosd.typechef.conditional.Opt[3]/entry/range/value/__2"/>
                               <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                                 <file>file struct.c</file>
-                                <line>24</line>
+                                <line>26</line>
                                 <column>11</column>
                               </__2>
                             </value>
@@ -1749,7 +1846,7 @@
                               <value class="scala.Tuple2">
                                 <__1 class="de.fosd.typechef.parser.c.TokenPosition">
                                   <file>file struct.c</file>
-                                  <line>24</line>
+                                  <line>26</line>
                                   <column>12</column>
                                 </__1>
                                 <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../range/value/__2"/>
@@ -1765,12 +1862,12 @@
                           <value class="scala.Tuple2">
                             <__1 class="de.fosd.typechef.parser.c.TokenPosition">
                               <file>file struct.c</file>
-                              <line>24</line>
+                              <line>26</line>
                               <column>25</column>
                             </__1>
                             <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                               <file>file struct.c</file>
-                              <line>24</line>
+                              <line>26</line>
                               <column>27</column>
                             </__2>
                           </value>
@@ -1788,7 +1885,7 @@
                         <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../de.fosd.typechef.conditional.Opt[4]/entry/range/value/__2"/>
                         <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                           <file>file struct.c</file>
-                          <line>26</line>
+                          <line>28</line>
                           <column>1</column>
                         </__2>
                       </value>
@@ -1806,7 +1903,7 @@
                             <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../de.fosd.typechef.conditional.Opt[4]/entry/range/value/__2"/>
                             <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                               <file>file struct.c</file>
-                              <line>25</line>
+                              <line>27</line>
                               <column>16</column>
                             </__2>
                           </value>
@@ -1817,7 +1914,7 @@
                               <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../de.fosd.typechef.conditional.Opt[4]/entry/range/value/__2"/>
                               <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                                 <file>file struct.c</file>
-                                <line>25</line>
+                                <line>27</line>
                                 <column>11</column>
                               </__2>
                             </value>
@@ -1837,7 +1934,7 @@
                               <value class="scala.Tuple2">
                                 <__1 class="de.fosd.typechef.parser.c.TokenPosition">
                                   <file>file struct.c</file>
-                                  <line>25</line>
+                                  <line>27</line>
                                   <column>12</column>
                                 </__1>
                                 <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../range/value/__2"/>
@@ -1853,12 +1950,12 @@
                           <value class="scala.Tuple2">
                             <__1 class="de.fosd.typechef.parser.c.TokenPosition">
                               <file>file struct.c</file>
-                              <line>25</line>
+                              <line>27</line>
                               <column>18</column>
                             </__1>
                             <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                               <file>file struct.c</file>
-                              <line>25</line>
+                              <line>27</line>
                               <column>23</column>
                             </__2>
                           </value>
@@ -1876,7 +1973,7 @@
                         <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../de.fosd.typechef.conditional.Opt[5]/entry/range/value/__2"/>
                         <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                           <file>file struct.c</file>
-                          <line>27</line>
+                          <line>29</line>
                           <column>0</column>
                         </__2>
                       </value>
@@ -1894,7 +1991,7 @@
                             <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../de.fosd.typechef.conditional.Opt[5]/entry/range/value/__2"/>
                             <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                               <file>file struct.c</file>
-                              <line>26</line>
+                              <line>28</line>
                               <column>7</column>
                             </__2>
                           </value>
@@ -1907,7 +2004,7 @@
                             <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../p/range/value/__2"/>
                             <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                               <file>file struct.c</file>
-                              <line>26</line>
+                              <line>28</line>
                               <column>40</column>
                             </__2>
                           </value>
@@ -1917,12 +2014,12 @@
                             <value class="scala.Tuple2">
                               <__1 class="de.fosd.typechef.parser.c.TokenPosition">
                                 <file>file struct.c</file>
-                                <line>26</line>
+                                <line>28</line>
                                 <column>8</column>
                               </__1>
                               <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                                 <file>file struct.c</file>
-                                <line>26</line>
+                                <line>28</line>
                                 <column>39</column>
                               </__2>
                             </value>
@@ -1938,7 +2035,7 @@
                                       <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../range/value/__1"/>
                                       <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                                         <file>file struct.c</file>
-                                        <line>26</line>
+                                        <line>28</line>
                                         <column>24</column>
                                       </__2>
                                     </value>
@@ -1949,7 +2046,7 @@
                                         <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../range/value/__1"/>
                                         <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                                           <file>file struct.c</file>
-                                          <line>26</line>
+                                          <line>28</line>
                                           <column>18</column>
                                         </__2>
                                       </value>
@@ -1969,7 +2066,7 @@
                                         <value class="scala.Tuple2">
                                           <__1 class="de.fosd.typechef.parser.c.TokenPosition">
                                             <file>file struct.c</file>
-                                            <line>26</line>
+                                            <line>28</line>
                                             <column>19</column>
                                           </__1>
                                           <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../range/value/__2"/>
@@ -1987,7 +2084,7 @@
                                     <value class="scala.Tuple2">
                                       <__1 class="de.fosd.typechef.parser.c.TokenPosition">
                                         <file>file struct.c</file>
-                                        <line>26</line>
+                                        <line>28</line>
                                         <column>26</column>
                                       </__1>
                                       <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../range/value/__2"/>
@@ -2019,7 +2116,7 @@
           </stmt>
           <range class="scala.Some">
             <value class="scala.Tuple2">
-              <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../de.fosd.typechef.conditional.Opt[2]/entry/range/value/__2"/>
+              <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../de.fosd.typechef.conditional.Opt[3]/entry/range/value/__2"/>
               <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../stmt/range/value/__2"/>
             </value>
           </range>

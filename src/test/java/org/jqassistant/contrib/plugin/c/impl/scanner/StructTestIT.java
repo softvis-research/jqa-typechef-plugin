@@ -2,8 +2,10 @@ package org.jqassistant.contrib.plugin.c.impl.scanner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jqassistant.contrib.plugin.c.api.model.CAstFileDescriptor;
@@ -33,11 +35,14 @@ public class StructTestIT extends AbstractPluginIT{
         CAstFileDescriptor descriptor = (CAstFileDescriptor) returnedDescriptor;
         TranslationUnitDescriptor translationUnitDescriptor = descriptor.getTranslationUnit();
         List<StructDescriptor> structList = translationUnitDescriptor.getDeclaredStructs();
-        assertEquals(3, structList.size());
-        
+        assertEquals(5, structList.size());
+        List<String> structNameList = new ArrayList<>();
+        structNameList.add("adresse");
+        structNameList.add("adresse1");
         for(CDescriptor cDescriptor : structList) {
         	if(cDescriptor instanceof StructDescriptor) {
         		StructDescriptor struct = (StructDescriptor) cDescriptor;
+        		assertTrue(structNameList.contains(struct.getName()));
         		assertEquals(5, struct.getDeclaredVariables().size());
         		for(VariableDescriptor variable : struct.getDeclaredVariables()) {
         			switch (variable.getName()) {
@@ -59,6 +64,17 @@ public class StructTestIT extends AbstractPluginIT{
 					default:
 						break;
 					}
+        		}
+        	} else if(cDescriptor instanceof VariableDescriptor) {
+        		VariableDescriptor variable = (VariableDescriptor) cDescriptor;
+        		List<String> variableNameList = new ArrayList<>();
+        		variableNameList.add("newAddress");
+        		variableNameList.add("adresse2");
+        		assertTrue(variableNameList.contains(variable.getName()));
+        		if(variable.getName().equals("newAddress")) {
+        			assertEquals("struct adresse", variable.getTypeSpecifiers().get(0).getName());
+        		} else {
+        			assertEquals("struct adresse1", variable.getTypeSpecifiers().get(0).getName());
         		}
         	}
         }
