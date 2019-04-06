@@ -58,6 +58,9 @@ public class GlobalVariablesIT extends AbstractPluginIT{
     			case "doubleExample":
     				assertEquals("double", variableDescriptor.getTypeSpecifiers().get(0).getName());
     				break;
+    			case "boolExample":
+    				assertEquals("_Bool", variableDescriptor.getTypeSpecifiers().get(0).getName());
+    				break;
     			default:
     				break;
     			}
@@ -98,6 +101,9 @@ public class GlobalVariablesIT extends AbstractPluginIT{
         			break;
         		case "intArray":
         			assertEquals("int [5]", variableDescriptor.getTypeSpecifiers().get(0).getName());
+        			break;
+        		case "boolPtr":
+        			assertEquals("_Bool *", variableDescriptor.getTypeSpecifiers().get(0).getName());
         			break;
         		default:
         			break;

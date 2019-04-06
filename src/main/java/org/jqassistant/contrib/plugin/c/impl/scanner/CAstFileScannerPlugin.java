@@ -181,6 +181,17 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 					this.descriptorDeque.pop();
 				}
 				break;
+			case TagNameConstants.TYPENAME:
+				if(this.currentlyStoredType != null) {
+					try {
+						storeType(streamReader.getElementText());
+					} catch (XMLStreamException e) {
+						logger.error(e.getMessage());
+					} finally {
+						this.descriptorDeque.pop();
+					}
+				}
+				break;
 			default:
 				break;
 		}
@@ -279,6 +290,9 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			break;
 		case AttributeValueConstants.CHARSPECIFIER:
 			storeType("char");
+			break;
+		case AttributeValueConstants.PRIMITIVETYPESPECIFIER:
+			storeType("");
 			break;
 		case AttributeValueConstants.POINTER:
 			storeType("*");
@@ -383,7 +397,12 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				String firstPart = this.currentlyStoredType.getName();
 				//error in ast -> sometimes type occurs twice
 				if(!firstPart.contains(type)) {
-					this.currentlyStoredType.setName(firstPart + " " + type); 
+					if(firstPart != "") {
+						this.currentlyStoredType.setName(firstPart + " " + type);
+					} else {
+						this.currentlyStoredType.setName(type);
+					}
+					 
 				}
 			//If there is no type descriptor yet, create a new type descriptor.
 			} else {

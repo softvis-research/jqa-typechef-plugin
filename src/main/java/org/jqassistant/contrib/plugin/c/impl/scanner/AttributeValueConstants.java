@@ -24,4 +24,5 @@ public class AttributeValueConstants {
 	public static final String DECLARATION = "de.fosd.typechef.parser.c.Declaration";
 	public static final String STRUCTORUNIONSPECIFIER = "de.fosd.typechef.parser.c.StructOrUnionSpecifier";
 	public static final String STRUCTVARIABLEDECLARATION = "de.fosd.typechef.parser.c.StructDeclaration";
+	public static final String PRIMITIVETYPESPECIFIER = "de.fosd.typechef.parser.c.OtherPrimitiveTypeSpecifier";
 }

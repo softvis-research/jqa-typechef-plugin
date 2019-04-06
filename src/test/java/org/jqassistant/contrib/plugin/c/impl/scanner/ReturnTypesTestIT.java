@@ -70,11 +70,15 @@ public class ReturnTypesTestIT extends AbstractPluginIT{
 				assertEquals("char", descriptor.getReturnType().get(0).getName());
 				assertEquals("char", descriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
 				break;
+			case "getBool":
+				assertEquals("_Bool", descriptor.getReturnType().get(0).getName());
+				assertEquals("_Bool", descriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
+				break;
 			default:
 				break;
 			}
         }
-        assertEquals(10, declaredFunctions.size());
+        assertEquals(11, declaredFunctions.size());
         
         store.commitTransaction();
     }
