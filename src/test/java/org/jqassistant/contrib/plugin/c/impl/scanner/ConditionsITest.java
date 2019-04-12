@@ -23,13 +23,13 @@ import com.buschmais.jqassistant.core.scanner.api.Scanner;
 import com.buschmais.jqassistant.core.store.api.model.Descriptor;
 import com.buschmais.jqassistant.plugin.common.test.AbstractPluginIT;
 
-public class ConditionsTestIT extends AbstractPluginIT{
+public class ConditionsITest extends AbstractPluginIT{
 	
 	@Test
 	public void testIfDefUndefined() {
 		store.beginTransaction();
         
-        File testFile = new File(getClassesDirectory(ConditionsTestIT.class), "/ifdef_undefined.ast");
+        File testFile = new File(getClassesDirectory(ConditionsITest.class), "/ifdef_undefined.ast");
         Scanner scanner = getScanner();
         CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
         Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);
@@ -54,7 +54,7 @@ public class ConditionsTestIT extends AbstractPluginIT{
 	public void testIfElifUndefined() {
 		store.beginTransaction();
         
-        File testFile = new File(getClassesDirectory(ConditionsTestIT.class), "/ifelif_undefined.ast");
+        File testFile = new File(getClassesDirectory(ConditionsITest.class), "/ifelif_undefined.ast");
         Scanner scanner = getScanner();
         CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
         Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);
@@ -89,7 +89,7 @@ public class ConditionsTestIT extends AbstractPluginIT{
 	public void testIfDefMethod() {
 		store.beginTransaction();
         
-        File testFile = new File(getClassesDirectory(ConditionsTestIT.class), "/ifdef_method.ast");
+        File testFile = new File(getClassesDirectory(ConditionsITest.class), "/ifdef_method.ast");
         Scanner scanner = getScanner();
         CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
         Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);
@@ -122,7 +122,7 @@ public class ConditionsTestIT extends AbstractPluginIT{
 	public void testIfDefTranslationUnit() {
 		store.beginTransaction();
         
-        File testFile = new File(getClassesDirectory(ConditionsTestIT.class), "/ifdef_translationUnit.h.ast");
+        File testFile = new File(getClassesDirectory(ConditionsITest.class), "/ifdef_translationUnit.h.ast");
         Scanner scanner = getScanner();
         CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
         Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);

@@ -20,13 +20,13 @@ import com.buschmais.jqassistant.core.scanner.api.Scanner;
 import com.buschmais.jqassistant.core.store.api.model.Descriptor;
 import com.buschmais.jqassistant.plugin.common.test.AbstractPluginIT;
 
-public class UnionTestIT extends AbstractPluginIT{
+public class UnionITest extends AbstractPluginIT{
 
 	@Test
 	public void testUnionDeclaration() {
 		store.beginTransaction();
         
-        File testFile = new File(getClassesDirectory(UnionTestIT.class), "/unions.ast");
+        File testFile = new File(getClassesDirectory(UnionITest.class), "/unions.ast");
         Scanner scanner = getScanner();
         CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
         Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);
@@ -80,7 +80,7 @@ public class UnionTestIT extends AbstractPluginIT{
 	public void testConditionalUnion() {
 		store.beginTransaction();
         
-        File testFile = new File(getClassesDirectory(UnionTestIT.class), "/conditional_union.ast");
+        File testFile = new File(getClassesDirectory(UnionITest.class), "/conditional_union.ast");
         Scanner scanner = getScanner();
         CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
         Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);

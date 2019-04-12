@@ -17,13 +17,13 @@ import com.buschmais.jqassistant.core.scanner.api.Scanner;
 import com.buschmais.jqassistant.core.store.api.model.Descriptor;
 import com.buschmais.jqassistant.plugin.common.test.AbstractPluginIT;
 
-public class ReturnTypesTestIT extends AbstractPluginIT{
+public class ReturnTypesITest extends AbstractPluginIT{
 
 	@Test
     public void testReturnTypesSimple() {
     	store.beginTransaction();
         // Scan the test xml file located as resource in the classpath
-        File testFile = new File(getClassesDirectory(ReturnTypesTestIT.class), "/return_types_simple.ast");
+        File testFile = new File(getClassesDirectory(ReturnTypesITest.class), "/return_types_simple.ast");
         Scanner scanner = getScanner();
         CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
         Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);
@@ -87,7 +87,7 @@ public class ReturnTypesTestIT extends AbstractPluginIT{
     public void testReturnTypesComplex(){
     	store.beginTransaction();
         // Scan the test xml file located as resource in the classpath
-        File testFile = new File(getClassesDirectory(ReturnTypesTestIT.class), "/return_types_complex.ast");
+        File testFile = new File(getClassesDirectory(ReturnTypesITest.class), "/return_types_complex.ast");
         Scanner scanner = getScanner();
         CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
         Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);

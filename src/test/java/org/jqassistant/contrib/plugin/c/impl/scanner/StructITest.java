@@ -21,13 +21,13 @@ import com.buschmais.jqassistant.core.scanner.api.Scanner;
 import com.buschmais.jqassistant.core.store.api.model.Descriptor;
 import com.buschmais.jqassistant.plugin.common.test.AbstractPluginIT;
 
-public class StructTestIT extends AbstractPluginIT{
+public class StructITest extends AbstractPluginIT{
 
 	@Test
 	public void testStructDeclaration() {
 		store.beginTransaction();
         
-        File testFile = new File(getClassesDirectory(StructTestIT.class), "/struct.ast");
+        File testFile = new File(getClassesDirectory(StructITest.class), "/struct.ast");
         Scanner scanner = getScanner();
         CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
         Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);
@@ -86,7 +86,7 @@ public class StructTestIT extends AbstractPluginIT{
 	public void testConditionalStruct() {
 		store.beginTransaction();
         
-        File testFile = new File(getClassesDirectory(StructTestIT.class), "/conditional_struct.ast");
+        File testFile = new File(getClassesDirectory(StructITest.class), "/conditional_struct.ast");
         Scanner scanner = getScanner();
         CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
         Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);

@@ -18,13 +18,13 @@ import com.buschmais.jqassistant.core.scanner.api.Scanner;
 import com.buschmais.jqassistant.core.store.api.model.Descriptor;
 import com.buschmais.jqassistant.plugin.common.test.AbstractPluginIT;
 
-public class FunctionTestIT extends AbstractPluginIT{
+public class FunctionITest extends AbstractPluginIT{
 	
     @Test
     public void testScanMainFunction() {
         store.beginTransaction();
         
-        File testFile = new File(getClassesDirectory(FunctionTestIT.class), "/main_function.ast");
+        File testFile = new File(getClassesDirectory(FunctionITest.class), "/main_function.ast");
         Scanner scanner = getScanner();
         CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
         Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);
@@ -46,7 +46,7 @@ public class FunctionTestIT extends AbstractPluginIT{
     public void testScanTwoFunctions() {
     	store.beginTransaction();
         // Scan the test xml file located as resource in the classpath
-        File testFile = new File(getClassesDirectory(FunctionTestIT.class), "/two_functions.ast");
+        File testFile = new File(getClassesDirectory(FunctionITest.class), "/two_functions.ast");
         Scanner scanner = getScanner();
         CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
         Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);
