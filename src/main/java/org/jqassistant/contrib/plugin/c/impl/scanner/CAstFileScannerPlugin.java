@@ -22,11 +22,14 @@ import org.jqassistant.contrib.plugin.c.api.ConditionsParser;
 import org.jqassistant.contrib.plugin.c.api.model.CAstFileDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.Condition;
 import org.jqassistant.contrib.plugin.c.api.model.ConditionDescriptor;
+import org.jqassistant.contrib.plugin.c.api.model.Declaration;
+import org.jqassistant.contrib.plugin.c.api.model.Declaration.DeclarationType;
 import org.jqassistant.contrib.plugin.c.api.model.DependsOnDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.FunctionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.ParameterDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.StructDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.TranslationUnitDescriptor;
+import org.jqassistant.contrib.plugin.c.api.model.Type;
 import org.jqassistant.contrib.plugin.c.api.model.TypeDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.UnionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.VariableDescriptor;
@@ -52,7 +55,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 	private XMLInputFactory inputFactory;
 	private XMLStreamReader streamReader;
 	private CAstFileDescriptor cAstFileDescriptor;
-	private TypeDescriptor currentlyStoredType;
+	private Type currentlyStoredType;
 	private ScannerContext context;
 	private ArrayDeque<Object> descriptorDeque;
 	
@@ -201,10 +204,11 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 	 * Switches over the names of the xml end elements and processes them further
 	 * 
 	 * @return void
+	 * @throws Exception 
 	 */
-	private void handleEndElement() {
+	private void handleEndElement() throws Exception {
 		switch(this.streamReader.getLocalName()) {
-			//It if is the end of a big element like struct or variable, check conditions for this element and add it to the translation unit.
+			//If it is the end of a big element like struct or variable, check conditions for this element and add it to the translation unit.
 			case TagNameConstants.ENTRY:
 				TranslationUnitDescriptor translationUnit = (TranslationUnitDescriptor) DequeUtils.getFirstOfType(TranslationUnitDescriptor.class, this.descriptorDeque);
 				if(descriptorDeque.peekFirst() instanceof FunctionDescriptor) {
@@ -232,6 +236,18 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 						union.getDeclaredVariables().add(variable);
 					} else {
 						translationUnit.getDeclaredVariables().add(variable);
+					}
+				} else if(descriptorDeque.peekFirst() instanceof Declaration) {
+					Declaration declaration = (Declaration) DequeUtils.getFirstOfType(Declaration.class, this.descriptorDeque);
+					if(declaration.getDeclarationType() == DeclarationType.VARIABLE) {
+						VariableDescriptor variable = context.getStore().create(VariableDescriptor.class);
+						variable.setName(declaration.getName());
+						TypeDescriptor type = context.getStore().create(TypeDescriptor.class);
+						type.setName(declaration.getType());
+						variable.getTypeSpecifiers().add(type);
+						translationUnit.getDeclaredVariables().add(variable);
+					} else {
+						throw new Exception("Line 249: Declaration with other type than variable not expected. Please check.");
 					}
 				} else if(descriptorDeque.peekFirst() instanceof UnionDescriptor) {
 					UnionDescriptor union = (UnionDescriptor) DequeUtils.getFirstOfType(UnionDescriptor.class, this.descriptorDeque);
@@ -310,9 +326,10 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			handleParameterDeclaration();
 			break;
 		case AttributeValueConstants.DECLARATION:
-			VariableDescriptor variableDescriptor = context.getStore().create(VariableDescriptor.class);
+			Declaration declaration = new Declaration();
+			declaration.setDeclarationType(DeclarationType.VARIABLE);
 			this.descriptorDeque.pop();
-			descriptorDeque.push(variableDescriptor);
+			descriptorDeque.push(declaration);
 			break;
 		case AttributeValueConstants.STRUCTVARIABLEDECLARATION:
 			VariableDescriptor structVariable = context.getStore().create(VariableDescriptor.class);
@@ -338,23 +355,31 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 		}
 	}
 	
+	private TypeDescriptor createTypeDescriptor() {
+		TypeDescriptor typeDescriptor = context.getStore().create(TypeDescriptor.class);
+		typeDescriptor.setName(currentlyStoredType.getName());
+		this.currentlyStoredType = null;
+		
+		return typeDescriptor;
+	}
+	
 	/**
 	 * If a struct or union variable showed up, check if the current declaration is still stored as a variable declaration
 	 * and convert it to a struct or union declaration if necessary.
 	 * @return void
 	 */
 	private void checkStructOrUnion() {
-		VariableDescriptor variable = (VariableDescriptor) DequeUtils.getFirstOfType(VariableDescriptor.class, this.descriptorDeque);
-		if(variable != null) {
-			String type = variable.getTypeSpecifiers().get(0).getName();
+		Declaration variableDeclaration = (Declaration) DequeUtils.getFirstOfType(Declaration.class, this.descriptorDeque);
+		if(variableDeclaration != null) {
+			String type = variableDeclaration.getType();
 			if(type.equals("struct")) {
-				this.descriptorDeque = DequeUtils.replaceFirstElementOfType(VariableDescriptor.class, StructDescriptor.class, this.descriptorDeque, this.context);
+				this.descriptorDeque = DequeUtils.replaceFirstElementOfType(Declaration.class, StructDescriptor.class, this.descriptorDeque, this.context);
 				StructDescriptor struct = (StructDescriptor) DequeUtils.getFirstOfType(StructDescriptor.class, this.descriptorDeque);
-				struct.setName(variable.getName());
+				struct.setName(variableDeclaration.getName());
 			} else {
-				this.descriptorDeque = DequeUtils.replaceFirstElementOfType(VariableDescriptor.class, UnionDescriptor.class, this.descriptorDeque, this.context);
+				this.descriptorDeque = DequeUtils.replaceFirstElementOfType(Declaration.class, UnionDescriptor.class, this.descriptorDeque, this.context);
 				UnionDescriptor union = (UnionDescriptor) DequeUtils.getFirstOfType(UnionDescriptor.class, this.descriptorDeque);
-				union.setName(variable.getName());
+				union.setName(variableDeclaration.getName());
 			}
 		}
 	}
@@ -362,19 +387,18 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 	private void handleParameterDeclaration() {
 		FunctionDescriptor currentFunction = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, descriptorDeque);
 		if(this.currentlyStoredType != null && currentFunction != null) {
-			currentFunction.getReturnType().add(currentlyStoredType);
-			this.currentlyStoredType = null;
+			currentFunction.getReturnType().add(createTypeDescriptor());
 		} else if(currentFunction == null) {
 			//A function declaration looks like a variable first, so replace it if you find parameters.
-			VariableDescriptor variable = (VariableDescriptor) DequeUtils.getFirstOfType(VariableDescriptor.class, this.descriptorDeque);
-			if(variable != null) {
-				String name =  variable.getName();
-				this.descriptorDeque = DequeUtils.replaceFirstElementOfType(VariableDescriptor.class, FunctionDescriptor.class, this.descriptorDeque, this.context);
+			Declaration variableDeclaration = (Declaration) DequeUtils.getFirstOfType(Declaration.class, this.descriptorDeque);
+			if(variableDeclaration != null) {
+				String name =  variableDeclaration.getName();
+				this.descriptorDeque = DequeUtils.replaceFirstElementOfType(Declaration.class, FunctionDescriptor.class, this.descriptorDeque, this.context);
 				FunctionDescriptor function = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, this.descriptorDeque);
 				if(!StringUtils.isEmpty(name)) {
 					function.setName(name);
 				}
-				function.getReturnType().add(this.currentlyStoredType);
+				function.getReturnType().add(createTypeDescriptor());
 				this.currentlyStoredType = null;
 			}
 		}
@@ -406,7 +430,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				}
 			//If there is no type descriptor yet, create a new type descriptor.
 			} else {
-				this.currentlyStoredType = context.getStore().create(TypeDescriptor.class);
+				this.currentlyStoredType = new Type();
 				this.currentlyStoredType.setName(type);
 			}
 		}	
@@ -428,16 +452,31 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				parameterDescriptor.setName(name);
 				
 				if(this.currentlyStoredType != null) {
-					parameterDescriptor.getTypeSpecifiers().add(this.currentlyStoredType);
-					this.currentlyStoredType = null;
+					parameterDescriptor.getTypeSpecifiers().add(createTypeDescriptor());
 				}
 				break;
 			} else if(currentObject instanceof FunctionDescriptor && !this.descriptorDeque.contains(TagNameConstants.INNERSTATEMENTS)) {
 				if(this.currentlyStoredType != null) {
-					((FunctionDescriptor) currentObject).getReturnType().add(this.currentlyStoredType);
-					this.currentlyStoredType = null;
+					((FunctionDescriptor) currentObject).getReturnType().add(createTypeDescriptor());
 				}
 				((FunctionDescriptor) currentObject).setName(name);
+				break;
+			} else if(currentObject instanceof Declaration) {
+				Declaration declaration = (Declaration) currentObject;
+				
+				if(declaration.getDeclarationType() == DeclarationType.VARIABLE) {
+					//If the variable is of type struct or union, the name of the struct or union is stored as name of the variable descriptor.
+					if(declaration.getName() != null && declaration.getType() != null) {
+						String completeType = declaration.getType() + " " + declaration.getName();
+						declaration.setType(completeType);
+					}
+				}
+				declaration.setName(name);
+				
+				if(this.currentlyStoredType != null) {
+					declaration.setType(this.currentlyStoredType.getName());
+					this.currentlyStoredType = null;
+				}
 				break;
 			} else if(currentObject instanceof VariableDescriptor) {
 				VariableDescriptor variableDescriptor = (VariableDescriptor) currentObject;
@@ -449,7 +488,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				variableDescriptor.setName(name);
 				
 				if(this.currentlyStoredType != null) {
-					variableDescriptor.getTypeSpecifiers().add(this.currentlyStoredType);
+					variableDescriptor.getTypeSpecifiers().add(createTypeDescriptor());
 					this.currentlyStoredType = null;
 				}
 				break;
