@@ -25,6 +25,8 @@ import org.jqassistant.contrib.plugin.c.api.model.ConditionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.Declaration;
 import org.jqassistant.contrib.plugin.c.api.model.Declaration.DeclarationType;
 import org.jqassistant.contrib.plugin.c.api.model.DependsOnDescriptor;
+import org.jqassistant.contrib.plugin.c.api.model.EnumConstantDescriptor;
+import org.jqassistant.contrib.plugin.c.api.model.EnumDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.FunctionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.ParameterDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.StructDescriptor;
@@ -240,7 +242,9 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				} else if(descriptorDeque.peekFirst() instanceof Declaration) {
 					Declaration declaration = (Declaration) DequeUtils.getFirstOfType(Declaration.class, this.descriptorDeque);
 					if(declaration.getDeclarationType() == DeclarationType.VARIABLE) {
-						VariableDescriptor variable = context.getStore().create(VariableDescriptor.class);
+						this.descriptorDeque = DequeUtils.replaceFirstElementOfType(Declaration.class, VariableDescriptor.class, this.descriptorDeque, this.context);
+						VariableDescriptor variable = (VariableDescriptor) DequeUtils.getFirstOfType(VariableDescriptor.class, this.descriptorDeque);
+						checkConditionsForElement(VariableDescriptor.class);
 						variable.setName(declaration.getName());
 						TypeDescriptor type = context.getStore().create(TypeDescriptor.class);
 						type.setName(declaration.getType());
@@ -259,6 +263,16 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 					ParameterDescriptor parameter = (ParameterDescriptor) DequeUtils.getFirstOfType(ParameterDescriptor.class, this.descriptorDeque);
 					parameter.setIndex(index);
 					functionDescriptor.getParameters().add(parameter);
+				} else if(descriptorDeque.peekFirst() instanceof EnumConstantDescriptor) {
+					EnumDescriptor enumDescriptor = (EnumDescriptor) DequeUtils.getFirstOfType(EnumDescriptor.class, this.descriptorDeque);
+					checkConditionsForElement(EnumConstantDescriptor.class);
+					if(enumDescriptor != null) {
+						enumDescriptor.getDeclaredConstants().add((EnumConstantDescriptor) descriptorDeque.peekFirst());
+					}
+				} else if(descriptorDeque.peekFirst() instanceof EnumDescriptor) {
+					EnumDescriptor enumDescriptor = (EnumDescriptor) descriptorDeque.peekFirst();
+					checkConditionsForElement(EnumDescriptor.class);
+					translationUnit.getDeclaredEnums().add(enumDescriptor);
 				}
 				break;
 			default:
@@ -337,9 +351,28 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			this.descriptorDeque.pop();
 			this.descriptorDeque.push(structVariable);
 			break;
+		case AttributeValueConstants.ENUMSPECIFIER:
+			storeType("enum");
+			break;
+		case AttributeValueConstants.ENUMERATOR:
+			EnumConstantDescriptor enumConstant = context.getStore().create(EnumConstantDescriptor.class);
+			createEnum();
+			this.descriptorDeque.pop();
+			this.descriptorDeque.push(enumConstant);
+			break;
 		default:
 			break;
 		}
+	}
+
+	private void createEnum() {
+		Declaration variableDeclaration = (Declaration) DequeUtils.getFirstOfType(Declaration.class, this.descriptorDeque);
+		if(variableDeclaration != null) {
+			this.descriptorDeque = DequeUtils.replaceFirstElementOfType(Declaration.class, EnumDescriptor.class, this.descriptorDeque, this.context);
+			EnumDescriptor enumDescriptor = (EnumDescriptor) DequeUtils.getFirstOfType(EnumDescriptor.class, this.descriptorDeque);
+			enumDescriptor.setName(variableDeclaration.getName());
+		}
+		
 	}
 
 	/**
@@ -355,6 +388,11 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 		}
 	}
 	
+	/**
+	 * Create a TypeDescriptor, fetch the name and type from the currently stored type
+	 * and set the currently stored type to null
+	 * @return TypeDescriptor the generated TypeDescriptor
+	 */
 	private TypeDescriptor createTypeDescriptor() {
 		TypeDescriptor typeDescriptor = context.getStore().create(TypeDescriptor.class);
 		typeDescriptor.setName(currentlyStoredType.getName());
@@ -460,6 +498,9 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 					((FunctionDescriptor) currentObject).getReturnType().add(createTypeDescriptor());
 				}
 				((FunctionDescriptor) currentObject).setName(name);
+				break;
+			} else if(currentObject instanceof EnumConstantDescriptor) {
+				((EnumConstantDescriptor) currentObject).setName(name);
 				break;
 			} else if(currentObject instanceof Declaration) {
 				Declaration declaration = (Declaration) currentObject;
