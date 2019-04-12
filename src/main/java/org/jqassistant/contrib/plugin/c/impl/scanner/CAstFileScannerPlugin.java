@@ -533,8 +533,8 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 					this.currentlyStoredType = null;
 				}
 				break;
-			//If a struct or a union already exist and a name comes up, it is the instantiation of a variable
-			//with the type of this struct or union
+			//If a struct, union or enum already exist and a name comes up, it is the instantiation of a variable
+			//with the type of this struct, union or enum
 			} else if(currentObject instanceof StructDescriptor) {
 				StructDescriptor structDescriptor = (StructDescriptor) currentObject;
 				VariableDescriptor variable = context.getStore().create(VariableDescriptor.class);
@@ -551,6 +551,16 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				variable.setName(name);
 				TypeDescriptor type = context.getStore().create(TypeDescriptor.class);
 				type.setName("union " + union.getName());
+				variable.getTypeSpecifiers().add(type);
+				TranslationUnitDescriptor translationUnit = (TranslationUnitDescriptor) DequeUtils.getFirstOfType(TranslationUnitDescriptor.class, this.descriptorDeque);
+				translationUnit.getDeclaredVariables().add(variable);
+				break;
+			} else if(currentObject instanceof EnumDescriptor) {
+				EnumDescriptor enumDescriptor = (EnumDescriptor) currentObject;
+				VariableDescriptor variable = context.getStore().create(VariableDescriptor.class);
+				variable.setName(name);
+				TypeDescriptor type = context.getStore().create(TypeDescriptor.class);
+				type.setName("enum " + enumDescriptor.getName());
 				variable.getTypeSpecifiers().add(type);
 				TranslationUnitDescriptor translationUnit = (TranslationUnitDescriptor) DequeUtils.getFirstOfType(TranslationUnitDescriptor.class, this.descriptorDeque);
 				translationUnit.getDeclaredVariables().add(variable);

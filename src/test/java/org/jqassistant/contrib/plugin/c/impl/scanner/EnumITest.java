@@ -35,7 +35,7 @@ public class EnumITest extends AbstractPluginIT{
         CAstFileDescriptor descriptor = (CAstFileDescriptor) returnedDescriptor;
         TranslationUnitDescriptor translationUnitDescriptor = descriptor.getTranslationUnit();
         List<EnumDescriptor> enumList = translationUnitDescriptor.getDeclaredEnums();
-        assertEquals(5, enumList.size());
+        assertEquals(6, enumList.size());
         List<String> enumNameList = new ArrayList<>();
         enumNameList.add("week_first");
         enumNameList.add("constants");
