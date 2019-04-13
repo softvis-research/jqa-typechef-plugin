@@ -27,4 +27,6 @@ public class AttributeValueConstants {
 	public static final String PRIMITIVETYPESPECIFIER = "de.fosd.typechef.parser.c.OtherPrimitiveTypeSpecifier";
 	public static final String ENUMSPECIFIER = "de.fosd.typechef.parser.c.EnumSpecifier";
 	public static final String ENUMERATOR = "de.fosd.typechef.parser.c.Enumerator";
+	public static final String FUNCTIONCALL = "de.fosd.typechef.parser.c.FunctionCall";
+	public static final String ID = "de.fosd.typechef.parser.c.Id";
 }

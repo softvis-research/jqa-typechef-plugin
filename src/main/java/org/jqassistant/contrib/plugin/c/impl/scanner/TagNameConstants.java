@@ -15,4 +15,6 @@ public class TagNameConstants {
 	public static final String FEATUREEXPRESSION = "fexpr";
 	public static final String ISUNION = "isUnion";
 	public static final String TYPENAME = "typeName";
+	public static final String P = "p";
+	public static final String S = "s";
 }

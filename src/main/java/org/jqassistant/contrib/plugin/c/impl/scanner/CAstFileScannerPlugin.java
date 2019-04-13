@@ -27,6 +27,8 @@ import org.jqassistant.contrib.plugin.c.api.model.Declaration.DeclarationType;
 import org.jqassistant.contrib.plugin.c.api.model.DependsOnDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.EnumConstantDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.EnumDescriptor;
+import org.jqassistant.contrib.plugin.c.api.model.FunctionArgument;
+import org.jqassistant.contrib.plugin.c.api.model.FunctionCall;
 import org.jqassistant.contrib.plugin.c.api.model.FunctionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.ParameterDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.StructDescriptor;
@@ -60,6 +62,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 	private Type currentlyStoredType;
 	private ScannerContext context;
 	private ArrayDeque<Object> descriptorDeque;
+	private String functionName;
 	
     @Override
     public void initialize() {
@@ -79,6 +82,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
         Source source = new StreamSource(item.createStream());
         context = scanner.getContext();
         this.currentlyStoredType = null;
+        this.functionName = null;
         final FileDescriptor fileDescriptor = context.getCurrentDescriptor();
         
         // Add the C label.
@@ -129,6 +133,9 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 					if(this.descriptorDeque.contains("id")) {
 						getElementTextCalled = true;
 						handleNameElement(streamReader.getElementText());
+					} else if(this.descriptorDeque.contains(TagNameConstants.P)) {
+						getElementTextCalled = true;
+						this.functionName = streamReader.getElementText();
 					}
 				} catch (XMLStreamException e) {
 					logger.error(e.getMessage());
@@ -195,6 +202,16 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 					} finally {
 						this.descriptorDeque.pop();
 					}
+				}
+				break;
+			case TagNameConstants.S:
+				if(streamReader.getAttributeValue(0).equals(AttributeValueConstants.FUNCTIONCALL)) {
+					FunctionCall functionCall = new FunctionCall();
+					if(this.functionName != null) {
+						functionCall.setFunctionName(this.functionName);
+					}
+					this.descriptorDeque.pop();
+					this.descriptorDeque.push(functionCall);
 				}
 				break;
 			default:
@@ -273,6 +290,17 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 					EnumDescriptor enumDescriptor = (EnumDescriptor) descriptorDeque.peekFirst();
 					checkConditionsForElement(EnumDescriptor.class);
 					translationUnit.getDeclaredEnums().add(enumDescriptor);
+				}
+				break;
+			case TagNameConstants.S:
+				if(descriptorDeque.peekFirst() instanceof FunctionCall) {
+					FunctionDescriptor functionDescriptor = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, this.descriptorDeque);
+					if(functionDescriptor != null) {
+						FunctionDescriptor resolvedFunction = resolveFunctionCall((FunctionCall) this.descriptorDeque.peekFirst());
+						if(resolvedFunction != null) {
+							functionDescriptor.getInvokedFunctions().add(resolvedFunction);
+						}
+					}
 				}
 				break;
 			default:
@@ -360,6 +388,12 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			this.descriptorDeque.pop();
 			this.descriptorDeque.push(enumConstant);
 			break;
+		case AttributeValueConstants.ID:
+			if(DequeUtils.getFirstOfType(FunctionCall.class, this.descriptorDeque) != null) {
+				this.descriptorDeque.pop();
+				this.descriptorDeque.push(new FunctionArgument());
+			}
+			break;
 		default:
 			break;
 		}
@@ -373,6 +407,12 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			enumDescriptor.setName(variableDeclaration.getName());
 		}
 		
+	}	
+
+	private FunctionDescriptor resolveFunctionCall(FunctionCall functionCall) {
+		//TODO: check if this is the right function 
+		FunctionDescriptor calledFunction = this.context.getStore().find(FunctionDescriptor.class, functionCall.getFunctionName());
+		return calledFunction;
 	}
 
 	/**
@@ -493,11 +533,17 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 					parameterDescriptor.getTypeSpecifiers().add(createTypeDescriptor());
 				}
 				break;
+			} else if(currentObject instanceof FunctionArgument) {
+				FunctionCall functionCall = (FunctionCall) DequeUtils.getFirstOfType(FunctionCall.class, this.descriptorDeque);
+				functionCall.getArgumentList().add(name);
+				break;
 			} else if(currentObject instanceof FunctionDescriptor && !this.descriptorDeque.contains(TagNameConstants.INNERSTATEMENTS)) {
+				FunctionDescriptor function = (FunctionDescriptor) currentObject;
 				if(this.currentlyStoredType != null) {
-					((FunctionDescriptor) currentObject).getReturnType().add(createTypeDescriptor());
+					function.getReturnType().add(createTypeDescriptor());
 				}
-				((FunctionDescriptor) currentObject).setName(name);
+				function.setName(name);
+				function.setFullQualifiedName(name);
 				break;
 			} else if(currentObject instanceof EnumConstantDescriptor) {
 				((EnumConstantDescriptor) currentObject).setName(name);
