@@ -82,4 +82,15 @@ public class DequeUtilsTest extends AbstractPluginIT{
 		assertTrue(DequeUtils.getElementAt(2, this.deque) instanceof FunctionDescriptor);
 		store.commitTransaction();
 	}
+	
+	@Test
+	public void testReplaceCertainElement() {
+		Object first = this.deque.getFirst();
+		String newString = new String("test");
+		this.deque = DequeUtils.replaceCertainElement(first, newString, this.deque);
+		assertEquals("test", this.deque.getFirst());
+		Double firstDouble = (Double) DequeUtils.getFirstOfType(Double.class, this.deque);
+		this.deque = DequeUtils.replaceCertainElement(firstDouble, newString, this.deque);
+		assertEquals("test", ((String) DequeUtils.getElementAt(2, this.deque)));
+	}
 }

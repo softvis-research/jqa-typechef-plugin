@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.jqassistant.contrib.plugin.c.api.ConditionsLexer;
 import org.jqassistant.contrib.plugin.c.api.ConditionsParser;
 import org.jqassistant.contrib.plugin.c.api.model.CAstFileDescriptor;
+import org.jqassistant.contrib.plugin.c.api.model.CDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.Condition;
 import org.jqassistant.contrib.plugin.c.api.model.ConditionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.Declaration;
@@ -233,7 +234,20 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				if(descriptorDeque.peekFirst() instanceof FunctionDescriptor) {
 					FunctionDescriptor function = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, this.descriptorDeque);
 					checkConditionsForElement(FunctionDescriptor.class);
-					translationUnit.getDeclaredFunctions().add(function);
+					boolean sameFunction = false;
+					
+					//if function already exists, don't add it to the translation unit
+					for(CDescriptor cDescriptor : translationUnit.getDeclaredFunctions()) {
+						if(cDescriptor instanceof FunctionDescriptor) {
+							FunctionDescriptor declaredFunction = (FunctionDescriptor) cDescriptor;
+							if(declaredFunction.getName().equals(function.getName())) {
+								sameFunction = true;
+							}
+						}
+					}
+					if(!sameFunction) {
+						translationUnit.getDeclaredFunctions().add(function);
+					}
 				} else if(descriptorDeque.peekFirst() instanceof StructDescriptor) {
 					StructDescriptor struct = (StructDescriptor) DequeUtils.getFirstOfType(StructDescriptor.class, this.descriptorDeque);
 					checkConditionsForElement(StructDescriptor.class);
@@ -276,10 +290,14 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 					translationUnit.getDeclaredUnions().add(union);
 				} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
 					FunctionDescriptor functionDescriptor = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, descriptorDeque);
-					int index = functionDescriptor.getParameters().size();
-					ParameterDescriptor parameter = (ParameterDescriptor) DequeUtils.getFirstOfType(ParameterDescriptor.class, this.descriptorDeque);
-					parameter.setIndex(index);
-					functionDescriptor.getParameters().add(parameter);
+					ParameterDescriptor parameter = (ParameterDescriptor) this.descriptorDeque.peekFirst();
+					
+					//if function has already been declared, parameter already exists
+					if(!functionDescriptor.getParameters().contains(parameter)) {
+						int index = functionDescriptor.getParameters().size();
+						parameter.setIndex(index);
+						functionDescriptor.getParameters().add(parameter);
+					}
 				} else if(descriptorDeque.peekFirst() instanceof EnumConstantDescriptor) {
 					EnumDescriptor enumDescriptor = (EnumDescriptor) DequeUtils.getFirstOfType(EnumDescriptor.class, this.descriptorDeque);
 					checkConditionsForElement(EnumConstantDescriptor.class);
@@ -410,7 +428,6 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 	}	
 
 	private FunctionDescriptor resolveFunctionCall(FunctionCall functionCall) {
-		//TODO: check if this is the right function 
 		FunctionDescriptor calledFunction = this.context.getStore().find(FunctionDescriptor.class, functionCall.getFunctionName());
 		return calledFunction;
 	}
@@ -539,11 +556,17 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				break;
 			} else if(currentObject instanceof FunctionDescriptor && !this.descriptorDeque.contains(TagNameConstants.INNERSTATEMENTS)) {
 				FunctionDescriptor function = (FunctionDescriptor) currentObject;
-				if(this.currentlyStoredType != null) {
-					function.getReturnType().add(createTypeDescriptor());
+				FunctionDescriptor sameFunction = this.context.getStore().find(FunctionDescriptor.class, name);
+				if(sameFunction != null) {
+					this.descriptorDeque = DequeUtils.replaceCertainElement(function, sameFunction, this.descriptorDeque);
+				} else {
+					if(this.currentlyStoredType != null) {
+						function.getReturnType().add(createTypeDescriptor());
+					}
+					function.setName(name);
+					function.setFullQualifiedName(name);
 				}
-				function.setName(name);
-				function.setFullQualifiedName(name);
+				
 				break;
 			} else if(currentObject instanceof EnumConstantDescriptor) {
 				((EnumConstantDescriptor) currentObject).setName(name);
@@ -628,7 +651,11 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 		for(Condition condition : conditionsForElement) {
 			if(!StringUtils.isEmpty(condition.getConditionText())) {
 				ConditionDescriptor conditionDescriptor = parseCondition(condition.getConditionText());
-				descriptor.setCondition(conditionDescriptor);
+				if(descriptor.getCondition() != null && descriptor.getCondition().equals(conditionDescriptor)) {
+					this.context.getStore().delete(conditionDescriptor);
+				} else {
+					descriptor.setCondition(conditionDescriptor);
+				}
 			}
 		}
 	}

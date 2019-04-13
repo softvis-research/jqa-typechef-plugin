@@ -136,4 +136,21 @@ public class DequeUtils{
 		return deque;
 	}
 	
+	public static <A, B> ArrayDeque<Object> replaceCertainElement(A oldElement, B newElement, ArrayDeque<Object> deque){
+		if (deque.contains(oldElement)) {
+			Object[] descriptorArray = deque.toArray();
+			for(int i = 0; i <= descriptorArray.length-1; i++) {
+				Object currentObject = descriptorArray[i];
+				if(currentObject.equals(oldElement)) {
+					descriptorArray[i] = newElement;
+					List<Object> helperList = Arrays.asList(descriptorArray);
+					deque = new ArrayDeque<>(helperList);
+					break;
+				}
+			}
+		}
+		
+		return deque;
+	}
+	
 }

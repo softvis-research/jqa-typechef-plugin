@@ -7,9 +7,7 @@ import java.util.List;
 
 import org.jqassistant.contrib.plugin.c.api.model.CAstFileDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.CDescriptor;
-import org.jqassistant.contrib.plugin.c.api.model.EnumDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.FunctionDescriptor;
-import org.jqassistant.contrib.plugin.c.api.model.SingleConditionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.TranslationUnitDescriptor;
 import org.junit.Test;
 
@@ -33,7 +31,7 @@ public class FunctionCallITest extends AbstractPluginIT{
         CAstFileDescriptor descriptor = (CAstFileDescriptor) returnedDescriptor;
         TranslationUnitDescriptor translationUnitDescriptor = descriptor.getTranslationUnit();
         List<FunctionDescriptor> functionList = translationUnitDescriptor.getDeclaredFunctions();
-        assertEquals(3, functionList.size());
+        assertEquals(2, functionList.size());
         
         for(CDescriptor cDescriptor : functionList) {
         	if(cDescriptor instanceof FunctionDescriptor) {
