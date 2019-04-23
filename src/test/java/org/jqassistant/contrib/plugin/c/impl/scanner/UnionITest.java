@@ -47,13 +47,13 @@ public class UnionITest extends AbstractPluginIT{
         		for(VariableDescriptor variable : union.getDeclaredVariables()) {
         			switch (variable.getName()) {
 					case "a":
-						assertEquals("char", variable.getTypeSpecifiers().get(0).getName());
+						assertEquals("char", variable.getTypeSpecifiers().getName());
 						break;
 					case "b":
-						assertEquals("int", variable.getTypeSpecifiers().get(0).getName());
+						assertEquals("int", variable.getTypeSpecifiers().getName());
 						break;
 					case "c":
-						assertEquals("double", variable.getTypeSpecifiers().get(0).getName());
+						assertEquals("double", variable.getTypeSpecifiers().getName());
 						break;
 					default:
 						break;
@@ -66,9 +66,9 @@ public class UnionITest extends AbstractPluginIT{
         		variableNameList.add("newTest");
         		assertTrue(variableNameList.contains(variable.getName()));
         		if(variable.getName().equals("test2")) {
-        			assertEquals("union test1", variable.getTypeSpecifiers().get(0).getName());
+        			assertEquals("union test1", variable.getTypeSpecifiers().getName());
         		} else {
-        			assertEquals("union test", variable.getTypeSpecifiers().get(0).getName());
+        			assertEquals("union test", variable.getTypeSpecifiers().getName());
         		}
         	}
         }

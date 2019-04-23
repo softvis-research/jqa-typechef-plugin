@@ -19,12 +19,12 @@ public interface FunctionDescriptor extends CDescriptor, NamedDescriptor, Depend
 	void setParameters(List<ParameterDescriptor> parameters);
 	
 	/**
-	 * Returns a list with the parts of the return type, e.g. unsigned and int
-	 * @return parts of the return type
+	 * Returns the return type as a whole, e.g. unsigned int
+	 * @return the return type
 	 */
 	@Relation("RETURNS")
-	List<TypeDescriptor> getReturnType();
-	void setReturnType(List<TypeDescriptor> returnType);
+	TypeDescriptor getReturnType();
+	void setReturnType(TypeDescriptor returnType);
 	
 	/**
 	 * Returns the variables that were declared in this function

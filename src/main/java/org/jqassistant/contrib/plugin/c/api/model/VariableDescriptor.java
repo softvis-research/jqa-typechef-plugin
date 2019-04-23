@@ -14,8 +14,8 @@ public interface VariableDescriptor extends CDescriptor, NamedDescriptor, Depend
 	 * @return the type specifiers and qualifiers
 	 */
 	@Relation("OF_TYPE")
-	List<TypeDescriptor> getTypeSpecifiers();
-	void setTypeSpecifiers(List<TypeDescriptor> typeSpecifiers);
+	TypeDescriptor getTypeSpecifiers();
+	void setTypeSpecifiers(TypeDescriptor typeSpecifiers);
 	
 	List<WritesDescriptor> getWrittenBy();
 

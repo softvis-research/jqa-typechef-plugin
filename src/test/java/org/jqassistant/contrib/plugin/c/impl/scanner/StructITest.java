@@ -47,19 +47,19 @@ public class StructITest extends AbstractPluginIT{
         		for(VariableDescriptor variable : struct.getDeclaredVariables()) {
         			switch (variable.getName()) {
 					case "name":
-						assertEquals("char [50]", variable.getTypeSpecifiers().get(0).getName());
+						assertEquals("char [50]", variable.getTypeSpecifiers().getName());
 						break;
 					case "strasse":
-						assertEquals("char [100]", variable.getTypeSpecifiers().get(0).getName());
+						assertEquals("char [100]", variable.getTypeSpecifiers().getName());
 						break;
 					case "hausnummer":
-						assertEquals("short", variable.getTypeSpecifiers().get(0).getName());
+						assertEquals("short", variable.getTypeSpecifiers().getName());
 						break;
 					case "plz":
-						assertEquals("long", variable.getTypeSpecifiers().get(0).getName());
+						assertEquals("long", variable.getTypeSpecifiers().getName());
 						break;
 					case "stadt":
-						assertEquals("char [50]", variable.getTypeSpecifiers().get(0).getName());
+						assertEquals("char [50]", variable.getTypeSpecifiers().getName());
 						break;
 					default:
 						break;
@@ -72,9 +72,9 @@ public class StructITest extends AbstractPluginIT{
         		variableNameList.add("adresse2");
         		assertTrue(variableNameList.contains(variable.getName()));
         		if(variable.getName().equals("newAddress")) {
-        			assertEquals("struct adresse", variable.getTypeSpecifiers().get(0).getName());
+        			assertEquals("struct adresse", variable.getTypeSpecifiers().getName());
         		} else {
-        			assertEquals("struct adresse1", variable.getTypeSpecifiers().get(0).getName());
+        			assertEquals("struct adresse1", variable.getTypeSpecifiers().getName());
         		}
         	}
         }
@@ -103,19 +103,19 @@ public class StructITest extends AbstractPluginIT{
         		for(VariableDescriptor variable : struct.getDeclaredVariables()) {
         			switch (variable.getName()) {
 					case "name":
-						assertEquals("char [50]", variable.getTypeSpecifiers().get(0).getName());
+						assertEquals("char [50]", variable.getTypeSpecifiers().getName());
 						break;
 					case "strasse":
-						assertEquals("char [100]", variable.getTypeSpecifiers().get(0).getName());
+						assertEquals("char [100]", variable.getTypeSpecifiers().getName());
 						break;
 					case "hausnummer":
-						assertEquals("short", variable.getTypeSpecifiers().get(0).getName());
+						assertEquals("short", variable.getTypeSpecifiers().getName());
 						break;
 					case "plz":
-						assertEquals("long", variable.getTypeSpecifiers().get(0).getName());
+						assertEquals("long", variable.getTypeSpecifiers().getName());
 						break;
 					case "stadt":
-						assertEquals("char [50]", variable.getTypeSpecifiers().get(0).getName());
+						assertEquals("char [50]", variable.getTypeSpecifiers().getName());
 						break;
 					default:
 						break;

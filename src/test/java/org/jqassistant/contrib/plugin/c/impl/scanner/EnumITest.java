@@ -78,9 +78,9 @@ public class EnumITest extends AbstractPluginIT{
         		variableNameList.add("day");
         		VariableDescriptor variable = (VariableDescriptor) cDescriptor;
         		if(variable.getName().equals("newDay")) {
-        			assertEquals("enum week_second", variable.getTypeSpecifiers().get(0).getName());
+        			assertEquals("enum week_second", variable.getTypeSpecifiers().getName());
         		} else {
-        			assertEquals("enum week_first", variable.getTypeSpecifiers().get(0).getName());
+        			assertEquals("enum week_first", variable.getTypeSpecifiers().getName());
         		}
         	}
         }

@@ -36,7 +36,7 @@ public class FunctionITest extends AbstractPluginIT{
         assertNotNull(translationUnitDescriptor);
         FunctionDescriptor functionDescriptor = translationUnitDescriptor.getDeclaredFunctions().get(0);
         assertNotNull(functionDescriptor);
-        assertEquals("int", functionDescriptor.getReturnType().get(0).getName());
+        assertEquals("int", functionDescriptor.getReturnType().getName());
         assertEquals("main", functionDescriptor.getName());
         assertEquals(5, functionDescriptor.getLineCount());
         
@@ -58,14 +58,14 @@ public class FunctionITest extends AbstractPluginIT{
         assertEquals(2, declaredFunctions.size());
         assertEquals("multiplyTwoNumbers", declaredFunctions.get(0).getName());
         assertEquals(2, declaredFunctions.get(0).getParameters().size());
-        assertEquals("double", declaredFunctions.get(0).getReturnType().get(0).getName());
+        assertEquals("double", declaredFunctions.get(0).getReturnType().getName());
         assertEquals("factor1", declaredFunctions.get(0).getParameters().get(0).getName());
-        assertEquals("double", declaredFunctions.get(0).getParameters().get(0).getTypeSpecifiers().get(0).getName());
+        assertEquals("double", declaredFunctions.get(0).getParameters().get(0).getTypeSpecifiers().getName());
         assertEquals("factor2", declaredFunctions.get(0).getParameters().get(1).getName());
-        assertEquals("double", declaredFunctions.get(0).getParameters().get(1).getTypeSpecifiers().get(0).getName());
+        assertEquals("double", declaredFunctions.get(0).getParameters().get(1).getTypeSpecifiers().getName());
         assertEquals(3, declaredFunctions.get(0).getLineCount());
         
-        assertEquals("int", declaredFunctions.get(1).getReturnType().get(0).getName());
+        assertEquals("int", declaredFunctions.get(1).getReturnType().getName());
         assertEquals("main", declaredFunctions.get(1).getName());
         assertEquals(0, declaredFunctions.get(1).getParameters().size());
         assertEquals(6, declaredFunctions.get(1).getLineCount());

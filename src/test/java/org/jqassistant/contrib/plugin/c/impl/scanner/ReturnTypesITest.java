@@ -35,44 +35,44 @@ public class ReturnTypesITest extends AbstractPluginIT{
         for(FunctionDescriptor descriptor : declaredFunctions) {
         	switch (descriptor.getName()) {
 			case "main":
-				assertEquals("int", descriptor.getReturnType().get(0).getName());
+				assertEquals("int", descriptor.getReturnType().getName());
 				assertEquals(0, descriptor.getParameters().size());
 				break;
 			case "getInt":
-				assertEquals("int", descriptor.getReturnType().get(0).getName());
-				assertEquals("int", descriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
+				assertEquals("int", descriptor.getReturnType().getName());
+				assertEquals("int", descriptor.getParameters().get(0).getTypeSpecifiers().getName());
 				assertEquals("number", descriptor.getParameters().get(0).getName());
 				break;
 			case "makeNothing":
-				assertEquals("void", descriptor.getReturnType().get(0).getName());
+				assertEquals("void", descriptor.getReturnType().getName());
 				break;
 			case "getShort":
-				assertEquals("short", descriptor.getReturnType().get(0).getName());
-				assertEquals("short", descriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
+				assertEquals("short", descriptor.getReturnType().getName());
+				assertEquals("short", descriptor.getParameters().get(0).getTypeSpecifiers().getName());
 				break;
 			case "getLong":
-				assertEquals("long", descriptor.getReturnType().get(0).getName());
-				assertEquals("long", descriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
+				assertEquals("long", descriptor.getReturnType().getName());
+				assertEquals("long", descriptor.getParameters().get(0).getTypeSpecifiers().getName());
 				break;
 			case "getFloat":
-				assertEquals("float", descriptor.getReturnType().get(0).getName());
-				assertEquals("float", descriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
+				assertEquals("float", descriptor.getReturnType().getName());
+				assertEquals("float", descriptor.getParameters().get(0).getTypeSpecifiers().getName());
 				break;
 			case "getSigned":
-				assertEquals("signed", descriptor.getReturnType().get(0).getName());
-				assertEquals("signed", descriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
+				assertEquals("signed", descriptor.getReturnType().getName());
+				assertEquals("signed", descriptor.getParameters().get(0).getTypeSpecifiers().getName());
 				break;
 			case "getUnsigned":
-				assertEquals("unsigned", descriptor.getReturnType().get(0).getName());
-				assertEquals("unsigned", descriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
+				assertEquals("unsigned", descriptor.getReturnType().getName());
+				assertEquals("unsigned", descriptor.getParameters().get(0).getTypeSpecifiers().getName());
 				break;
 			case "getChar":
-				assertEquals("char", descriptor.getReturnType().get(0).getName());
-				assertEquals("char", descriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
+				assertEquals("char", descriptor.getReturnType().getName());
+				assertEquals("char", descriptor.getParameters().get(0).getTypeSpecifiers().getName());
 				break;
 			case "getBool":
-				assertEquals("_Bool", descriptor.getReturnType().get(0).getName());
-				assertEquals("_Bool", descriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
+				assertEquals("_Bool", descriptor.getReturnType().getName());
+				assertEquals("_Bool", descriptor.getParameters().get(0).getTypeSpecifiers().getName());
 				break;
 			default:
 				break;
@@ -99,27 +99,27 @@ public class ReturnTypesITest extends AbstractPluginIT{
         for(FunctionDescriptor functionDescriptor : declaredFunctions) {
         	switch (functionDescriptor.getName()) {
 			case "getCharArray":
-				assertEquals("char *", functionDescriptor.getReturnType().get(0).getName());
-				assertEquals("char []", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
+				assertEquals("char *", functionDescriptor.getReturnType().getName());
+				assertEquals("char []", functionDescriptor.getParameters().get(0).getTypeSpecifiers().getName());
 				break;
 			case "getUnsignedInt":
-				assertEquals("unsigned int *", functionDescriptor.getReturnType().get(0).getName());
-				assertEquals("unsigned int *", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
+				assertEquals("unsigned int *", functionDescriptor.getReturnType().getName());
+				assertEquals("unsigned int *", functionDescriptor.getParameters().get(0).getTypeSpecifiers().getName());
 				break;
 			case "getSignedInt":
-				assertEquals("signed int", functionDescriptor.getReturnType().get(0).getName());
-				assertEquals("signed int", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
+				assertEquals("signed int", functionDescriptor.getReturnType().getName());
+				assertEquals("signed int", functionDescriptor.getParameters().get(0).getTypeSpecifiers().getName());
 				break;
 			case "getPointerToInt":
-				assertEquals("int *", functionDescriptor.getReturnType().get(0).getName());
+				assertEquals("int *", functionDescriptor.getReturnType().getName());
 				List<String> parameterTypeList = new ArrayList<>();
 				parameterTypeList.add("int *");
 				parameterTypeList.add("short int");
-				assertTrue(parameterTypeList.contains(functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName()));
-				assertTrue(parameterTypeList.contains(functionDescriptor.getParameters().get(1).getTypeSpecifiers().get(0).getName()));
+				assertTrue(parameterTypeList.contains(functionDescriptor.getParameters().get(0).getTypeSpecifiers().getName()));
+				assertTrue(parameterTypeList.contains(functionDescriptor.getParameters().get(1).getTypeSpecifiers().getName()));
 				break;
 			case "getCharArraySized":
-				assertEquals("char [5]", functionDescriptor.getParameters().get(0).getTypeSpecifiers().get(0).getName());
+				assertEquals("char [5]", functionDescriptor.getParameters().get(0).getTypeSpecifiers().getName());
 				break;
 			default:
 				break;

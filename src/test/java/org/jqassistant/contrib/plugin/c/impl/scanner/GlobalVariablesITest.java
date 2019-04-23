@@ -35,31 +35,31 @@ public class GlobalVariablesITest extends AbstractPluginIT{
         		VariableDescriptor variableDescriptor = (VariableDescriptor) cDescriptor;
         		switch (variableDescriptor.getName()) {
     			case "intExample":
-    				assertEquals("int", variableDescriptor.getTypeSpecifiers().get(0).getName());
+    				assertEquals("int", variableDescriptor.getTypeSpecifiers().getName());
     				break;
     			case "charExample":
-    				assertEquals("char", variableDescriptor.getTypeSpecifiers().get(0).getName());
+    				assertEquals("char", variableDescriptor.getTypeSpecifiers().getName());
     				break;
     			case "shortExample":
-    				assertEquals("short", variableDescriptor.getTypeSpecifiers().get(0).getName());
+    				assertEquals("short", variableDescriptor.getTypeSpecifiers().getName());
     				break;
     			case "longExample":
-    				assertEquals("long", variableDescriptor.getTypeSpecifiers().get(0).getName());
+    				assertEquals("long", variableDescriptor.getTypeSpecifiers().getName());
     				break;
     			case "unsignedExample":
-    				assertEquals("unsigned", variableDescriptor.getTypeSpecifiers().get(0).getName());
+    				assertEquals("unsigned", variableDescriptor.getTypeSpecifiers().getName());
     				break;
     			case "signedExample":
-    				assertEquals("signed", variableDescriptor.getTypeSpecifiers().get(0).getName());
+    				assertEquals("signed", variableDescriptor.getTypeSpecifiers().getName());
     				break;
     			case "floatExample":
-    				assertEquals("float", variableDescriptor.getTypeSpecifiers().get(0).getName());
+    				assertEquals("float", variableDescriptor.getTypeSpecifiers().getName());
     				break;
     			case "doubleExample":
-    				assertEquals("double", variableDescriptor.getTypeSpecifiers().get(0).getName());
+    				assertEquals("double", variableDescriptor.getTypeSpecifiers().getName());
     				break;
     			case "boolExample":
-    				assertEquals("_Bool", variableDescriptor.getTypeSpecifiers().get(0).getName());
+    				assertEquals("_Bool", variableDescriptor.getTypeSpecifiers().getName());
     				break;
     			default:
     				break;
@@ -88,22 +88,22 @@ public class GlobalVariablesITest extends AbstractPluginIT{
         		VariableDescriptor variableDescriptor = (VariableDescriptor) cDescriptor;
         		switch (variableDescriptor.getName()) {
         		case "i":
-        			assertEquals("int", variableDescriptor.getTypeSpecifiers().get(0).getName());
+        			assertEquals("int", variableDescriptor.getTypeSpecifiers().getName());
         			break;
         		case "ptr":
-        			assertEquals("int *", variableDescriptor.getTypeSpecifiers().get(0).getName());
+        			assertEquals("int *", variableDescriptor.getTypeSpecifiers().getName());
         			break;
         		case "text":
-        			assertEquals("char *", variableDescriptor.getTypeSpecifiers().get(0).getName());
+        			assertEquals("char *", variableDescriptor.getTypeSpecifiers().getName());
         			break;
         		case "doubleArray":
-        			assertEquals("double []", variableDescriptor.getTypeSpecifiers().get(0).getName());
+        			assertEquals("double []", variableDescriptor.getTypeSpecifiers().getName());
         			break;
         		case "intArray":
-        			assertEquals("int [5]", variableDescriptor.getTypeSpecifiers().get(0).getName());
+        			assertEquals("int [5]", variableDescriptor.getTypeSpecifiers().getName());
         			break;
         		case "boolPtr":
-        			assertEquals("_Bool *", variableDescriptor.getTypeSpecifiers().get(0).getName());
+        			assertEquals("_Bool *", variableDescriptor.getTypeSpecifiers().getName());
         			break;
         		default:
         			break;
@@ -131,19 +131,19 @@ public class GlobalVariablesITest extends AbstractPluginIT{
         		VariableDescriptor variableDescriptor = (VariableDescriptor) cDescriptor;
             	switch (variableDescriptor.getName()) {
     			case "p_ci":
-    				assertEquals("int const *", variableDescriptor.getTypeSpecifiers().get(0).getName());
+    				assertEquals("int const *", variableDescriptor.getTypeSpecifiers().getName());
     				break;
     			case "p_ci2":
-    				assertEquals("int const *", variableDescriptor.getTypeSpecifiers().get(0).getName());
+    				assertEquals("int const *", variableDescriptor.getTypeSpecifiers().getName());
     				break;
     			case "cp_i":
-    				assertEquals("int * const", variableDescriptor.getTypeSpecifiers().get(0).getName());
+    				assertEquals("int * const", variableDescriptor.getTypeSpecifiers().getName());
     				break;
     			case "cp_i2":
-    				assertEquals("int * const", variableDescriptor.getTypeSpecifiers().get(0).getName());
+    				assertEquals("int * const", variableDescriptor.getTypeSpecifiers().getName());
     				break;
     			case "vint":
-    				assertEquals("int volatile", variableDescriptor.getTypeSpecifiers().get(0).getName());
+    				assertEquals("int volatile", variableDescriptor.getTypeSpecifiers().getName());
     				break;
     			default:
     				break;
