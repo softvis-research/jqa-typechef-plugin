@@ -1,0 +1,853 @@
+<?xml version="1.0"?>
+<de.fosd.typechef.parser.c.TranslationUnit>
+  <defs class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
+    <scala.collection.immutable.List_-SerializationProxy>
+      <default/>
+      <de.fosd.typechef.conditional.Opt>
+        <condition class="de.fosd.typechef.featureexpr.sat.True$" resolves-to="de.fosd.typechef.featureexpr.FeatureExprSerializationProxy">
+          <fexpr>1</fexpr>
+        </condition>
+        <entry class="de.fosd.typechef.parser.c.Declaration">
+          <declSpecs class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
+            <scala.collection.immutable.List_-SerializationProxy>
+              <default/>
+              <de.fosd.typechef.conditional.Opt>
+                <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../condition"/>
+                <entry class="de.fosd.typechef.parser.c.IntSpecifier">
+                  <range class="scala.Some">
+                    <value class="scala.Tuple2">
+                      <__1 class="de.fosd.typechef.parser.c.TokenPosition">
+                        <file>file global_variable_use.c</file>
+                        <line>3</line>
+                        <column>0</column>
+                      </__1>
+                      <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                        <file>file global_variable_use.c</file>
+                        <line>3</line>
+                        <column>4</column>
+                      </__2>
+                    </value>
+                  </range>
+                </entry>
+              </de.fosd.typechef.conditional.Opt>
+              <scala.collection.immutable.ListSerializeEnd_-/>
+            </scala.collection.immutable.List_-SerializationProxy>
+          </declSpecs>
+          <init class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
+            <scala.collection.immutable.List_-SerializationProxy>
+              <default/>
+              <de.fosd.typechef.conditional.Opt>
+                <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../condition"/>
+                <entry class="de.fosd.typechef.parser.c.InitDeclaratorI">
+                  <declarator class="de.fosd.typechef.parser.c.AtomicNamedDeclarator">
+                    <pointers class="scala.collection.immutable.Nil$" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
+                      <scala.collection.immutable.List_-SerializationProxy>
+                        <default/>
+                        <scala.collection.immutable.ListSerializeEnd_- reference="../../../../../../../../declSpecs/scala.collection.immutable.List_-SerializationProxy/scala.collection.immutable.ListSerializeEnd_-"/>
+                      </scala.collection.immutable.List_-SerializationProxy>
+                    </pointers>
+                    <extensions class="scala.collection.immutable.Nil$" reference="../pointers"/>
+                    <range class="scala.Some">
+                      <value class="scala.Tuple2">
+                        <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                        <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                          <file>file global_variable_use.c</file>
+                          <line>3</line>
+                          <column>5</column>
+                        </__2>
+                      </value>
+                    </range>
+                    <id>
+                      <range class="scala.Some">
+                        <value class="scala.Tuple2">
+                          <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../../declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                          <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__2"/>
+                        </value>
+                      </range>
+                      <name>g</name>
+                    </id>
+                  </declarator>
+                  <attributes class="scala.collection.immutable.Nil$" reference="../declarator/pointers"/>
+                  <range class="scala.Some">
+                    <value class="scala.Tuple2">
+                      <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                      <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../declarator/range/value/__2"/>
+                    </value>
+                  </range>
+                  <i class="scala.None$"/>
+                </entry>
+              </de.fosd.typechef.conditional.Opt>
+              <scala.collection.immutable.ListSerializeEnd_- reference="../../../declSpecs/scala.collection.immutable.List_-SerializationProxy/scala.collection.immutable.ListSerializeEnd_-"/>
+            </scala.collection.immutable.List_-SerializationProxy>
+          </init>
+          <range class="scala.Some">
+            <value class="scala.Tuple2">
+              <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__1"/>
+              <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                <file>file global_variable_use.c</file>
+                <line>5</line>
+                <column>0</column>
+              </__2>
+            </value>
+          </range>
+        </entry>
+      </de.fosd.typechef.conditional.Opt>
+      <de.fosd.typechef.conditional.Opt>
+        <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../de.fosd.typechef.conditional.Opt/condition"/>
+        <entry class="de.fosd.typechef.parser.c.FunctionDef">
+          <specifiers class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
+            <scala.collection.immutable.List_-SerializationProxy>
+              <default/>
+              <de.fosd.typechef.conditional.Opt>
+                <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                <entry class="de.fosd.typechef.parser.c.IntSpecifier">
+                  <range class="scala.Some">
+                    <value class="scala.Tuple2">
+                      <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                      <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                        <file>file global_variable_use.c</file>
+                        <line>5</line>
+                        <column>4</column>
+                      </__2>
+                    </value>
+                  </range>
+                </entry>
+              </de.fosd.typechef.conditional.Opt>
+              <scala.collection.immutable.ListSerializeEnd_- reference="../../../../../de.fosd.typechef.conditional.Opt/entry/declSpecs/scala.collection.immutable.List_-SerializationProxy/scala.collection.immutable.ListSerializeEnd_-"/>
+            </scala.collection.immutable.List_-SerializationProxy>
+          </specifiers>
+          <declarator class="de.fosd.typechef.parser.c.AtomicNamedDeclarator">
+            <pointers class="scala.collection.immutable.Nil$" reference="../../../../de.fosd.typechef.conditional.Opt/entry/init/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/declarator/pointers"/>
+            <extensions class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
+              <scala.collection.immutable.List_-SerializationProxy>
+                <default/>
+                <de.fosd.typechef.conditional.Opt>
+                  <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                  <entry class="de.fosd.typechef.parser.c.DeclIdentifierList">
+                    <range class="scala.Some">
+                      <value class="scala.Tuple2">
+                        <__1 class="de.fosd.typechef.parser.c.TokenPosition">
+                          <file>file global_variable_use.c</file>
+                          <line>5</line>
+                          <column>9</column>
+                        </__1>
+                        <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                          <file>file global_variable_use.c</file>
+                          <line>5</line>
+                          <column>12</column>
+                        </__2>
+                      </value>
+                    </range>
+                    <idList class="scala.collection.immutable.Nil$" reference="../../../../../../../../de.fosd.typechef.conditional.Opt/entry/init/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/declarator/pointers"/>
+                  </entry>
+                </de.fosd.typechef.conditional.Opt>
+                <scala.collection.immutable.ListSerializeEnd_- reference="../../../../../../de.fosd.typechef.conditional.Opt/entry/declSpecs/scala.collection.immutable.List_-SerializationProxy/scala.collection.immutable.ListSerializeEnd_-"/>
+              </scala.collection.immutable.List_-SerializationProxy>
+            </extensions>
+            <range class="scala.Some">
+              <value class="scala.Tuple2">
+                <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../specifiers/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+              </value>
+            </range>
+            <id>
+              <range class="scala.Some">
+                <value class="scala.Tuple2">
+                  <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../specifiers/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                  <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__1"/>
+                </value>
+              </range>
+              <name>main</name>
+            </id>
+          </declarator>
+          <oldStyleParameters class="scala.collection.immutable.Nil$" reference="../../../de.fosd.typechef.conditional.Opt/entry/init/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/declarator/pointers"/>
+          <stmt>
+            <range class="scala.Some">
+              <value class="scala.Tuple2">
+                <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../declarator/extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                  <line>0</line>
+                  <column>0</column>
+                </__2>
+              </value>
+            </range>
+            <innerStatements class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
+              <scala.collection.immutable.List_-SerializationProxy>
+                <default/>
+                <de.fosd.typechef.conditional.Opt>
+                  <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                  <entry class="de.fosd.typechef.parser.c.DeclarationStatement">
+                    <range class="scala.Some">
+                      <value class="scala.Tuple2">
+                        <__1 class="de.fosd.typechef.parser.c.TokenPosition">
+                          <file>file global_variable_use.c</file>
+                          <line>7</line>
+                          <column>2</column>
+                        </__1>
+                        <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                          <file>file global_variable_use.c</file>
+                          <line>9</line>
+                          <column>2</column>
+                        </__2>
+                      </value>
+                    </range>
+                    <decl>
+                      <declSpecs class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
+                        <scala.collection.immutable.List_-SerializationProxy>
+                          <default/>
+                          <de.fosd.typechef.conditional.Opt>
+                            <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                            <entry class="de.fosd.typechef.parser.c.IntSpecifier">
+                              <range class="scala.Some">
+                                <value class="scala.Tuple2">
+                                  <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../range/value/__1"/>
+                                  <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                                    <file>file global_variable_use.c</file>
+                                    <line>7</line>
+                                    <column>6</column>
+                                  </__2>
+                                </value>
+                              </range>
+                            </entry>
+                          </de.fosd.typechef.conditional.Opt>
+                          <scala.collection.immutable.ListSerializeEnd_- reference="../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/declSpecs/scala.collection.immutable.List_-SerializationProxy/scala.collection.immutable.ListSerializeEnd_-"/>
+                        </scala.collection.immutable.List_-SerializationProxy>
+                      </declSpecs>
+                      <init class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
+                        <scala.collection.immutable.List_-SerializationProxy>
+                          <default/>
+                          <de.fosd.typechef.conditional.Opt>
+                            <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                            <entry class="de.fosd.typechef.parser.c.InitDeclaratorI">
+                              <declarator class="de.fosd.typechef.parser.c.AtomicNamedDeclarator">
+                                <pointers class="scala.collection.immutable.Nil$" reference="../../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/init/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/declarator/pointers"/>
+                                <extensions class="scala.collection.immutable.Nil$" reference="../../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/init/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/declarator/pointers"/>
+                                <range class="scala.Some">
+                                  <value class="scala.Tuple2">
+                                    <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                                    <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                                      <file>file global_variable_use.c</file>
+                                      <line>7</line>
+                                      <column>7</column>
+                                    </__2>
+                                  </value>
+                                </range>
+                                <id>
+                                  <range class="scala.Some">
+                                    <value class="scala.Tuple2">
+                                      <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../../declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                                      <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__2"/>
+                                    </value>
+                                  </range>
+                                  <name>a</name>
+                                </id>
+                              </declarator>
+                              <attributes class="scala.collection.immutable.Nil$" reference="../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/init/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/declarator/pointers"/>
+                              <range class="scala.Some">
+                                <value class="scala.Tuple2">
+                                  <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                                  <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../declarator/range/value/__2"/>
+                                </value>
+                              </range>
+                              <i class="scala.None$" reference="../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/init/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/i"/>
+                            </entry>
+                          </de.fosd.typechef.conditional.Opt>
+                          <de.fosd.typechef.conditional.Opt>
+                            <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                            <entry class="de.fosd.typechef.parser.c.InitDeclaratorI">
+                              <declarator class="de.fosd.typechef.parser.c.AtomicNamedDeclarator">
+                                <pointers class="scala.collection.immutable.Nil$" reference="../../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/init/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/declarator/pointers"/>
+                                <extensions class="scala.collection.immutable.Nil$" reference="../../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/init/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/declarator/pointers"/>
+                                <range class="scala.Some">
+                                  <value class="scala.Tuple2">
+                                    <__1 class="de.fosd.typechef.parser.c.TokenPosition">
+                                      <file>file global_variable_use.c</file>
+                                      <line>7</line>
+                                      <column>9</column>
+                                    </__1>
+                                    <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                                      <file>file global_variable_use.c</file>
+                                      <line>7</line>
+                                      <column>10</column>
+                                    </__2>
+                                  </value>
+                                </range>
+                                <id>
+                                  <range class="scala.Some">
+                                    <value class="scala.Tuple2">
+                                      <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__1"/>
+                                      <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__2"/>
+                                    </value>
+                                  </range>
+                                  <name>b</name>
+                                </id>
+                              </declarator>
+                              <attributes class="scala.collection.immutable.Nil$" reference="../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/init/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/declarator/pointers"/>
+                              <range class="scala.Some">
+                                <value class="scala.Tuple2">
+                                  <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../declarator/range/value/__1"/>
+                                  <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../declarator/range/value/__2"/>
+                                </value>
+                              </range>
+                              <i class="scala.None$" reference="../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/init/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/i"/>
+                            </entry>
+                          </de.fosd.typechef.conditional.Opt>
+                          <scala.collection.immutable.ListSerializeEnd_- reference="../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/declSpecs/scala.collection.immutable.List_-SerializationProxy/scala.collection.immutable.ListSerializeEnd_-"/>
+                        </scala.collection.immutable.List_-SerializationProxy>
+                      </init>
+                      <range class="scala.Some">
+                        <value class="scala.Tuple2">
+                          <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__1"/>
+                          <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__2"/>
+                        </value>
+                      </range>
+                    </decl>
+                  </entry>
+                </de.fosd.typechef.conditional.Opt>
+                <de.fosd.typechef.conditional.Opt>
+                  <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                  <entry class="de.fosd.typechef.parser.c.ExprStatement">
+                    <range class="scala.Some">
+                      <value class="scala.Tuple2">
+                        <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                        <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                          <file>file global_variable_use.c</file>
+                          <line>10</line>
+                          <column>2</column>
+                        </__2>
+                      </value>
+                    </range>
+                    <expr class="de.fosd.typechef.parser.c.AssignExpr">
+                      <range class="scala.Some">
+                        <value class="scala.Tuple2">
+                          <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                          <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__2"/>
+                        </value>
+                      </range>
+                      <target class="de.fosd.typechef.parser.c.Id">
+                        <range class="scala.Some">
+                          <value class="scala.Tuple2">
+                            <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                            <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                              <file>file global_variable_use.c</file>
+                              <line>9</line>
+                              <column>4</column>
+                            </__2>
+                          </value>
+                        </range>
+                        <name>a</name>
+                      </target>
+                      <operation>=</operation>
+                      <source class="de.fosd.typechef.parser.c.Constant">
+                        <range class="scala.Some">
+                          <value class="scala.Tuple2">
+                            <__1 class="de.fosd.typechef.parser.c.TokenPosition">
+                              <file>file global_variable_use.c</file>
+                              <line>9</line>
+                              <column>6</column>
+                            </__1>
+                            <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                              <file>file global_variable_use.c</file>
+                              <line>9</line>
+                              <column>8</column>
+                            </__2>
+                          </value>
+                        </range>
+                        <value>10</value>
+                      </source>
+                    </expr>
+                  </entry>
+                </de.fosd.typechef.conditional.Opt>
+                <de.fosd.typechef.conditional.Opt>
+                  <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                  <entry class="de.fosd.typechef.parser.c.ExprStatement">
+                    <range class="scala.Some">
+                      <value class="scala.Tuple2">
+                        <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../de.fosd.typechef.conditional.Opt[2]/entry/range/value/__2"/>
+                        <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                          <file>file global_variable_use.c</file>
+                          <line>11</line>
+                          <column>2</column>
+                        </__2>
+                      </value>
+                    </range>
+                    <expr class="de.fosd.typechef.parser.c.AssignExpr">
+                      <range class="scala.Some">
+                        <value class="scala.Tuple2">
+                          <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../de.fosd.typechef.conditional.Opt[2]/entry/range/value/__2"/>
+                          <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__2"/>
+                        </value>
+                      </range>
+                      <target class="de.fosd.typechef.parser.c.Id">
+                        <range class="scala.Some">
+                          <value class="scala.Tuple2">
+                            <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../de.fosd.typechef.conditional.Opt[2]/entry/range/value/__2"/>
+                            <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                              <file>file global_variable_use.c</file>
+                              <line>10</line>
+                              <column>4</column>
+                            </__2>
+                          </value>
+                        </range>
+                        <name>b</name>
+                      </target>
+                      <operation>=</operation>
+                      <source class="de.fosd.typechef.parser.c.Constant">
+                        <range class="scala.Some">
+                          <value class="scala.Tuple2">
+                            <__1 class="de.fosd.typechef.parser.c.TokenPosition">
+                              <file>file global_variable_use.c</file>
+                              <line>10</line>
+                              <column>6</column>
+                            </__1>
+                            <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                              <file>file global_variable_use.c</file>
+                              <line>10</line>
+                              <column>8</column>
+                            </__2>
+                          </value>
+                        </range>
+                        <value>20</value>
+                      </source>
+                    </expr>
+                  </entry>
+                </de.fosd.typechef.conditional.Opt>
+                <de.fosd.typechef.conditional.Opt>
+                  <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                  <entry class="de.fosd.typechef.parser.c.ExprStatement">
+                    <range class="scala.Some">
+                      <value class="scala.Tuple2">
+                        <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../de.fosd.typechef.conditional.Opt[3]/entry/range/value/__2"/>
+                        <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                          <file>file global_variable_use.c</file>
+                          <line>13</line>
+                          <column>2</column>
+                        </__2>
+                      </value>
+                    </range>
+                    <expr class="de.fosd.typechef.parser.c.AssignExpr">
+                      <range class="scala.Some">
+                        <value class="scala.Tuple2">
+                          <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../de.fosd.typechef.conditional.Opt[3]/entry/range/value/__2"/>
+                          <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__2"/>
+                        </value>
+                      </range>
+                      <target class="de.fosd.typechef.parser.c.Id">
+                        <range class="scala.Some">
+                          <value class="scala.Tuple2">
+                            <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../de.fosd.typechef.conditional.Opt[3]/entry/range/value/__2"/>
+                            <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                              <file>file global_variable_use.c</file>
+                              <line>11</line>
+                              <column>4</column>
+                            </__2>
+                          </value>
+                        </range>
+                        <name>g</name>
+                      </target>
+                      <operation>=</operation>
+                      <source class="de.fosd.typechef.parser.c.NAryExpr">
+                        <range class="scala.Some">
+                          <value class="scala.Tuple2">
+                            <__1 class="de.fosd.typechef.parser.c.TokenPosition">
+                              <file>file global_variable_use.c</file>
+                              <line>11</line>
+                              <column>6</column>
+                            </__1>
+                            <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                              <file>file global_variable_use.c</file>
+                              <line>11</line>
+                              <column>11</column>
+                            </__2>
+                          </value>
+                        </range>
+                        <e class="de.fosd.typechef.parser.c.Id">
+                          <range class="scala.Some">
+                            <value class="scala.Tuple2">
+                              <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__1"/>
+                              <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                                <file>file global_variable_use.c</file>
+                                <line>11</line>
+                                <column>8</column>
+                              </__2>
+                            </value>
+                          </range>
+                          <name>a</name>
+                        </e>
+                        <others class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
+                          <scala.collection.immutable.List_-SerializationProxy>
+                            <default/>
+                            <de.fosd.typechef.conditional.Opt>
+                              <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                              <entry class="de.fosd.typechef.parser.c.NArySubExpr">
+                                <op>+</op>
+                                <e class="de.fosd.typechef.parser.c.Id">
+                                  <range class="scala.Some">
+                                    <value class="scala.Tuple2">
+                                      <__1 class="de.fosd.typechef.parser.c.TokenPosition">
+                                        <file>file global_variable_use.c</file>
+                                        <line>11</line>
+                                        <column>10</column>
+                                      </__1>
+                                      <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../range/value/__2"/>
+                                    </value>
+                                  </range>
+                                  <name>b</name>
+                                </e>
+                                <range class="scala.Some">
+                                  <value class="scala.Tuple2">
+                                    <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../e/range/value/__2"/>
+                                    <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../range/value/__2"/>
+                                  </value>
+                                </range>
+                              </entry>
+                            </de.fosd.typechef.conditional.Opt>
+                            <scala.collection.immutable.ListSerializeEnd_- reference="../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/declSpecs/scala.collection.immutable.List_-SerializationProxy/scala.collection.immutable.ListSerializeEnd_-"/>
+                          </scala.collection.immutable.List_-SerializationProxy>
+                        </others>
+                      </source>
+                    </expr>
+                  </entry>
+                </de.fosd.typechef.conditional.Opt>
+                <de.fosd.typechef.conditional.Opt>
+                  <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                  <entry class="de.fosd.typechef.parser.c.DeclarationStatement">
+                    <range class="scala.Some">
+                      <value class="scala.Tuple2">
+                        <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../de.fosd.typechef.conditional.Opt[4]/entry/range/value/__2"/>
+                        <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                          <file>file global_variable_use.c</file>
+                          <line>14</line>
+                          <column>2</column>
+                        </__2>
+                      </value>
+                    </range>
+                    <decl>
+                      <declSpecs class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
+                        <scala.collection.immutable.List_-SerializationProxy>
+                          <default/>
+                          <de.fosd.typechef.conditional.Opt>
+                            <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                            <entry class="de.fosd.typechef.parser.c.IntSpecifier">
+                              <range class="scala.Some">
+                                <value class="scala.Tuple2">
+                                  <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../../../de.fosd.typechef.conditional.Opt[4]/entry/range/value/__2"/>
+                                  <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                                    <file>file global_variable_use.c</file>
+                                    <line>13</line>
+                                    <column>6</column>
+                                  </__2>
+                                </value>
+                              </range>
+                            </entry>
+                          </de.fosd.typechef.conditional.Opt>
+                          <scala.collection.immutable.ListSerializeEnd_- reference="../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/declSpecs/scala.collection.immutable.List_-SerializationProxy/scala.collection.immutable.ListSerializeEnd_-"/>
+                        </scala.collection.immutable.List_-SerializationProxy>
+                      </declSpecs>
+                      <init class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
+                        <scala.collection.immutable.List_-SerializationProxy>
+                          <default/>
+                          <de.fosd.typechef.conditional.Opt>
+                            <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                            <entry class="de.fosd.typechef.parser.c.InitDeclaratorI">
+                              <declarator class="de.fosd.typechef.parser.c.AtomicNamedDeclarator">
+                                <pointers class="scala.collection.immutable.Nil$" reference="../../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/init/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/declarator/pointers"/>
+                                <extensions class="scala.collection.immutable.Nil$" reference="../../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/init/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/declarator/pointers"/>
+                                <range class="scala.Some">
+                                  <value class="scala.Tuple2">
+                                    <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                                    <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                                      <file>file global_variable_use.c</file>
+                                      <line>13</line>
+                                      <column>7</column>
+                                    </__2>
+                                  </value>
+                                </range>
+                                <id>
+                                  <range class="scala.Some">
+                                    <value class="scala.Tuple2">
+                                      <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../../declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                                      <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__2"/>
+                                    </value>
+                                  </range>
+                                  <name>c</name>
+                                </id>
+                              </declarator>
+                              <attributes class="scala.collection.immutable.Nil$" reference="../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/init/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/declarator/pointers"/>
+                              <range class="scala.Some">
+                                <value class="scala.Tuple2">
+                                  <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                                  <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../declarator/range/value/__2"/>
+                                </value>
+                              </range>
+                              <i class="scala.None$" reference="../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/init/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/i"/>
+                            </entry>
+                          </de.fosd.typechef.conditional.Opt>
+                          <scala.collection.immutable.ListSerializeEnd_- reference="../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/declSpecs/scala.collection.immutable.List_-SerializationProxy/scala.collection.immutable.ListSerializeEnd_-"/>
+                        </scala.collection.immutable.List_-SerializationProxy>
+                      </init>
+                      <range class="scala.Some">
+                        <value class="scala.Tuple2">
+                          <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../de.fosd.typechef.conditional.Opt[4]/entry/range/value/__2"/>
+                          <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__2"/>
+                        </value>
+                      </range>
+                    </decl>
+                  </entry>
+                </de.fosd.typechef.conditional.Opt>
+                <de.fosd.typechef.conditional.Opt>
+                  <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                  <entry class="de.fosd.typechef.parser.c.ExprStatement">
+                    <range class="scala.Some">
+                      <value class="scala.Tuple2">
+                        <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../de.fosd.typechef.conditional.Opt[5]/entry/range/value/__2"/>
+                        <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                          <file>file global_variable_use.c</file>
+                          <line>16</line>
+                          <column>2</column>
+                        </__2>
+                      </value>
+                    </range>
+                    <expr class="de.fosd.typechef.parser.c.AssignExpr">
+                      <range class="scala.Some">
+                        <value class="scala.Tuple2">
+                          <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../de.fosd.typechef.conditional.Opt[5]/entry/range/value/__2"/>
+                          <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__2"/>
+                        </value>
+                      </range>
+                      <target class="de.fosd.typechef.parser.c.Id">
+                        <range class="scala.Some">
+                          <value class="scala.Tuple2">
+                            <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../de.fosd.typechef.conditional.Opt[5]/entry/range/value/__2"/>
+                            <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                              <file>file global_variable_use.c</file>
+                              <line>14</line>
+                              <column>4</column>
+                            </__2>
+                          </value>
+                        </range>
+                        <name>c</name>
+                      </target>
+                      <operation>=</operation>
+                      <source class="de.fosd.typechef.parser.c.Id">
+                        <range class="scala.Some">
+                          <value class="scala.Tuple2">
+                            <__1 class="de.fosd.typechef.parser.c.TokenPosition">
+                              <file>file global_variable_use.c</file>
+                              <line>14</line>
+                              <column>6</column>
+                            </__1>
+                            <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                              <file>file global_variable_use.c</file>
+                              <line>14</line>
+                              <column>7</column>
+                            </__2>
+                          </value>
+                        </range>
+                        <name>g</name>
+                      </source>
+                    </expr>
+                  </entry>
+                </de.fosd.typechef.conditional.Opt>
+                <de.fosd.typechef.conditional.Opt>
+                  <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                  <entry class="de.fosd.typechef.parser.c.ExprStatement">
+                    <range class="scala.Some">
+                      <value class="scala.Tuple2">
+                        <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../de.fosd.typechef.conditional.Opt[6]/entry/range/value/__2"/>
+                        <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                          <file>file global_variable_use.c</file>
+                          <line>18</line>
+                          <column>2</column>
+                        </__2>
+                      </value>
+                    </range>
+                    <expr class="de.fosd.typechef.parser.c.PostfixExpr">
+                      <range class="scala.Some">
+                        <value class="scala.Tuple2">
+                          <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../de.fosd.typechef.conditional.Opt[6]/entry/range/value/__2"/>
+                          <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__2"/>
+                        </value>
+                      </range>
+                      <p class="de.fosd.typechef.parser.c.Id">
+                        <range class="scala.Some">
+                          <value class="scala.Tuple2">
+                            <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../de.fosd.typechef.conditional.Opt[6]/entry/range/value/__2"/>
+                            <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                              <file>file global_variable_use.c</file>
+                              <line>16</line>
+                              <column>9</column>
+                            </__2>
+                          </value>
+                        </range>
+                        <name>printf</name>
+                      </p>
+                      <s class="de.fosd.typechef.parser.c.FunctionCall">
+                        <range class="scala.Some">
+                          <value class="scala.Tuple2">
+                            <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../p/range/value/__2"/>
+                            <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                              <file>file global_variable_use.c</file>
+                              <line>16</line>
+                              <column>58</column>
+                            </__2>
+                          </value>
+                        </range>
+                        <params>
+                          <range class="scala.Some">
+                            <value class="scala.Tuple2">
+                              <__1 class="de.fosd.typechef.parser.c.TokenPosition">
+                                <file>file global_variable_use.c</file>
+                                <line>16</line>
+                                <column>10</column>
+                              </__1>
+                              <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                                <file>file global_variable_use.c</file>
+                                <line>16</line>
+                                <column>57</column>
+                              </__2>
+                            </value>
+                          </range>
+                          <exprs class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
+                            <scala.collection.immutable.List_-SerializationProxy>
+                              <default/>
+                              <de.fosd.typechef.conditional.Opt>
+                                <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                                <entry class="de.fosd.typechef.parser.c.StringLit">
+                                  <range class="scala.Some">
+                                    <value class="scala.Tuple2">
+                                      <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../range/value/__1"/>
+                                      <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                                        <file>file global_variable_use.c</file>
+                                        <line>16</line>
+                                        <column>48</column>
+                                      </__2>
+                                    </value>
+                                  </range>
+                                  <name class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
+                                    <scala.collection.immutable.List_-SerializationProxy>
+                                      <default/>
+                                      <de.fosd.typechef.conditional.Opt>
+                                        <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                                        <entry class="string">&quot;value of a = %d, b = %d and g = %d\n&quot;</entry>
+                                      </de.fosd.typechef.conditional.Opt>
+                                      <scala.collection.immutable.ListSerializeEnd_- reference="../../../../../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/declSpecs/scala.collection.immutable.List_-SerializationProxy/scala.collection.immutable.ListSerializeEnd_-"/>
+                                    </scala.collection.immutable.List_-SerializationProxy>
+                                  </name>
+                                </entry>
+                              </de.fosd.typechef.conditional.Opt>
+                              <de.fosd.typechef.conditional.Opt>
+                                <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                                <entry class="de.fosd.typechef.parser.c.Id">
+                                  <range class="scala.Some">
+                                    <value class="scala.Tuple2">
+                                      <__1 class="de.fosd.typechef.parser.c.TokenPosition">
+                                        <file>file global_variable_use.c</file>
+                                        <line>16</line>
+                                        <column>50</column>
+                                      </__1>
+                                      <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                                        <file>file global_variable_use.c</file>
+                                        <line>16</line>
+                                        <column>51</column>
+                                      </__2>
+                                    </value>
+                                  </range>
+                                  <name>a</name>
+                                </entry>
+                              </de.fosd.typechef.conditional.Opt>
+                              <de.fosd.typechef.conditional.Opt>
+                                <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                                <entry class="de.fosd.typechef.parser.c.Id">
+                                  <range class="scala.Some">
+                                    <value class="scala.Tuple2">
+                                      <__1 class="de.fosd.typechef.parser.c.TokenPosition">
+                                        <file>file global_variable_use.c</file>
+                                        <line>16</line>
+                                        <column>53</column>
+                                      </__1>
+                                      <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                                        <file>file global_variable_use.c</file>
+                                        <line>16</line>
+                                        <column>54</column>
+                                      </__2>
+                                    </value>
+                                  </range>
+                                  <name>b</name>
+                                </entry>
+                              </de.fosd.typechef.conditional.Opt>
+                              <de.fosd.typechef.conditional.Opt>
+                                <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                                <entry class="de.fosd.typechef.parser.c.Id">
+                                  <range class="scala.Some">
+                                    <value class="scala.Tuple2">
+                                      <__1 class="de.fosd.typechef.parser.c.TokenPosition">
+                                        <file>file global_variable_use.c</file>
+                                        <line>16</line>
+                                        <column>56</column>
+                                      </__1>
+                                      <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../range/value/__2"/>
+                                    </value>
+                                  </range>
+                                  <name>g</name>
+                                </entry>
+                              </de.fosd.typechef.conditional.Opt>
+                              <scala.collection.immutable.ListSerializeEnd_- reference="../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/declSpecs/scala.collection.immutable.List_-SerializationProxy/scala.collection.immutable.ListSerializeEnd_-"/>
+                            </scala.collection.immutable.List_-SerializationProxy>
+                          </exprs>
+                        </params>
+                      </s>
+                    </expr>
+                  </entry>
+                </de.fosd.typechef.conditional.Opt>
+                <de.fosd.typechef.conditional.Opt>
+                  <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
+                  <entry class="de.fosd.typechef.parser.c.ReturnStatement">
+                    <range class="scala.Some">
+                      <value class="scala.Tuple2">
+                        <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../de.fosd.typechef.conditional.Opt[7]/entry/range/value/__2"/>
+                        <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                          <file>file global_variable_use.c</file>
+                          <line>19</line>
+                          <column>0</column>
+                        </__2>
+                      </value>
+                    </range>
+                    <expr class="scala.Some">
+                      <value class="de.fosd.typechef.parser.c.Constant">
+                        <range class="scala.Some">
+                          <value class="scala.Tuple2">
+                            <__1 class="de.fosd.typechef.parser.c.TokenPosition">
+                              <file>file global_variable_use.c</file>
+                              <line>18</line>
+                              <column>9</column>
+                            </__1>
+                            <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                              <file>file global_variable_use.c</file>
+                              <line>18</line>
+                              <column>10</column>
+                            </__2>
+                          </value>
+                        </range>
+                        <value>0</value>
+                      </value>
+                    </expr>
+                  </entry>
+                </de.fosd.typechef.conditional.Opt>
+                <scala.collection.immutable.ListSerializeEnd_- reference="../../../../../../de.fosd.typechef.conditional.Opt/entry/declSpecs/scala.collection.immutable.List_-SerializationProxy/scala.collection.immutable.ListSerializeEnd_-"/>
+              </scala.collection.immutable.List_-SerializationProxy>
+            </innerStatements>
+          </stmt>
+          <range class="scala.Some">
+            <value class="scala.Tuple2">
+              <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+              <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../stmt/range/value/__2"/>
+            </value>
+          </range>
+        </entry>
+      </de.fosd.typechef.conditional.Opt>
+      <scala.collection.immutable.ListSerializeEnd_- reference="../de.fosd.typechef.conditional.Opt/entry/declSpecs/scala.collection.immutable.List_-SerializationProxy/scala.collection.immutable.ListSerializeEnd_-"/>
+    </scala.collection.immutable.List_-SerializationProxy>
+  </defs>
+  <range class="scala.None$" reference="../defs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/init/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/i"/>
+</de.fosd.typechef.parser.c.TranslationUnit>

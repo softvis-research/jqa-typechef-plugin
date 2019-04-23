@@ -19,6 +19,8 @@
     	<class>org.jqassistant.contrib.plugin.c.api.model.NegationDescriptor</class>
     	<class>org.jqassistant.contrib.plugin.c.api.model.AndDescriptor</class>
     	<class>org.jqassistant.contrib.plugin.c.api.model.OrDescriptor</class>
+    	<class>org.jqassistant.contrib.plugin.c.api.model.WritesDescriptor</class>
+    	<class>org.jqassistant.contrib.plugin.c.api.model.ReadsDescriptor</class>
     </model>
     <scanner>
         <class>org.jqassistant.contrib.plugin.c.impl.scanner.CAstFileScannerPlugin</class>

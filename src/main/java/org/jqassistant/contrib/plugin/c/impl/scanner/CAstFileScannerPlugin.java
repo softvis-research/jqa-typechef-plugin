@@ -32,12 +32,14 @@ import org.jqassistant.contrib.plugin.c.api.model.FunctionArgument;
 import org.jqassistant.contrib.plugin.c.api.model.FunctionCall;
 import org.jqassistant.contrib.plugin.c.api.model.FunctionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.ParameterDescriptor;
+import org.jqassistant.contrib.plugin.c.api.model.ReadsDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.StructDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.TranslationUnitDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.Type;
 import org.jqassistant.contrib.plugin.c.api.model.TypeDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.UnionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.VariableDescriptor;
+import org.jqassistant.contrib.plugin.c.api.model.WritesDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -137,6 +139,9 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 					} else if(this.descriptorDeque.contains(TagNameConstants.P)) {
 						getElementTextCalled = true;
 						this.functionName = streamReader.getElementText();
+					} else if(this.descriptorDeque.contains("AssignmentExpression")) {
+						getElementTextCalled = true;
+						handleAssignment(streamReader.getElementText());
 					}
 				} catch (XMLStreamException e) {
 					logger.error(e.getMessage());
@@ -233,6 +238,12 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 					} finally {
 						this.descriptorDeque.pop();
 					}
+				}
+				break;
+			case TagNameConstants.EXPR:
+				if(streamReader.getAttributeValue(0).equals(AttributeValueConstants.ASSIGNMENTEXPRESSION)) {
+					this.descriptorDeque.pop();
+					this.descriptorDeque.push("AssignmentExpression");
 				}
 				break;
 			default:
@@ -667,6 +678,39 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				break;
 			}
 		}
+	}
+
+	/**
+	 * If an assignment expression comes up, check if there is a global variable involved
+	 * and add a READ or WRITE relationship to the current function
+	 * @param name String name of the current element
+	 */
+	private void handleAssignment(String name) {
+		FunctionDescriptor currentFunction = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, this.descriptorDeque);
+		VariableDescriptor calledVariable = null;
+		if(currentFunction != null) {
+			TranslationUnitDescriptor translationUnit = (TranslationUnitDescriptor) DequeUtils.getFirstOfType(TranslationUnitDescriptor.class, this.descriptorDeque);
+			for(CDescriptor cDescriptor : translationUnit.getDeclaredVariables()) {
+				//returns all elements that have the relation DECLARES with the translation unit
+				if(cDescriptor instanceof VariableDescriptor) {
+					VariableDescriptor variable = (VariableDescriptor) cDescriptor;
+					if(variable.getName().equals(name)) {
+						calledVariable = variable;
+						break;
+					}
+				}
+			}
+			if(calledVariable != null) {
+				//value is assigned to the variable
+				if(this.descriptorDeque.contains("target")) {
+					context.getStore().create(currentFunction, WritesDescriptor.class, calledVariable);
+				//variable is part of the assignment value
+				} else if(this.descriptorDeque.contains("source")) {
+					context.getStore().create(currentFunction, ReadsDescriptor.class, calledVariable);
+				}
+			}
+			
+		}	
 	}
 
 	/**

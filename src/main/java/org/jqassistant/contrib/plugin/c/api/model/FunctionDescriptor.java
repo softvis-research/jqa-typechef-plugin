@@ -63,4 +63,18 @@ public interface FunctionDescriptor extends CDescriptor, NamedDescriptor, Depend
      */
     int getLineCount();
     void setLineCount(int lineCount);
+    
+    /**
+     * Return all read accesses to fields this method performs.
+     *
+     * @return All read accesses to fields this method performs.
+     */
+    List<ReadsDescriptor> getReads();
+
+    /**
+     * Return all write accesses to fields this method performs.
+     *
+     * @return All write accesses to fields this method performs.
+     */
+    List<WritesDescriptor> getWrites();
 }
