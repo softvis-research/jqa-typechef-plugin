@@ -7,7 +7,7 @@ import com.buschmais.xo.neo4j.api.annotation.Label;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
 
 @Label("Struct")
-public interface StructDescriptor extends CDescriptor, NamedDescriptor, DependsOnDescriptor{
+public interface StructDescriptor extends CDescriptor, NamedDescriptor, DependsOnDescriptor, SourceFileDescriptor{
 
 	/**
 	 * Returns the variables that were declared in this struct

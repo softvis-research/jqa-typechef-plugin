@@ -42,9 +42,11 @@ public class UnionITest extends AbstractPluginIT{
         for(CDescriptor cDescriptor : unionList) {
         	if(cDescriptor instanceof UnionDescriptor) {
         		UnionDescriptor union = (UnionDescriptor) cDescriptor;
+        		assertEquals("unions.c", union.getFileName());
         		assertTrue(unionNameList.contains(union.getName()));
         		assertEquals(3, union.getDeclaredVariables().size());
         		for(VariableDescriptor variable : union.getDeclaredVariables()) {
+        			assertEquals("unions.c", variable.getFileName());
         			switch (variable.getName()) {
 					case "a":
 						assertEquals("char", variable.getTypeSpecifiers().getName());
@@ -65,6 +67,7 @@ public class UnionITest extends AbstractPluginIT{
         		variableNameList.add("test2");
         		variableNameList.add("newTest");
         		assertTrue(variableNameList.contains(variable.getName()));
+        		assertEquals("unions.c", variable.getFileName());
         		if(variable.getName().equals("test2")) {
         			assertEquals("union test1", variable.getTypeSpecifiers().getName());
         		} else {
@@ -92,6 +95,7 @@ public class UnionITest extends AbstractPluginIT{
         for(CDescriptor cDescriptor : unionList) {
         	if(cDescriptor instanceof UnionDescriptor) {
         		UnionDescriptor union = (UnionDescriptor) cDescriptor;
+        		assertEquals("conditional_union.c", union.getFileName());
         		assertEquals("test", union.getName());
         		assertEquals(3, union.getDeclaredVariables().size());
         		assertEquals("FLAG", ((SingleConditionDescriptor)union.getCondition()).getMacroName());

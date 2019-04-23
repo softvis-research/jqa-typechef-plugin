@@ -33,6 +33,7 @@ public class GlobalVariablesITest extends AbstractPluginIT{
         for(CDescriptor cDescriptor : variableList) {
         	if(cDescriptor instanceof VariableDescriptor) {
         		VariableDescriptor variableDescriptor = (VariableDescriptor) cDescriptor;
+        		assertEquals("global_variables_simple.c", variableDescriptor.getFileName());
         		switch (variableDescriptor.getName()) {
     			case "intExample":
     				assertEquals("int", variableDescriptor.getTypeSpecifiers().getName());
@@ -86,6 +87,7 @@ public class GlobalVariablesITest extends AbstractPluginIT{
         for(CDescriptor cDescriptor : variableList) {
         	if(cDescriptor instanceof VariableDescriptor) {
         		VariableDescriptor variableDescriptor = (VariableDescriptor) cDescriptor;
+        		assertEquals("global_variables_complex.c", variableDescriptor.getFileName());
         		switch (variableDescriptor.getName()) {
         		case "i":
         			assertEquals("int", variableDescriptor.getTypeSpecifiers().getName());

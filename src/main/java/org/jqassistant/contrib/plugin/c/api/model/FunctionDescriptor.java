@@ -8,7 +8,7 @@ import com.buschmais.xo.neo4j.api.annotation.Label;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
 
 @Label(value = "Function", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
-public interface FunctionDescriptor extends CDescriptor, NamedDescriptor, DependsOnDescriptor, FullQualifiedNameDescriptor{
+public interface FunctionDescriptor extends CDescriptor, NamedDescriptor, DependsOnDescriptor, FullQualifiedNameDescriptor, SourceFileDescriptor{
 	
 	/**
 	 * Returns the parameter of the function

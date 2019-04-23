@@ -7,7 +7,7 @@ import com.buschmais.xo.neo4j.api.annotation.Label;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
 
 @Label("Union")
-public interface UnionDescriptor extends CDescriptor, NamedDescriptor, DependsOnDescriptor{
+public interface UnionDescriptor extends CDescriptor, NamedDescriptor, DependsOnDescriptor, SourceFileDescriptor{
 
 	/**
 	 * Returns the declared variables of this union

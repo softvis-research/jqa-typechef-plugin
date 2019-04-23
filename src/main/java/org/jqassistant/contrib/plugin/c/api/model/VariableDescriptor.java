@@ -7,7 +7,7 @@ import com.buschmais.xo.neo4j.api.annotation.Label;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
 
 @Label("Variable")
-public interface VariableDescriptor extends CDescriptor, NamedDescriptor, DependsOnDescriptor{
+public interface VariableDescriptor extends CDescriptor, NamedDescriptor, DependsOnDescriptor, SourceFileDescriptor{
 
 	/**
 	 * Returns the type specifiers and qualifiers of this variable

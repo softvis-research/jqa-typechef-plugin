@@ -17,6 +17,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.jqassistant.contrib.plugin.c.api.ConditionsLexer;
 import org.jqassistant.contrib.plugin.c.api.ConditionsParser;
 import org.jqassistant.contrib.plugin.c.api.model.CAstFileDescriptor;
@@ -66,6 +67,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 	private ScannerContext context;
 	private ArrayDeque<Object> descriptorDeque;
 	private String functionName;
+	private String currentFile;
 	
     @Override
     public void initialize() {
@@ -86,6 +88,8 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
         context = scanner.getContext();
         this.currentlyStoredType = null;
         this.functionName = null;
+        this.currentFile = null;
+        
         final FileDescriptor fileDescriptor = context.getCurrentDescriptor();
         
         // Add the C label.
@@ -125,6 +129,11 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			case TagNameConstants.TRANSLATIONUNIT:
 				TranslationUnitDescriptor translationUnitDescriptor = context.getStore().create(TranslationUnitDescriptor.class);
         		cAstFileDescriptor.setTranslationUnit(translationUnitDescriptor);
+        		if(cAstFileDescriptor.getFileName() != null) {
+        			String fileName = cAstFileDescriptor.getFileName().replace("ast", "c");
+        			translationUnitDescriptor.setFileName(fileName);
+        		}
+        		
         		this.descriptorDeque.pop();
         		descriptorDeque.push(translationUnitDescriptor);
         		break;
@@ -246,6 +255,14 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 					this.descriptorDeque.push("AssignmentExpression");
 				}
 				break;
+			case TagNameConstants.FILE:
+				try {
+					storeCurrentFileName(streamReader.getElementText());
+				} catch (XMLStreamException e) {
+					logger.error(e.getMessage());
+				} finally {
+					this.descriptorDeque.pop();
+				} 
 			default:
 				break;
 		}
@@ -315,6 +332,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 						TypeDescriptor type = context.getStore().create(TypeDescriptor.class);
 						type.setName(declaration.getType());
 						variable.setTypeSpecifiers(type);
+						variable.setFileName(declaration.getFileName());
 						translationUnit.getDeclaredVariables().add(variable);
 					} else {
 						throw new Exception("Line 249: Declaration with other type than variable not expected. Please check.");
@@ -455,6 +473,29 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			break;
 		}
 	}
+	
+	/**
+	 * Extract filename and store it to use it later
+	 * @param elementText content of the file tag
+	 */
+	private void storeCurrentFileName(String elementText) {
+		String fileName = elementText;
+		if(fileName.startsWith("file ")) {
+			fileName = fileName.substring(5);
+		}
+		if(fileName.contains("\\")) {
+			String[] parts = fileName.split(StringEscapeUtils.escapeJava("\\"));
+			if(parts.length > 0) {
+				fileName = parts[parts.length -1];	
+			}
+		} else if(fileName.contains("/")) {
+			String[] parts = fileName.split("/");
+			if(parts.length > 0) {
+				fileName = parts[parts.length -1];	
+			}
+		}
+		this.currentFile = fileName;
+	}
 
 	private void createEnum() {
 		Declaration variableDeclaration = (Declaration) DequeUtils.getFirstOfType(Declaration.class, this.descriptorDeque);
@@ -462,10 +503,19 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			this.descriptorDeque = DequeUtils.replaceFirstElementOfType(Declaration.class, EnumDescriptor.class, this.descriptorDeque, this.context);
 			EnumDescriptor enumDescriptor = (EnumDescriptor) DequeUtils.getFirstOfType(EnumDescriptor.class, this.descriptorDeque);
 			enumDescriptor.setName(variableDeclaration.getName());
+			if(this.currentFile != null) {
+				enumDescriptor.setFileName(this.currentFile);
+			}
 		}
 		
 	}	
 
+	/**
+	 * Returns FunctionDescriptor of the called function if it exists by searching for the
+	 * fully qualified name
+	 * @param functionCall an object that stores the information concerning the function call
+	 * @return the found FunctionDescriptor or null
+	 */
 	private FunctionDescriptor resolveFunctionCall(FunctionCall functionCall) {
 		String fullQualifiedName = this.cAstFileDescriptor.getFileName() + "_" + functionCall.getFunctionName();
 		FunctionDescriptor calledFunction = this.context.getStore().find(FunctionDescriptor.class, fullQualifiedName);
@@ -511,10 +561,16 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				this.descriptorDeque = DequeUtils.replaceFirstElementOfType(Declaration.class, StructDescriptor.class, this.descriptorDeque, this.context);
 				StructDescriptor struct = (StructDescriptor) DequeUtils.getFirstOfType(StructDescriptor.class, this.descriptorDeque);
 				struct.setName(variableDeclaration.getName());
+				if(variableDeclaration.getFileName() != null) {
+					struct.setFileName(variableDeclaration.getFileName());
+				}
 			} else {
 				this.descriptorDeque = DequeUtils.replaceFirstElementOfType(Declaration.class, UnionDescriptor.class, this.descriptorDeque, this.context);
 				UnionDescriptor union = (UnionDescriptor) DequeUtils.getFirstOfType(UnionDescriptor.class, this.descriptorDeque);
 				union.setName(variableDeclaration.getName());
+				if(variableDeclaration.getFileName() != null) {
+					union.setFileName(variableDeclaration.getFileName());
+				}
 			}
 		}
 	}
@@ -607,11 +663,19 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 					}
 					function.setName(name);
 					function.setFullQualifiedName(fullQualifiedName);
+					
+					if(this.currentFile != null) {
+						function.setFileName(this.currentFile);
+					}
 				}
 				
 				break;
 			} else if(currentObject instanceof EnumConstantDescriptor) {
-				((EnumConstantDescriptor) currentObject).setName(name);
+				EnumConstantDescriptor enumConstant = (EnumConstantDescriptor) currentObject;
+				enumConstant.setName(name);
+				if(this.currentFile != null) {
+					enumConstant.setFileName(this.currentFile);	
+				}
 				break;
 			} else if(currentObject instanceof Declaration) {
 				Declaration declaration = (Declaration) currentObject;
@@ -629,6 +693,10 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 					declaration.setType(this.currentlyStoredType.getName());
 					this.currentlyStoredType = null;
 				}
+				
+				if(this.currentFile != null) {
+					declaration.setFileName(this.currentFile);
+				}
 				break;
 			} else if(currentObject instanceof VariableDescriptor) {
 				VariableDescriptor variableDescriptor = (VariableDescriptor) currentObject;
@@ -643,6 +711,10 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 					variableDescriptor.setTypeSpecifiers(createTypeDescriptor());
 					this.currentlyStoredType = null;
 				}
+				
+				if(this.currentFile != null) {
+					variableDescriptor.setFileName(this.currentFile);
+				}
 				break;
 			//If a struct, union or enum already exist and a name comes up, it is the instantiation of a variable
 			//with the type of this struct, union or enum
@@ -653,6 +725,9 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				TypeDescriptor type = context.getStore().create(TypeDescriptor.class);
 				type.setName("struct " + structDescriptor.getName());
 				variable.setTypeSpecifiers(type);
+				if(this.currentFile != null) {
+					variable.setFileName(this.currentFile);
+				}
 				TranslationUnitDescriptor translationUnit = (TranslationUnitDescriptor) DequeUtils.getFirstOfType(TranslationUnitDescriptor.class, this.descriptorDeque);
 				translationUnit.getDeclaredVariables().add(variable);
 				break;
@@ -663,6 +738,9 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				TypeDescriptor type = context.getStore().create(TypeDescriptor.class);
 				type.setName("union " + union.getName());
 				variable.setTypeSpecifiers(type);
+				if(this.currentFile != null) {
+					variable.setFileName(this.currentFile);
+				}
 				TranslationUnitDescriptor translationUnit = (TranslationUnitDescriptor) DequeUtils.getFirstOfType(TranslationUnitDescriptor.class, this.descriptorDeque);
 				translationUnit.getDeclaredVariables().add(variable);
 				break;
@@ -673,6 +751,9 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				TypeDescriptor type = context.getStore().create(TypeDescriptor.class);
 				type.setName("enum " + enumDescriptor.getName());
 				variable.setTypeSpecifiers(type);
+				if(this.currentFile != null) {
+					variable.setFileName(this.currentFile);
+				}
 				TranslationUnitDescriptor translationUnit = (TranslationUnitDescriptor) DequeUtils.getFirstOfType(TranslationUnitDescriptor.class, this.descriptorDeque);
 				translationUnit.getDeclaredVariables().add(variable);
 				break;

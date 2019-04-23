@@ -45,6 +45,7 @@ public class EnumITest extends AbstractPluginIT{
         	if(cDescriptor instanceof EnumDescriptor) {
         		EnumDescriptor enumDescriptor = (EnumDescriptor) cDescriptor;
         		assertTrue(enumNameList.contains(enumDescriptor.getName()));
+        		assertEquals("enums.c", enumDescriptor.getFileName());
         		switch (enumDescriptor.getName()) {
 				case "week_first":
 					assertEquals(3, enumDescriptor.getDeclaredConstants().size());
@@ -105,6 +106,7 @@ public class EnumITest extends AbstractPluginIT{
         for(CDescriptor cDescriptor : enumList) {
         	if(cDescriptor instanceof EnumDescriptor) {
         		EnumDescriptor enumDescriptor = (EnumDescriptor) cDescriptor;
+        		assertEquals("conditional_enum.c", enumDescriptor.getFileName());
         		assertEquals("FLAG", ((SingleConditionDescriptor) enumDescriptor.getCondition()).getMacroName());
         		List<EnumConstantDescriptor> enumConstants = enumDescriptor.getDeclaredConstants();
         		assertEquals(3, enumConstants.size());

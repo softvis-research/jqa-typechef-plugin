@@ -13,7 +13,7 @@ import com.buschmais.xo.neo4j.api.annotation.Relation;
  *
  */
 @Label("TranslationUnit")
-public interface TranslationUnitDescriptor extends CDescriptor, NamedDescriptor{
+public interface TranslationUnitDescriptor extends CDescriptor, NamedDescriptor, SourceFileDescriptor{
 
 	/**
 	 * Returns the declared functions of the translation unit

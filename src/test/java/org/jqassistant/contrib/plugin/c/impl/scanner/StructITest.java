@@ -42,9 +42,11 @@ public class StructITest extends AbstractPluginIT{
         for(CDescriptor cDescriptor : structList) {
         	if(cDescriptor instanceof StructDescriptor) {
         		StructDescriptor struct = (StructDescriptor) cDescriptor;
+        		assertEquals("struct.c", struct.getFileName());
         		assertTrue(structNameList.contains(struct.getName()));
         		assertEquals(5, struct.getDeclaredVariables().size());
         		for(VariableDescriptor variable : struct.getDeclaredVariables()) {
+        			assertEquals("struct.c", variable.getFileName());
         			switch (variable.getName()) {
 					case "name":
 						assertEquals("char [50]", variable.getTypeSpecifiers().getName());
@@ -67,6 +69,7 @@ public class StructITest extends AbstractPluginIT{
         		}
         	} else if(cDescriptor instanceof VariableDescriptor) {
         		VariableDescriptor variable = (VariableDescriptor) cDescriptor;
+        		assertEquals("struct.c", variable.getFileName());
         		List<String> variableNameList = new ArrayList<>();
         		variableNameList.add("newAddress");
         		variableNameList.add("adresse2");
@@ -99,6 +102,7 @@ public class StructITest extends AbstractPluginIT{
         for(CDescriptor cDescriptor : structList) {
         	if(cDescriptor instanceof StructDescriptor) {
         		StructDescriptor struct = (StructDescriptor) cDescriptor;
+        		assertEquals("conditional_struct.c", struct.getFileName());
         		assertEquals(5, struct.getDeclaredVariables().size());
         		for(VariableDescriptor variable : struct.getDeclaredVariables()) {
         			switch (variable.getName()) {

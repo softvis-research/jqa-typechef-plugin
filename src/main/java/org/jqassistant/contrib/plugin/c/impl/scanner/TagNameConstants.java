@@ -19,4 +19,5 @@ public class TagNameConstants {
 	public static final String S = "s";
 	public static final String LINE = "line";
 	public static final String EXPR = "expr";
+	public static final String FILE = "file";
 }

@@ -34,11 +34,13 @@ public class FunctionITest extends AbstractPluginIT{
         CAstFileDescriptor descriptor = (CAstFileDescriptor) returnedDescriptor;
         TranslationUnitDescriptor translationUnitDescriptor = descriptor.getTranslationUnit();
         assertNotNull(translationUnitDescriptor);
+        assertEquals("main_function.c", translationUnitDescriptor.getFileName());
         FunctionDescriptor functionDescriptor = translationUnitDescriptor.getDeclaredFunctions().get(0);
         assertNotNull(functionDescriptor);
         assertEquals("int", functionDescriptor.getReturnType().getName());
         assertEquals("main", functionDescriptor.getName());
         assertEquals(5, functionDescriptor.getLineCount());
+        assertEquals("main_function.c", functionDescriptor.getFileName());
         
         store.commitTransaction();
     }
@@ -64,11 +66,13 @@ public class FunctionITest extends AbstractPluginIT{
         assertEquals("factor2", declaredFunctions.get(0).getParameters().get(1).getName());
         assertEquals("double", declaredFunctions.get(0).getParameters().get(1).getTypeSpecifiers().getName());
         assertEquals(3, declaredFunctions.get(0).getLineCount());
+        assertEquals("two_functions.c", declaredFunctions.get(0).getFileName());
         
         assertEquals("int", declaredFunctions.get(1).getReturnType().getName());
         assertEquals("main", declaredFunctions.get(1).getName());
         assertEquals(0, declaredFunctions.get(1).getParameters().size());
         assertEquals(6, declaredFunctions.get(1).getLineCount());
+        assertEquals("two_functions.c", declaredFunctions.get(1).getFileName());
         
         store.commitTransaction();
     }    

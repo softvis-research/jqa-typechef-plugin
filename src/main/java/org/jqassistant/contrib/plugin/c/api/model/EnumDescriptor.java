@@ -7,7 +7,7 @@ import com.buschmais.xo.neo4j.api.annotation.Label;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
 
 @Label("Enum")
-public interface EnumDescriptor extends CDescriptor, NamedDescriptor, DependsOnDescriptor{
+public interface EnumDescriptor extends CDescriptor, NamedDescriptor, DependsOnDescriptor, SourceFileDescriptor{
 
 	/**
 	 * Returns the constants that were declared in this enum
