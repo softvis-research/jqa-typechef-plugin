@@ -4,7 +4,7 @@
     <scala.collection.immutable.List_-SerializationProxy>
       <default/>
       <de.fosd.typechef.conditional.Opt>
-        <condition class="de.fosd.typechef.featureexpr.bdd.BDDFeatureExpr" resolves-to="de.fosd.typechef.featureexpr.FeatureExprSerializationProxy">
+        <condition class="de.fosd.typechef.featureexpr.sat.True$" resolves-to="de.fosd.typechef.featureexpr.FeatureExprSerializationProxy">
           <fexpr>1</fexpr>
         </condition>
         <entry class="de.fosd.typechef.parser.c.FunctionDef">
@@ -12,9 +12,7 @@
             <scala.collection.immutable.List_-SerializationProxy>
               <default/>
               <de.fosd.typechef.conditional.Opt>
-                <condition class="de.fosd.typechef.featureexpr.bdd.BDDFeatureExpr" resolves-to="de.fosd.typechef.featureexpr.FeatureExprSerializationProxy">
-                  <fexpr>1</fexpr>
-                </condition>
+                <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../condition"/>
                 <entry class="de.fosd.typechef.parser.c.DoubleSpecifier">
                   <range class="scala.Some">
                     <value class="scala.Tuple2">
@@ -46,26 +44,33 @@
               <scala.collection.immutable.List_-SerializationProxy>
                 <default/>
                 <de.fosd.typechef.conditional.Opt>
-                  <condition class="de.fosd.typechef.featureexpr.bdd.BDDFeatureExpr" resolves-to="de.fosd.typechef.featureexpr.FeatureExprSerializationProxy">
-                    <fexpr>1</fexpr>
-                  </condition>
+                  <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../condition"/>
                   <entry class="de.fosd.typechef.parser.c.DeclParameterDeclList">
-                    <range class="scala.None$"/>
+                    <range class="scala.Some">
+                      <value class="scala.Tuple2">
+                        <__1 class="de.fosd.typechef.parser.c.TokenPosition">
+                          <file>file two_functions.c</file>
+                          <line>1</line>
+                          <column>25</column>
+                        </__1>
+                        <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                          <file>file two_functions.c</file>
+                          <line>1</line>
+                          <column>57</column>
+                        </__2>
+                      </value>
+                    </range>
                     <parameterDecls class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
                       <scala.collection.immutable.List_-SerializationProxy>
                         <default/>
                         <de.fosd.typechef.conditional.Opt>
-                          <condition class="de.fosd.typechef.featureexpr.bdd.BDDFeatureExpr" resolves-to="de.fosd.typechef.featureexpr.FeatureExprSerializationProxy">
-                            <fexpr>1</fexpr>
-                          </condition>
+                          <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../../../../condition"/>
                           <entry class="de.fosd.typechef.parser.c.ParameterDeclarationD">
                             <specifiers class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
                               <scala.collection.immutable.List_-SerializationProxy>
                                 <default/>
                                 <de.fosd.typechef.conditional.Opt>
-                                  <condition class="de.fosd.typechef.featureexpr.bdd.BDDFeatureExpr" resolves-to="de.fosd.typechef.featureexpr.FeatureExprSerializationProxy">
-                                    <fexpr>1</fexpr>
-                                  </condition>
+                                  <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../../../../../../../../condition"/>
                                   <entry class="de.fosd.typechef.parser.c.DoubleSpecifier">
                                     <range class="scala.Some">
                                       <value class="scala.Tuple2">
@@ -86,25 +91,30 @@
                                 <scala.collection.immutable.ListSerializeEnd_- reference="../../../../../../../../../../../../specifiers/scala.collection.immutable.List_-SerializationProxy/scala.collection.immutable.ListSerializeEnd_-"/>
                               </scala.collection.immutable.List_-SerializationProxy>
                             </specifiers>
-                            <range class="scala.None$" reference="../../../../../range"/>
+                            <range class="scala.Some">
+                              <value class="scala.Tuple2">
+                                <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../specifiers/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__1"/>
+                                <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                                  <file>file two_functions.c</file>
+                                  <line>1</line>
+                                  <column>40</column>
+                                </__2>
+                              </value>
+                            </range>
                             <decl class="de.fosd.typechef.parser.c.AtomicNamedDeclarator">
                               <pointers class="scala.collection.immutable.Nil$" reference="../../../../../../../../../../pointers"/>
                               <extensions class="scala.collection.immutable.Nil$" reference="../../../../../../../../../../pointers"/>
                               <range class="scala.Some">
                                 <value class="scala.Tuple2">
                                   <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../specifiers/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
-                                  <__2 class="de.fosd.typechef.parser.c.TokenPosition">
-                                    <file>file two_functions.c</file>
-                                    <line>1</line>
-                                    <column>40</column>
-                                  </__2>
+                                  <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__2"/>
                                 </value>
                               </range>
                               <id>
                                 <range class="scala.Some">
                                   <value class="scala.Tuple2">
                                     <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../specifiers/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
-                                    <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__2"/>
+                                    <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../range/value/__2"/>
                                   </value>
                                 </range>
                                 <name>factor1</name>
@@ -114,17 +124,13 @@
                           </entry>
                         </de.fosd.typechef.conditional.Opt>
                         <de.fosd.typechef.conditional.Opt>
-                          <condition class="de.fosd.typechef.featureexpr.bdd.BDDFeatureExpr" resolves-to="de.fosd.typechef.featureexpr.FeatureExprSerializationProxy">
-                            <fexpr>1</fexpr>
-                          </condition>
+                          <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../../../../condition"/>
                           <entry class="de.fosd.typechef.parser.c.ParameterDeclarationD">
                             <specifiers class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
                               <scala.collection.immutable.List_-SerializationProxy>
                                 <default/>
                                 <de.fosd.typechef.conditional.Opt>
-                                  <condition class="de.fosd.typechef.featureexpr.bdd.BDDFeatureExpr" resolves-to="de.fosd.typechef.featureexpr.FeatureExprSerializationProxy">
-                                    <fexpr>1</fexpr>
-                                  </condition>
+                                  <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../../../../../../../../condition"/>
                                   <entry class="de.fosd.typechef.parser.c.DoubleSpecifier">
                                     <range class="scala.Some">
                                       <value class="scala.Tuple2">
@@ -145,25 +151,30 @@
                                 <scala.collection.immutable.ListSerializeEnd_- reference="../../../../../../../../../../../../specifiers/scala.collection.immutable.List_-SerializationProxy/scala.collection.immutable.ListSerializeEnd_-"/>
                               </scala.collection.immutable.List_-SerializationProxy>
                             </specifiers>
-                            <range class="scala.None$" reference="../../../../../range"/>
+                            <range class="scala.Some">
+                              <value class="scala.Tuple2">
+                                <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                                <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                                  <file>file two_functions.c</file>
+                                  <line>1</line>
+                                  <column>56</column>
+                                </__2>
+                              </value>
+                            </range>
                             <decl class="de.fosd.typechef.parser.c.AtomicNamedDeclarator">
                               <pointers class="scala.collection.immutable.Nil$" reference="../../../../../../../../../../pointers"/>
                               <extensions class="scala.collection.immutable.Nil$" reference="../../../../../../../../../../pointers"/>
                               <range class="scala.Some">
                                 <value class="scala.Tuple2">
                                   <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../specifiers/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
-                                  <__2 class="de.fosd.typechef.parser.c.TokenPosition">
-                                    <file>file two_functions.c</file>
-                                    <line>1</line>
-                                    <column>56</column>
-                                  </__2>
+                                  <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__2"/>
                                 </value>
                               </range>
                               <id>
                                 <range class="scala.Some">
                                   <value class="scala.Tuple2">
                                     <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../specifiers/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
-                                    <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__2"/>
+                                    <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../range/value/__2"/>
                                   </value>
                                 </range>
                                 <name>factor2</name>
@@ -180,16 +191,17 @@
                 <scala.collection.immutable.ListSerializeEnd_- reference="../../../../specifiers/scala.collection.immutable.List_-SerializationProxy/scala.collection.immutable.ListSerializeEnd_-"/>
               </scala.collection.immutable.List_-SerializationProxy>
             </extensions>
-            <range class="scala.None$" reference="../extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range"/>
+            <range class="scala.Some">
+              <value class="scala.Tuple2">
+                <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../specifiers/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+              </value>
+            </range>
             <id>
               <range class="scala.Some">
                 <value class="scala.Tuple2">
                   <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../specifiers/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
-                  <__2 class="de.fosd.typechef.parser.c.TokenPosition">
-                    <file>file two_functions.c</file>
-                    <line>1</line>
-                    <column>25</column>
-                  </__2>
+                  <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__1"/>
                 </value>
               </range>
               <name>multiplyTwoNumbers</name>
@@ -197,27 +209,56 @@
           </declarator>
           <oldStyleParameters class="scala.collection.immutable.Nil$" reference="../declarator/pointers"/>
           <stmt>
-            <range class="scala.None$" reference="../../declarator/extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range"/>
+            <range class="scala.Some">
+              <value class="scala.Tuple2">
+                <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../declarator/extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                  <file>file two_functions.c</file>
+                  <line>5</line>
+                  <column>0</column>
+                </__2>
+              </value>
+            </range>
             <innerStatements class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
               <scala.collection.immutable.List_-SerializationProxy>
                 <default/>
                 <de.fosd.typechef.conditional.Opt>
-                  <condition class="de.fosd.typechef.featureexpr.bdd.BDDFeatureExpr" resolves-to="de.fosd.typechef.featureexpr.FeatureExprSerializationProxy">
-                    <fexpr>1</fexpr>
-                  </condition>
+                  <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../condition"/>
                   <entry class="de.fosd.typechef.parser.c.ReturnStatement">
-                    <range class="scala.None$" reference="../../../../../../declarator/extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range"/>
+                    <range class="scala.Some">
+                      <value class="scala.Tuple2">
+                        <__1 class="de.fosd.typechef.parser.c.TokenPosition">
+                          <file>file two_functions.c</file>
+                          <line>2</line>
+                          <column>1</column>
+                        </__1>
+                        <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                          <file>file two_functions.c</file>
+                          <line>3</line>
+                          <column>0</column>
+                        </__2>
+                      </value>
+                    </range>
                     <expr class="scala.Some">
                       <value class="de.fosd.typechef.parser.c.NAryExpr">
-                        <range class="scala.None$" reference="../../../../../../../../declarator/extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range"/>
+                        <range class="scala.Some">
+                          <value class="scala.Tuple2">
+                            <__1 class="de.fosd.typechef.parser.c.TokenPosition">
+                              <file>file two_functions.c</file>
+                              <line>2</line>
+                              <column>8</column>
+                            </__1>
+                            <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                              <file>file two_functions.c</file>
+                              <line>2</line>
+                              <column>25</column>
+                            </__2>
+                          </value>
+                        </range>
                         <e class="de.fosd.typechef.parser.c.Id">
                           <range class="scala.Some">
                             <value class="scala.Tuple2">
-                              <__1 class="de.fosd.typechef.parser.c.TokenPosition">
-                                <file>file two_functions.c</file>
-                                <line>2</line>
-                                <column>8</column>
-                              </__1>
+                              <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__1"/>
                               <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                                 <file>file two_functions.c</file>
                                 <line>2</line>
@@ -231,9 +272,7 @@
                           <scala.collection.immutable.List_-SerializationProxy>
                             <default/>
                             <de.fosd.typechef.conditional.Opt>
-                              <condition class="de.fosd.typechef.featureexpr.bdd.BDDFeatureExpr" resolves-to="de.fosd.typechef.featureexpr.FeatureExprSerializationProxy">
-                                <fexpr>1</fexpr>
-                              </condition>
+                              <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../../../../../../condition"/>
                               <entry class="de.fosd.typechef.parser.c.NArySubExpr">
                                 <op>*</op>
                                 <e class="de.fosd.typechef.parser.c.Id">
@@ -244,11 +283,7 @@
                                         <line>2</line>
                                         <column>18</column>
                                       </__1>
-                                      <__2 class="de.fosd.typechef.parser.c.TokenPosition">
-                                        <file>file two_functions.c</file>
-                                        <line>2</line>
-                                        <column>25</column>
-                                      </__2>
+                                      <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../range/value/__2"/>
                                     </value>
                                   </range>
                                   <name>factor2</name>
@@ -256,7 +291,7 @@
                                 <range class="scala.Some">
                                   <value class="scala.Tuple2">
                                     <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../e/range/value/__2"/>
-                                    <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../e/range/value/__2"/>
+                                    <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../range/value/__2"/>
                                   </value>
                                 </range>
                               </entry>
@@ -272,29 +307,26 @@
               </scala.collection.immutable.List_-SerializationProxy>
             </innerStatements>
           </stmt>
-          <range class="scala.None$" reference="../declarator/extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range"/>
+          <range class="scala.Some">
+            <value class="scala.Tuple2">
+              <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../specifiers/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__1"/>
+              <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../stmt/range/value/__2"/>
+            </value>
+          </range>
         </entry>
       </de.fosd.typechef.conditional.Opt>
       <de.fosd.typechef.conditional.Opt>
-        <condition class="de.fosd.typechef.featureexpr.bdd.BDDFeatureExpr" resolves-to="de.fosd.typechef.featureexpr.FeatureExprSerializationProxy">
-          <fexpr>1</fexpr>
-        </condition>
+        <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../de.fosd.typechef.conditional.Opt/condition"/>
         <entry class="de.fosd.typechef.parser.c.FunctionDef">
           <specifiers class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
             <scala.collection.immutable.List_-SerializationProxy>
               <default/>
               <de.fosd.typechef.conditional.Opt>
-                <condition class="de.fosd.typechef.featureexpr.bdd.BDDFeatureExpr" resolves-to="de.fosd.typechef.featureexpr.FeatureExprSerializationProxy">
-                  <fexpr>1</fexpr>
-                </condition>
+                <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
                 <entry class="de.fosd.typechef.parser.c.IntSpecifier">
                   <range class="scala.Some">
                     <value class="scala.Tuple2">
-                      <__1 class="de.fosd.typechef.parser.c.TokenPosition">
-                        <file>file two_functions.c</file>
-                        <line>5</line>
-                        <column>0</column>
-                      </__1>
+                      <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/stmt/range/value/__2"/>
                       <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                         <file>file two_functions.c</file>
                         <line>5</line>
@@ -313,9 +345,7 @@
               <scala.collection.immutable.List_-SerializationProxy>
                 <default/>
                 <de.fosd.typechef.conditional.Opt>
-                  <condition class="de.fosd.typechef.featureexpr.bdd.BDDFeatureExpr" resolves-to="de.fosd.typechef.featureexpr.FeatureExprSerializationProxy">
-                    <fexpr>1</fexpr>
-                  </condition>
+                  <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
                   <entry class="de.fosd.typechef.parser.c.DeclIdentifierList">
                     <range class="scala.Some">
                       <value class="scala.Tuple2">
@@ -337,7 +367,12 @@
                 <scala.collection.immutable.ListSerializeEnd_- reference="../../../../../../de.fosd.typechef.conditional.Opt/entry/specifiers/scala.collection.immutable.List_-SerializationProxy/scala.collection.immutable.ListSerializeEnd_-"/>
               </scala.collection.immutable.List_-SerializationProxy>
             </extensions>
-            <range class="scala.None$" reference="../../../../de.fosd.typechef.conditional.Opt/entry/declarator/extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range"/>
+            <range class="scala.Some">
+              <value class="scala.Tuple2">
+                <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../specifiers/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+              </value>
+            </range>
             <id>
               <range class="scala.Some">
                 <value class="scala.Tuple2">
@@ -350,32 +385,45 @@
           </declarator>
           <oldStyleParameters class="scala.collection.immutable.Nil$" reference="../../../de.fosd.typechef.conditional.Opt/entry/declarator/pointers"/>
           <stmt>
-            <range class="scala.None$" reference="../../../../de.fosd.typechef.conditional.Opt/entry/declarator/extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range"/>
+            <range class="scala.Some">
+              <value class="scala.Tuple2">
+                <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../declarator/extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                  <line>0</line>
+                  <column>0</column>
+                </__2>
+              </value>
+            </range>
             <innerStatements class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
               <scala.collection.immutable.List_-SerializationProxy>
                 <default/>
                 <de.fosd.typechef.conditional.Opt>
-                  <condition class="de.fosd.typechef.featureexpr.bdd.BDDFeatureExpr" resolves-to="de.fosd.typechef.featureexpr.FeatureExprSerializationProxy">
-                    <fexpr>1</fexpr>
-                  </condition>
+                  <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
                   <entry class="de.fosd.typechef.parser.c.DeclarationStatement">
-                    <range class="scala.None$" reference="../../../../../../../../de.fosd.typechef.conditional.Opt/entry/declarator/extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range"/>
+                    <range class="scala.Some">
+                      <value class="scala.Tuple2">
+                        <__1 class="de.fosd.typechef.parser.c.TokenPosition">
+                          <file>file two_functions.c</file>
+                          <line>7</line>
+                          <column>1</column>
+                        </__1>
+                        <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                          <file>file two_functions.c</file>
+                          <line>9</line>
+                          <column>4</column>
+                        </__2>
+                      </value>
+                    </range>
                     <decl>
                       <declSpecs class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
                         <scala.collection.immutable.List_-SerializationProxy>
                           <default/>
                           <de.fosd.typechef.conditional.Opt>
-                            <condition class="de.fosd.typechef.featureexpr.bdd.BDDFeatureExpr" resolves-to="de.fosd.typechef.featureexpr.FeatureExprSerializationProxy">
-                              <fexpr>1</fexpr>
-                            </condition>
+                            <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
                             <entry class="de.fosd.typechef.parser.c.DoubleSpecifier">
                               <range class="scala.Some">
                                 <value class="scala.Tuple2">
-                                  <__1 class="de.fosd.typechef.parser.c.TokenPosition">
-                                    <file>file two_functions.c</file>
-                                    <line>7</line>
-                                    <column>1</column>
-                                  </__1>
+                                  <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../../range/value/__1"/>
                                   <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                                     <file>file two_functions.c</file>
                                     <line>7</line>
@@ -392,9 +440,7 @@
                         <scala.collection.immutable.List_-SerializationProxy>
                           <default/>
                           <de.fosd.typechef.conditional.Opt>
-                            <condition class="de.fosd.typechef.featureexpr.bdd.BDDFeatureExpr" resolves-to="de.fosd.typechef.featureexpr.FeatureExprSerializationProxy">
-                              <fexpr>1</fexpr>
-                            </condition>
+                            <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
                             <entry class="de.fosd.typechef.parser.c.InitDeclaratorI">
                               <declarator class="de.fosd.typechef.parser.c.AtomicNamedDeclarator">
                                 <pointers class="scala.collection.immutable.Nil$" reference="../../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/declarator/pointers"/>
@@ -420,20 +466,34 @@
                                 </id>
                               </declarator>
                               <attributes class="scala.collection.immutable.Nil$" reference="../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/declarator/pointers"/>
-                              <range class="scala.None$" reference="../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/declarator/extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range"/>
+                              <range class="scala.Some">
+                                <value class="scala.Tuple2">
+                                  <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../declSpecs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
+                                  <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                                    <file>file two_functions.c</file>
+                                    <line>7</line>
+                                    <column>46</column>
+                                  </__2>
+                                </value>
+                              </range>
                               <i class="scala.Some">
                                 <value class="de.fosd.typechef.parser.c.Initializer">
-                                  <initializerElementLabel class="scala.None$" reference="../../../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/declarator/extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range"/>
+                                  <initializerElementLabel class="scala.None$"/>
                                   <expr class="de.fosd.typechef.parser.c.PostfixExpr">
-                                    <range class="scala.None$" reference="../../../../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/declarator/extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range"/>
+                                    <range class="scala.Some">
+                                      <value class="scala.Tuple2">
+                                        <__1 class="de.fosd.typechef.parser.c.TokenPosition">
+                                          <file>file two_functions.c</file>
+                                          <line>7</line>
+                                          <column>18</column>
+                                        </__1>
+                                        <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../range/value/__2"/>
+                                      </value>
+                                    </range>
                                     <p class="de.fosd.typechef.parser.c.Id">
                                       <range class="scala.Some">
                                         <value class="scala.Tuple2">
-                                          <__1 class="de.fosd.typechef.parser.c.TokenPosition">
-                                            <file>file two_functions.c</file>
-                                            <line>7</line>
-                                            <column>18</column>
-                                          </__1>
+                                          <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__1"/>
                                           <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                                             <file>file two_functions.c</file>
                                             <line>7</line>
@@ -444,24 +504,36 @@
                                       <name>multiplyTwoNumbers</name>
                                     </p>
                                     <s class="de.fosd.typechef.parser.c.FunctionCall">
-                                      <range class="scala.None$" reference="../../../../../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/declarator/extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range"/>
+                                      <range class="scala.Some">
+                                        <value class="scala.Tuple2">
+                                          <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../p/range/value/__2"/>
+                                          <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../range/value/__2"/>
+                                        </value>
+                                      </range>
                                       <params>
-                                        <range class="scala.None$" reference="../../../../../../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/declarator/extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range"/>
+                                        <range class="scala.Some">
+                                          <value class="scala.Tuple2">
+                                            <__1 class="de.fosd.typechef.parser.c.TokenPosition">
+                                              <file>file two_functions.c</file>
+                                              <line>7</line>
+                                              <column>37</column>
+                                            </__1>
+                                            <__2 class="de.fosd.typechef.parser.c.TokenPosition">
+                                              <file>file two_functions.c</file>
+                                              <line>7</line>
+                                              <column>45</column>
+                                            </__2>
+                                          </value>
+                                        </range>
                                         <exprs class="scala.collection.immutable.$colon$colon" resolves-to="scala.collection.immutable.List$SerializationProxy" serialization="custom">
                                           <scala.collection.immutable.List_-SerializationProxy>
                                             <default/>
                                             <de.fosd.typechef.conditional.Opt>
-                                              <condition class="de.fosd.typechef.featureexpr.bdd.BDDFeatureExpr" resolves-to="de.fosd.typechef.featureexpr.FeatureExprSerializationProxy">
-                                                <fexpr>1</fexpr>
-                                              </condition>
+                                              <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../../../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
                                               <entry class="de.fosd.typechef.parser.c.Constant">
                                                 <range class="scala.Some">
                                                   <value class="scala.Tuple2">
-                                                    <__1 class="de.fosd.typechef.parser.c.TokenPosition">
-                                                      <file>file two_functions.c</file>
-                                                      <line>7</line>
-                                                      <column>37</column>
-                                                    </__1>
+                                                    <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../range/value/__1"/>
                                                     <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                                                       <file>file two_functions.c</file>
                                                       <line>7</line>
@@ -473,9 +545,7 @@
                                               </entry>
                                             </de.fosd.typechef.conditional.Opt>
                                             <de.fosd.typechef.conditional.Opt>
-                                              <condition class="de.fosd.typechef.featureexpr.bdd.BDDFeatureExpr" resolves-to="de.fosd.typechef.featureexpr.FeatureExprSerializationProxy">
-                                                <fexpr>1</fexpr>
-                                              </condition>
+                                              <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../../../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
                                               <entry class="de.fosd.typechef.parser.c.Constant">
                                                 <range class="scala.Some">
                                                   <value class="scala.Tuple2">
@@ -484,11 +554,7 @@
                                                       <line>7</line>
                                                       <column>42</column>
                                                     </__1>
-                                                    <__2 class="de.fosd.typechef.parser.c.TokenPosition">
-                                                      <file>file two_functions.c</file>
-                                                      <line>7</line>
-                                                      <column>45</column>
-                                                    </__2>
+                                                    <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../../../range/value/__2"/>
                                                   </value>
                                                 </range>
                                                 <value>1.5</value>
@@ -500,7 +566,12 @@
                                       </params>
                                     </s>
                                   </expr>
-                                  <range class="scala.None$" reference="../../../../../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/declarator/extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range"/>
+                                  <range class="scala.Some">
+                                    <value class="scala.Tuple2">
+                                      <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../declarator/range/value/__2"/>
+                                      <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../range/value/__2"/>
+                                    </value>
+                                  </range>
                                 </value>
                               </i>
                             </entry>
@@ -508,22 +579,21 @@
                           <scala.collection.immutable.ListSerializeEnd_- reference="../../../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/specifiers/scala.collection.immutable.List_-SerializationProxy/scala.collection.immutable.ListSerializeEnd_-"/>
                         </scala.collection.immutable.List_-SerializationProxy>
                       </init>
-                      <range class="scala.None$" reference="../../../../../../../../../de.fosd.typechef.conditional.Opt/entry/declarator/extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range"/>
+                      <range class="scala.Some">
+                        <value class="scala.Tuple2">
+                          <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__1"/>
+                          <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../range/value/__2"/>
+                        </value>
+                      </range>
                     </decl>
                   </entry>
                 </de.fosd.typechef.conditional.Opt>
                 <de.fosd.typechef.conditional.Opt>
-                  <condition class="de.fosd.typechef.featureexpr.bdd.BDDFeatureExpr" resolves-to="de.fosd.typechef.featureexpr.FeatureExprSerializationProxy">
-                    <fexpr>1</fexpr>
-                  </condition>
+                  <condition class="de.fosd.typechef.featureexpr.sat.True$" reference="../../../../../../../de.fosd.typechef.conditional.Opt/condition"/>
                   <entry class="de.fosd.typechef.parser.c.ReturnStatement">
                     <range class="scala.Some">
                       <value class="scala.Tuple2">
-                        <__1 class="de.fosd.typechef.parser.c.TokenPosition">
-                          <file>file two_functions.c</file>
-                          <line>9</line>
-                          <column>4</column>
-                        </__1>
+                        <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../de.fosd.typechef.conditional.Opt/entry/range/value/__2"/>
                         <__2 class="de.fosd.typechef.parser.c.TokenPosition">
                           <file>file two_functions.c</file>
                           <line>10</line>
@@ -556,11 +626,16 @@
               </scala.collection.immutable.List_-SerializationProxy>
             </innerStatements>
           </stmt>
-          <range class="scala.None$" reference="../../../de.fosd.typechef.conditional.Opt/entry/declarator/extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range"/>
+          <range class="scala.Some">
+            <value class="scala.Tuple2">
+              <__1 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../../../de.fosd.typechef.conditional.Opt/entry/stmt/range/value/__2"/>
+              <__2 class="de.fosd.typechef.parser.c.TokenPosition" reference="../../../stmt/range/value/__2"/>
+            </value>
+          </range>
         </entry>
       </de.fosd.typechef.conditional.Opt>
       <scala.collection.immutable.ListSerializeEnd_- reference="../de.fosd.typechef.conditional.Opt/entry/specifiers/scala.collection.immutable.List_-SerializationProxy/scala.collection.immutable.ListSerializeEnd_-"/>
     </scala.collection.immutable.List_-SerializationProxy>
   </defs>
-  <range class="scala.None$" reference="../defs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/declarator/extensions/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/range"/>
+  <range class="scala.None$" reference="../defs/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt[2]/entry/stmt/innerStatements/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/decl/init/scala.collection.immutable.List_-SerializationProxy/de.fosd.typechef.conditional.Opt/entry/i/value/initializerElementLabel"/>
 </de.fosd.typechef.parser.c.TranslationUnit>

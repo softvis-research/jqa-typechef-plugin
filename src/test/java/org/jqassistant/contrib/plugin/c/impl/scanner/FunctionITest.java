@@ -38,6 +38,7 @@ public class FunctionITest extends AbstractPluginIT{
         assertNotNull(functionDescriptor);
         assertEquals("int", functionDescriptor.getReturnType().get(0).getName());
         assertEquals("main", functionDescriptor.getName());
+        assertEquals(5, functionDescriptor.getLineCount());
         
         store.commitTransaction();
     }
@@ -62,10 +63,12 @@ public class FunctionITest extends AbstractPluginIT{
         assertEquals("double", declaredFunctions.get(0).getParameters().get(0).getTypeSpecifiers().get(0).getName());
         assertEquals("factor2", declaredFunctions.get(0).getParameters().get(1).getName());
         assertEquals("double", declaredFunctions.get(0).getParameters().get(1).getTypeSpecifiers().get(0).getName());
+        assertEquals(3, declaredFunctions.get(0).getLineCount());
         
         assertEquals("int", declaredFunctions.get(1).getReturnType().get(0).getName());
         assertEquals("main", declaredFunctions.get(1).getName());
         assertEquals(0, declaredFunctions.get(1).getParameters().size());
+        assertEquals(6, declaredFunctions.get(1).getLineCount());
         
         store.commitTransaction();
     }    

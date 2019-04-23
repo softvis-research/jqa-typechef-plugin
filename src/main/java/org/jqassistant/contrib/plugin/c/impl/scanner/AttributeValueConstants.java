@@ -29,4 +29,5 @@ public class AttributeValueConstants {
 	public static final String ENUMERATOR = "de.fosd.typechef.parser.c.Enumerator";
 	public static final String FUNCTIONCALL = "de.fosd.typechef.parser.c.FunctionCall";
 	public static final String ID = "de.fosd.typechef.parser.c.Id";
+	public static final String RETURNSTATEMENT = "de.fosd.typechef.parser.c.ReturnStatement";
 }

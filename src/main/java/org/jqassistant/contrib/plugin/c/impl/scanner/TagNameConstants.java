@@ -17,4 +17,5 @@ public class TagNameConstants {
 	public static final String TYPENAME = "typeName";
 	public static final String P = "p";
 	public static final String S = "s";
+	public static final String LINE = "line";
 }

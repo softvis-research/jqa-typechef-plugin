@@ -41,4 +41,26 @@ public interface FunctionDescriptor extends CDescriptor, NamedDescriptor, Depend
 	@Relation("INVOKES")
 	List<FunctionDescriptor> getInvokedFunctions();
 	void setInvokedFunctions(List<FunctionDescriptor> invokedFunctions);
+	
+
+    /**
+     * Return the first line number of the function.
+     * @return The first line number of the function.
+     */
+    Integer getFirstLineNumber();
+    void setFirstLineNumber(Integer firstLineNumber);
+
+    /**
+     * Return the last line number of the function.
+     * @return The last line number of the function.
+     */
+    Integer getLastLineNumber();
+    void setLastLineNumber(Integer lastLineNumber);
+
+    /**
+     * Return the total number of lines of the function.
+     * @return The number of lines of the function.
+     */
+    int getLineCount();
+    void setLineCount(int lineCount);
 }

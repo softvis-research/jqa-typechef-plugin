@@ -215,6 +215,26 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 					this.descriptorDeque.push(functionCall);
 				}
 				break;
+			case TagNameConstants.LINE:
+				FunctionDescriptor function = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, this.descriptorDeque);
+				if(function != null && this.descriptorDeque.contains("specifiers") && function.getFirstLineNumber() == null) {
+					try {
+						function.setFirstLineNumber(Integer.parseInt(streamReader.getElementText()));
+					} catch (NumberFormatException | XMLStreamException e) {
+						logger.error(e.getMessage());
+					} finally {
+						this.descriptorDeque.pop();
+					}
+				} else if(function != null && this.descriptorDeque.contains("ReturnStatement") && this.descriptorDeque.contains("__2") && function.getLastLineNumber() == null) {
+					try {
+						function.setLastLineNumber(Integer.parseInt(streamReader.getElementText()));
+					} catch (NumberFormatException | XMLStreamException e) {
+						logger.error(e.getMessage());
+					} finally {
+						this.descriptorDeque.pop();
+					}
+				}
+				break;
 			default:
 				break;
 		}
@@ -234,13 +254,17 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				if(descriptorDeque.peekFirst() instanceof FunctionDescriptor) {
 					FunctionDescriptor function = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, this.descriptorDeque);
 					checkConditionsForElement(FunctionDescriptor.class);
+					
+					if(function.getFirstLineNumber() != null && function.getLastLineNumber() != null) {
+						function.setLineCount(function.getLastLineNumber() - function.getFirstLineNumber() + 1);
+					}
 					boolean sameFunction = false;
 					
 					//if function already exists, don't add it to the translation unit
 					for(CDescriptor cDescriptor : translationUnit.getDeclaredFunctions()) {
 						if(cDescriptor instanceof FunctionDescriptor) {
 							FunctionDescriptor declaredFunction = (FunctionDescriptor) cDescriptor;
-							if(declaredFunction.getName().equals(function.getName())) {
+							if(declaredFunction.getFullQualifiedName().equals(function.getFullQualifiedName())) {
 								sameFunction = true;
 							}
 						}
@@ -412,6 +436,10 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				this.descriptorDeque.push(new FunctionArgument());
 			}
 			break;
+		case AttributeValueConstants.RETURNSTATEMENT:
+			this.descriptorDeque.pop();
+			this.descriptorDeque.push("ReturnStatement");
+			break;
 		default:
 			break;
 		}
@@ -428,7 +456,8 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 	}	
 
 	private FunctionDescriptor resolveFunctionCall(FunctionCall functionCall) {
-		FunctionDescriptor calledFunction = this.context.getStore().find(FunctionDescriptor.class, functionCall.getFunctionName());
+		String fullQualifiedName = this.cAstFileDescriptor.getFileName() + "_" + functionCall.getFunctionName();
+		FunctionDescriptor calledFunction = this.context.getStore().find(FunctionDescriptor.class, fullQualifiedName);
 		return calledFunction;
 	}
 
@@ -555,8 +584,10 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				functionCall.getArgumentList().add(name);
 				break;
 			} else if(currentObject instanceof FunctionDescriptor && !this.descriptorDeque.contains(TagNameConstants.INNERSTATEMENTS)) {
+				String fullQualifiedName = this.cAstFileDescriptor.getFileName() + "_" + name;
 				FunctionDescriptor function = (FunctionDescriptor) currentObject;
-				FunctionDescriptor sameFunction = this.context.getStore().find(FunctionDescriptor.class, name);
+				FunctionDescriptor sameFunction = this.context.getStore().find(FunctionDescriptor.class, fullQualifiedName);
+				
 				if(sameFunction != null) {
 					this.descriptorDeque = DequeUtils.replaceCertainElement(function, sameFunction, this.descriptorDeque);
 				} else {
@@ -564,7 +595,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 						function.getReturnType().add(createTypeDescriptor());
 					}
 					function.setName(name);
-					function.setFullQualifiedName(name);
+					function.setFullQualifiedName(fullQualifiedName);
 				}
 				
 				break;
