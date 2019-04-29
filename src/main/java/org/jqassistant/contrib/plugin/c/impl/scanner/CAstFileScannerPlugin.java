@@ -679,20 +679,24 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				break;
 			} else if(currentObject instanceof Declaration) {
 				Declaration declaration = (Declaration) currentObject;
+				String completeType = "";
 				
 				if(declaration.getDeclarationType() == DeclarationType.VARIABLE) {
-					//If the variable is of type struct or union, the name of the struct or union is stored as name of the variable descriptor.
+					//If the variable is of type struct, enum or union, the name of the struct or union is stored as name of the variable descriptor.
 					if(declaration.getName() != null && declaration.getType() != null) {
-						String completeType = declaration.getType() + " " + declaration.getName();
-						declaration.setType(completeType);
+						completeType = declaration.getType() + " " + declaration.getName();
 					}
 				}
-				declaration.setName(name);
 				
 				if(this.currentlyStoredType != null) {
-					declaration.setType(this.currentlyStoredType.getName());
+					if(!completeType.equals("")) {
+						completeType += " ";
+					}
+					completeType += this.currentlyStoredType.getName();
 					this.currentlyStoredType = null;
 				}
+				declaration.setType(completeType);
+				declaration.setName(name);
 				
 				if(this.currentFile != null) {
 					declaration.setFileName(this.currentFile);

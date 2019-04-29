@@ -35,7 +35,7 @@ public class StructITest extends AbstractPluginIT{
         CAstFileDescriptor descriptor = (CAstFileDescriptor) returnedDescriptor;
         TranslationUnitDescriptor translationUnitDescriptor = descriptor.getTranslationUnit();
         List<StructDescriptor> structList = translationUnitDescriptor.getDeclaredStructs();
-        assertEquals(5, structList.size());
+        assertEquals(6, structList.size());
         List<String> structNameList = new ArrayList<>();
         structNameList.add("adresse");
         structNameList.add("adresse1");
@@ -73,9 +73,12 @@ public class StructITest extends AbstractPluginIT{
         		List<String> variableNameList = new ArrayList<>();
         		variableNameList.add("newAddress");
         		variableNameList.add("adresse2");
+        		variableNameList.add("addressbook");
         		assertTrue(variableNameList.contains(variable.getName()));
         		if(variable.getName().equals("newAddress")) {
         			assertEquals("struct adresse", variable.getTypeSpecifiers().getName());
+        		} else if(variable.getName().equals("addressbook")){
+        			assertEquals("struct adresse [20]", variable.getTypeSpecifiers().getName());
         		} else {
         			assertEquals("struct adresse1", variable.getTypeSpecifiers().getName());
         		}

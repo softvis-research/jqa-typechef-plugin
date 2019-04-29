@@ -34,7 +34,7 @@ public class UnionITest extends AbstractPluginIT{
         CAstFileDescriptor descriptor = (CAstFileDescriptor) returnedDescriptor;
         TranslationUnitDescriptor translationUnitDescriptor = descriptor.getTranslationUnit();
         List<UnionDescriptor> unionList = translationUnitDescriptor.getDeclaredUnions();
-        assertEquals(5, unionList.size());
+        assertEquals(6, unionList.size());
         List<String> unionNameList = new ArrayList<>();
         unionNameList.add("test");
         unionNameList.add("test1");
@@ -66,11 +66,14 @@ public class UnionITest extends AbstractPluginIT{
         		List<String> variableNameList = new ArrayList<>();
         		variableNameList.add("test2");
         		variableNameList.add("newTest");
+        		variableNameList.add("severalTests");
         		assertTrue(variableNameList.contains(variable.getName()));
         		assertEquals("unions.c", variable.getFileName());
         		if(variable.getName().equals("test2")) {
         			assertEquals("union test1", variable.getTypeSpecifiers().getName());
-        		} else {
+        		} else if(variable.getName().equals("severalTests")){
+        			assertEquals("union test [20]", variable.getTypeSpecifiers().getName());
+        		} else {	
         			assertEquals("union test", variable.getTypeSpecifiers().getName());
         		}
         	}

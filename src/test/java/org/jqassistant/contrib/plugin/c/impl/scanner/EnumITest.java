@@ -35,7 +35,7 @@ public class EnumITest extends AbstractPluginIT{
         CAstFileDescriptor descriptor = (CAstFileDescriptor) returnedDescriptor;
         TranslationUnitDescriptor translationUnitDescriptor = descriptor.getTranslationUnit();
         List<EnumDescriptor> enumList = translationUnitDescriptor.getDeclaredEnums();
-        assertEquals(6, enumList.size());
+        assertEquals(7, enumList.size());
         List<String> enumNameList = new ArrayList<>();
         enumNameList.add("week_first");
         enumNameList.add("constants");
@@ -77,9 +77,13 @@ public class EnumITest extends AbstractPluginIT{
         		List<String> variableNameList = new ArrayList<>();
         		variableNameList.add("newDay");
         		variableNameList.add("day");
+        		variableNameList.add("days");
         		VariableDescriptor variable = (VariableDescriptor) cDescriptor;
+        		assertTrue(variableNameList.contains(variable.getName()));
         		if(variable.getName().equals("newDay")) {
         			assertEquals("enum week_second", variable.getTypeSpecifiers().getName());
+        		} else if(variable.getName().equals("days")) {
+        			assertEquals("enum week_second [20]", variable.getTypeSpecifiers().getName());
         		} else {
         			assertEquals("enum week_first", variable.getTypeSpecifiers().getName());
         		}
