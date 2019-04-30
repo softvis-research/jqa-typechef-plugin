@@ -16,4 +16,21 @@ public interface StructDescriptor extends CDescriptor, NamedDescriptor, DependsO
 	@Relation("DECLARES")
 	List<VariableDescriptor> getDeclaredVariables();
 	void setDeclaredVariables(List<VariableDescriptor> declaredVariables);
+
+	/**
+	 * Returns the declared structs of the translation unit
+	 * @return the declared structs
+	 */
+	@Relation("DECLARES")
+	List<StructDescriptor> getDeclaredStructs();
+	void setDeclaredStructs(List<StructDescriptor> declaredStructs);
+	
+	/**
+	 * Returns the declared unions of the translation unit
+	 * @return the declared unions
+	 */
+	@Relation("DECLARES")
+	List<UnionDescriptor> getDeclaredUnions();
+	void setDeclaredUnions(List<UnionDescriptor> declaredUnions);
 }
+

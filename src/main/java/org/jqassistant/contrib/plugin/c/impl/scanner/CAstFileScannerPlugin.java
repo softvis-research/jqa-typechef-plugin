@@ -263,6 +263,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				} finally {
 					this.descriptorDeque.pop();
 				} 
+				break;
 			default:
 				break;
 		}
@@ -303,25 +304,11 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				} else if(descriptorDeque.peekFirst() instanceof StructDescriptor) {
 					StructDescriptor struct = (StructDescriptor) DequeUtils.getFirstOfType(StructDescriptor.class, this.descriptorDeque);
 					checkConditionsForElement(StructDescriptor.class);
-					translationUnit.getDeclaredStructs().add(struct);
+					addToSurroundingElement(struct, false);
 				} else if(descriptorDeque.peekFirst() instanceof VariableDescriptor) {
 					VariableDescriptor variable = (VariableDescriptor) DequeUtils.getFirstOfType(VariableDescriptor.class, this.descriptorDeque);
 					checkConditionsForElement(VariableDescriptor.class);
-					StructDescriptor struct = (StructDescriptor) DequeUtils.getFirstOfType(StructDescriptor.class, this.descriptorDeque);
-					UnionDescriptor union = (UnionDescriptor) DequeUtils.getFirstOfType(UnionDescriptor.class, this.descriptorDeque);
-					if(struct != null && union != null) {
-						if(DequeUtils.before(StructDescriptor.class, UnionDescriptor.class, this.descriptorDeque)) {
-							struct.getDeclaredVariables().add(variable);
-						} else {
-							union.getDeclaredVariables().add(variable);
-						}
-					} else if(struct != null) {
-						struct.getDeclaredVariables().add(variable);
-					} else if(union != null) {
-						union.getDeclaredVariables().add(variable);
-					} else {
-						translationUnit.getDeclaredVariables().add(variable);
-					}
+					addToSurroundingElement(variable, false);
 				} else if(descriptorDeque.peekFirst() instanceof Declaration) {
 					Declaration declaration = (Declaration) DequeUtils.getFirstOfType(Declaration.class, this.descriptorDeque);
 					if(declaration.getDeclarationType() == DeclarationType.VARIABLE) {
@@ -333,14 +320,14 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 						type.setName(declaration.getType());
 						variable.setTypeSpecifiers(type);
 						variable.setFileName(declaration.getFileName());
-						translationUnit.getDeclaredVariables().add(variable);
+						addToSurroundingElement(variable, false);
 					} else {
-						throw new Exception("Line 249: Declaration with other type than variable not expected. Please check.");
+						throw new Exception("Line 328: Declaration with other type than variable not expected. Please check.");
 					}
 				} else if(descriptorDeque.peekFirst() instanceof UnionDescriptor) {
 					UnionDescriptor union = (UnionDescriptor) DequeUtils.getFirstOfType(UnionDescriptor.class, this.descriptorDeque);
 					checkConditionsForElement(UnionDescriptor.class);
-					translationUnit.getDeclaredUnions().add(union);
+					addToSurroundingElement(union, false);
 				} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
 					FunctionDescriptor functionDescriptor = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, descriptorDeque);
 					ParameterDescriptor parameter = (ParameterDescriptor) this.descriptorDeque.peekFirst();
@@ -378,6 +365,61 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				break;
 		}
 		this.descriptorDeque.pop();
+	}
+	
+	/**
+	 * Check in which context variable, struct or union has been declared and add it to this surrounding element.
+	 * @param cDescriptor CDescriptor which should be added to its parent element
+	 * @param ignoreFirst if the variable is declared in the context of a struct or a union
+	 * 			declaration, ignore the struct or union and add it to the next surrounding element
+	 */
+	private void addToSurroundingElement(CDescriptor cDescriptor, boolean ignoreFirst) {
+		Object[] descriptorArray = this.descriptorDeque.toArray();
+		int counter = 0;
+		for(int i = 1; i < descriptorArray.length; i++) {
+			if(descriptorArray[i] instanceof StructDescriptor) {
+				counter += 1;
+
+				if(!(counter == 1 && ignoreFirst)) {
+					if(cDescriptor instanceof VariableDescriptor) {
+						((StructDescriptor) descriptorArray[i]).getDeclaredVariables().add((VariableDescriptor) cDescriptor);
+					} else if(cDescriptor instanceof StructDescriptor) {
+						((StructDescriptor) descriptorArray[i]).getDeclaredStructs().add((StructDescriptor) cDescriptor);
+					} else {
+						((StructDescriptor) descriptorArray[i]).getDeclaredUnions().add((UnionDescriptor) cDescriptor);
+					}
+					return;
+				}
+
+			} else if(descriptorArray[i] instanceof UnionDescriptor) {
+				counter += 1;
+
+				if(!(counter == 1 && ignoreFirst)) {
+					if(cDescriptor instanceof VariableDescriptor) {
+						((UnionDescriptor) descriptorArray[i]).getDeclaredVariables().add((VariableDescriptor) cDescriptor);
+					} else if(cDescriptor instanceof StructDescriptor) {
+						((UnionDescriptor) descriptorArray[i]).getDeclaredStructs().add((StructDescriptor) cDescriptor);
+					} else {
+						((UnionDescriptor) descriptorArray[i]).getDeclaredUnions().add((UnionDescriptor) cDescriptor);
+					}
+					return;
+				}
+				
+			} else if(descriptorArray[i] instanceof TranslationUnitDescriptor) {
+				counter += 1;
+				
+				if(!(counter == 1 && ignoreFirst)) {
+					if(cDescriptor instanceof VariableDescriptor) {
+						((TranslationUnitDescriptor) descriptorArray[i]).getDeclaredVariables().add((VariableDescriptor) cDescriptor);
+					} else if(cDescriptor instanceof StructDescriptor) {
+						((TranslationUnitDescriptor) descriptorArray[i]).getDeclaredStructs().add((StructDescriptor) cDescriptor);
+					} else {
+						((TranslationUnitDescriptor) descriptorArray[i]).getDeclaredUnions().add((UnionDescriptor) cDescriptor);
+					}
+					return;
+				}
+			}
+		}
 	}
 
 	/**
@@ -445,8 +487,9 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			descriptorDeque.push(declaration);
 			break;
 		case AttributeValueConstants.STRUCTVARIABLEDECLARATION:
-			VariableDescriptor structVariable = context.getStore().create(VariableDescriptor.class);
-			checkStructOrUnion();
+			Declaration structVariable = new Declaration();
+			structVariable.setDeclarationType(DeclarationType.VARIABLE);
+			checkStructUnionEnum();
 			this.descriptorDeque.pop();
 			this.descriptorDeque.push(structVariable);
 			break;
@@ -455,7 +498,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			break;
 		case AttributeValueConstants.ENUMERATOR:
 			EnumConstantDescriptor enumConstant = context.getStore().create(EnumConstantDescriptor.class);
-			createEnum();
+			checkStructUnionEnum();
 			this.descriptorDeque.pop();
 			this.descriptorDeque.push(enumConstant);
 			break;
@@ -497,19 +540,6 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 		this.currentFile = fileName;
 	}
 
-	private void createEnum() {
-		Declaration variableDeclaration = (Declaration) DequeUtils.getFirstOfType(Declaration.class, this.descriptorDeque);
-		if(variableDeclaration != null) {
-			this.descriptorDeque = DequeUtils.replaceFirstElementOfType(Declaration.class, EnumDescriptor.class, this.descriptorDeque, this.context);
-			EnumDescriptor enumDescriptor = (EnumDescriptor) DequeUtils.getFirstOfType(EnumDescriptor.class, this.descriptorDeque);
-			enumDescriptor.setName(variableDeclaration.getName());
-			if(this.currentFile != null) {
-				enumDescriptor.setFileName(this.currentFile);
-			}
-		}
-		
-	}	
-
 	/**
 	 * Returns FunctionDescriptor of the called function if it exists by searching for the
 	 * fully qualified name
@@ -549,27 +579,56 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 	}
 	
 	/**
-	 * If a struct or union variable showed up, check if the current declaration is still stored as a variable declaration
-	 * and convert it to a struct or union declaration if necessary.
+	 * Check if the current declaration is still stored as a variable declaration
+	 * and convert it to a struct, union or enum declaration if necessary.
 	 * @return void
 	 */
-	private void checkStructOrUnion() {
+	private void checkStructUnionEnum() {
 		Declaration variableDeclaration = (Declaration) DequeUtils.getFirstOfType(Declaration.class, this.descriptorDeque);
 		if(variableDeclaration != null) {
 			String type = variableDeclaration.getType();
-			if(type.equals("struct")) {
-				this.descriptorDeque = DequeUtils.replaceFirstElementOfType(Declaration.class, StructDescriptor.class, this.descriptorDeque, this.context);
-				StructDescriptor struct = (StructDescriptor) DequeUtils.getFirstOfType(StructDescriptor.class, this.descriptorDeque);
-				struct.setName(variableDeclaration.getName());
-				if(variableDeclaration.getFileName() != null) {
-					struct.setFileName(variableDeclaration.getFileName());
-				}
-			} else {
-				this.descriptorDeque = DequeUtils.replaceFirstElementOfType(Declaration.class, UnionDescriptor.class, this.descriptorDeque, this.context);
-				UnionDescriptor union = (UnionDescriptor) DequeUtils.getFirstOfType(UnionDescriptor.class, this.descriptorDeque);
-				union.setName(variableDeclaration.getName());
-				if(variableDeclaration.getFileName() != null) {
-					union.setFileName(variableDeclaration.getFileName());
+			//if struct or union is anonymous, check the type here
+			if(type == null && this.currentlyStoredType != null) {
+				type = this.currentlyStoredType.getName();
+				this.currentlyStoredType = null;
+			}
+			if(type != null) {
+				if(type.equals("struct")) {
+					this.descriptorDeque = DequeUtils.replaceFirstElementOfType(Declaration.class, StructDescriptor.class, this.descriptorDeque, this.context);
+					StructDescriptor struct = (StructDescriptor) DequeUtils.getFirstOfType(StructDescriptor.class, this.descriptorDeque);
+					
+					if(variableDeclaration.getName() != null) {
+						struct.setName(variableDeclaration.getName());
+					}
+					if(variableDeclaration.getFileName() != null) {
+						struct.setFileName(variableDeclaration.getFileName());
+					} else if(this.currentFile != null) {
+						struct.setFileName(this.currentFile);
+					}
+				} else if(type.equals("union")){
+					this.descriptorDeque = DequeUtils.replaceFirstElementOfType(Declaration.class, UnionDescriptor.class, this.descriptorDeque, this.context);
+					UnionDescriptor union = (UnionDescriptor) DequeUtils.getFirstOfType(UnionDescriptor.class, this.descriptorDeque);
+	
+					if(variableDeclaration.getName() != null) {
+						union.setName(variableDeclaration.getName());
+					}
+					if(variableDeclaration.getFileName() != null) {
+						union.setFileName(variableDeclaration.getFileName());
+					} else if(this.currentFile != null) {
+						union.setFileName(this.currentFile);
+					}
+				} else if(type.equals("enum")){
+					this.descriptorDeque = DequeUtils.replaceFirstElementOfType(Declaration.class, EnumDescriptor.class, this.descriptorDeque, this.context);
+					EnumDescriptor enumDescriptor = (EnumDescriptor) DequeUtils.getFirstOfType(EnumDescriptor.class, this.descriptorDeque);
+					
+					if(variableDeclaration.getName() != null) {
+						enumDescriptor.setName(variableDeclaration.getName());
+					}
+					if(variableDeclaration.getFileName() != null) {
+						enumDescriptor.setFileName(variableDeclaration.getFileName());
+					} else if(this.currentFile != null) {
+						enumDescriptor.setFileName(this.currentFile);
+					}
 				}
 			}
 		}
@@ -727,39 +786,49 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				VariableDescriptor variable = context.getStore().create(VariableDescriptor.class);
 				variable.setName(name);
 				TypeDescriptor type = context.getStore().create(TypeDescriptor.class);
-				type.setName("struct " + structDescriptor.getName());
+				String typeString = "struct";
+				if(structDescriptor.getName() != null) {
+					typeString = typeString + " " + structDescriptor.getName();
+				}
+				type.setName(typeString);
+
 				variable.setTypeSpecifiers(type);
 				if(this.currentFile != null) {
 					variable.setFileName(this.currentFile);
 				}
-				TranslationUnitDescriptor translationUnit = (TranslationUnitDescriptor) DequeUtils.getFirstOfType(TranslationUnitDescriptor.class, this.descriptorDeque);
-				translationUnit.getDeclaredVariables().add(variable);
+				addToSurroundingElement(variable, true);
 				break;
 			} else if(currentObject instanceof UnionDescriptor) {
 				UnionDescriptor union = (UnionDescriptor) currentObject;
 				VariableDescriptor variable = context.getStore().create(VariableDescriptor.class);
 				variable.setName(name);
 				TypeDescriptor type = context.getStore().create(TypeDescriptor.class);
-				type.setName("union " + union.getName());
+				String typeString = "union";
+				if(union.getName() != null) {
+					typeString = typeString + " " + union.getName();
+				}
+				type.setName(typeString);
 				variable.setTypeSpecifiers(type);
 				if(this.currentFile != null) {
 					variable.setFileName(this.currentFile);
 				}
-				TranslationUnitDescriptor translationUnit = (TranslationUnitDescriptor) DequeUtils.getFirstOfType(TranslationUnitDescriptor.class, this.descriptorDeque);
-				translationUnit.getDeclaredVariables().add(variable);
+				addToSurroundingElement(variable, true);
 				break;
 			} else if(currentObject instanceof EnumDescriptor) {
 				EnumDescriptor enumDescriptor = (EnumDescriptor) currentObject;
 				VariableDescriptor variable = context.getStore().create(VariableDescriptor.class);
 				variable.setName(name);
 				TypeDescriptor type = context.getStore().create(TypeDescriptor.class);
-				type.setName("enum " + enumDescriptor.getName());
+				String typeString = "enum";
+				if(enumDescriptor.getName() != null) {
+					typeString = typeString + " " + enumDescriptor.getName();
+				}
+				type.setName(typeString);
 				variable.setTypeSpecifiers(type);
 				if(this.currentFile != null) {
 					variable.setFileName(this.currentFile);
 				}
-				TranslationUnitDescriptor translationUnit = (TranslationUnitDescriptor) DequeUtils.getFirstOfType(TranslationUnitDescriptor.class, this.descriptorDeque);
-				translationUnit.getDeclaredVariables().add(variable);
+				addToSurroundingElement(variable, false);
 				break;
 			}
 		}

@@ -10,9 +10,11 @@ import java.util.List;
 
 import org.jqassistant.contrib.plugin.c.api.model.CAstFileDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.CDescriptor;
+import org.jqassistant.contrib.plugin.c.api.model.FunctionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.SingleConditionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.StructDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.TranslationUnitDescriptor;
+import org.jqassistant.contrib.plugin.c.api.model.UnionDescriptor;
 import org.jqassistant.contrib.plugin.c.api.model.VariableDescriptor;
 import org.junit.Test;
 
@@ -130,6 +132,75 @@ public class StructITest extends AbstractPluginIT{
         		}
         		assertNotNull(struct.getCondition());
         		assertEquals("FLAG", ((SingleConditionDescriptor) struct.getCondition()).getMacroName());
+        	}
+        }
+        
+        store.commitTransaction();
+	}
+
+	@Test
+	public void testNestedStruct() throws Exception {
+		store.beginTransaction();
+        
+        File testFile = new File(getClassesDirectory(StructITest.class), "/struct_union_nested.ast");
+        Scanner scanner = getScanner();
+        CAstFileDescriptor fileDescriptor = store.create(CAstFileDescriptor.class);
+        Descriptor returnedDescriptor = scanner.scan(testFile, fileDescriptor, testFile.getAbsolutePath(), DefaultScope.NONE);
+
+        CAstFileDescriptor descriptor = (CAstFileDescriptor) returnedDescriptor;
+        TranslationUnitDescriptor translationUnitDescriptor = descriptor.getTranslationUnit();
+        List<StructDescriptor> structList = translationUnitDescriptor.getDeclaredStructs();
+        assertEquals(3, structList.size());
+        
+        for(CDescriptor cDescriptor : structList) {
+        	if(cDescriptor instanceof StructDescriptor) {
+        		StructDescriptor struct = (StructDescriptor) cDescriptor;
+        		assertEquals("struct_union_nested.c", struct.getFileName());
+        		assertEquals(1, struct.getDeclaredUnions().size());
+        		for(UnionDescriptor union : struct.getDeclaredUnions()) {
+            		assertEquals("struct_union_nested.c", union.getFileName());
+        			List<VariableDescriptor> unionContentList = union.getDeclaredVariables();
+        			assertEquals(8, unionContentList.size());
+        			for(CDescriptor unionContentDescriptor : unionContentList) {
+        				if(unionContentDescriptor instanceof StructDescriptor) {
+        					StructDescriptor structInUnion = (StructDescriptor) unionContentDescriptor;
+        	        		assertEquals("struct_union_nested.c", structInUnion.getFileName());
+        					assertEquals(4, structInUnion.getDeclaredVariables().size());
+        					assertEquals(null, structInUnion.getName());
+        					for(VariableDescriptor structVariable : structInUnion.getDeclaredVariables()){
+        		        		assertEquals("struct_union_nested.c", structVariable.getFileName());
+        						switch (structVariable.getName()) {
+								case "name":
+									assertEquals("char [20]", structVariable.getTypeSpecifiers().getName());
+									break;
+								case "power":
+									assertEquals("int", structVariable.getTypeSpecifiers().getName());
+									break;
+								case "leben":
+									assertEquals("unsigned char", structVariable.getTypeSpecifiers().getName());
+									break;
+								case "geschwindigkeit":
+									assertEquals("unsigned int", structVariable.getTypeSpecifiers().getName());
+									break;
+								default:
+									throw new Exception("line 183: case not possible:" + structVariable.getName());
+								}
+        					}
+        				} else if(unionContentDescriptor instanceof VariableDescriptor) {
+        					VariableDescriptor unionContentVariable = (VariableDescriptor) unionContentDescriptor;
+        					assertTrue(unionContentVariable.getName().startsWith("fighter"));
+        					assertTrue(unionContentVariable.getTypeSpecifiers().getName().equals("struct"));
+        	        		assertEquals("struct_union_nested.c", unionContentVariable.getFileName());
+        				}
+        			}
+        			
+        		}
+        	} else if(cDescriptor instanceof VariableDescriptor) {
+        		VariableDescriptor variable = (VariableDescriptor) cDescriptor;
+        		assertEquals("dat", variable.getName());
+        		assertEquals("struct gegner", variable.getTypeSpecifiers().getName());
+        	} else if(cDescriptor instanceof FunctionDescriptor) {
+        		assertEquals("main", ((FunctionDescriptor) cDescriptor).getName());
         	}
         }
         
