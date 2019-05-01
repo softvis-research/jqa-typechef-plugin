@@ -2,12 +2,13 @@ package org.jqassistant.contrib.plugin.c.api.model;
 
 import java.util.List;
 
+import com.buschmais.jqassistant.core.store.api.model.FullQualifiedNameDescriptor;
 import com.buschmais.jqassistant.plugin.common.api.model.NamedDescriptor;
 import com.buschmais.xo.neo4j.api.annotation.Label;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
 
-@Label("Union")
-public interface UnionDescriptor extends CDescriptor, NamedDescriptor, DependsOnDescriptor, SourceFileDescriptor{
+@Label(value = "Union", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
+public interface UnionDescriptor extends CDescriptor, NamedDescriptor, DependsOnDescriptor, SourceFileDescriptor, FullQualifiedNameDescriptor{
 
 	/**
 	 * Returns the declared variables of this union
