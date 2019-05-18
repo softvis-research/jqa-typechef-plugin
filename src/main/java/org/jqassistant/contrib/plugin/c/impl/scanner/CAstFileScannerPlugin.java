@@ -142,27 +142,29 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				break;
 			case TagNameConstants.NAME:
 				try {
-					if(this.descriptorDeque.contains("id") || this.descriptorDeque.contains(AttributeValueConstants.TYPEDEFTYPESPECIFIER) 
-							&& DequeUtils.getElementAt(1, this.descriptorDeque).equals("name")) {
-						getElementTextCalled = true;
-						handleNameElement(streamReader.getElementText());
-					} else if(this.descriptorDeque.contains(TagNameConstants.P)) {
-						getElementTextCalled = true;
-						this.functionName = streamReader.getElementText();
-					} else if(this.descriptorDeque.contains("AssignmentExpression")) {
-						getElementTextCalled = true;
-						handleAssignment(streamReader.getElementText());
+					if(streamReader.getAttributeCount() == 0) {
+						if(this.descriptorDeque.contains("id") || this.descriptorDeque.contains(AttributeValueConstants.TYPEDEFTYPESPECIFIER) 
+								&& DequeUtils.getElementAt(1, this.descriptorDeque).equals("name")) {
+							getElementTextCalled = true;
+							handleNameElement(streamReader.getElementText());
+						} else if(this.descriptorDeque.contains(TagNameConstants.P)) {
+							getElementTextCalled = true;
+							this.functionName = streamReader.getElementText();
+						} else if(this.descriptorDeque.contains("AssignmentExpression")) {
+							getElementTextCalled = true;
+							handleAssignment(streamReader.getElementText());
+						}
+						//if it has been successfully called, pop the element because
+						//the end tag is skipped
+						if(getElementTextCalled) {
+							this.descriptorDeque.pop();
+						}
 					}
 				} catch (XMLStreamException e) {
+					//if getElementText has been called on an element with child tags, 
+					//it skips the next tag, so add a dummy element
 					logger.error(e.getMessage());
-				} finally {
-					/*
-					 * getElementText() calls streamReader.next() until an END_ELEMENT event is the current element
-					 * but I call next() as well so I miss the end element of the featureexpression
-					 */
-					if(getElementTextCalled) {
-						this.descriptorDeque.pop();
-					}
+					this.descriptorDeque.push("dummy");
 				}
 				break;
 			case TagNameConstants.VALUE:
@@ -286,126 +288,147 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 	 * @throws Exception 
 	 */
 	private void handleEndElement() throws Exception {
-		switch(this.streamReader.getLocalName()) {
-		//If it is the end of a big element like struct or variable, check conditions for this element and add it to the translation unit.
+		switch (this.streamReader.getLocalName()) {
+		// If it is the end of a big element like struct or variable, check conditions
+		// for this element and add it to the translation unit.
 		case TagNameConstants.ENTRY:
-			TranslationUnitDescriptor translationUnit = (TranslationUnitDescriptor) DequeUtils.getFirstOfType(TranslationUnitDescriptor.class, this.descriptorDeque);
-			if(descriptorDeque.peekFirst() instanceof FunctionDescriptor) {
-				FunctionDescriptor function = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, this.descriptorDeque);
+			TranslationUnitDescriptor translationUnit = (TranslationUnitDescriptor) DequeUtils
+					.getFirstOfType(TranslationUnitDescriptor.class, this.descriptorDeque);
+			if (descriptorDeque.peekFirst() instanceof FunctionDescriptor) {
+				FunctionDescriptor function = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class,
+						this.descriptorDeque);
 				checkConditionsForElement(FunctionDescriptor.class);
-				
-				if(function.getFirstLineNumber() != null && function.getLastLineNumber() != null) {
+
+				if (function.getFirstLineNumber() != null && function.getLastLineNumber() != null) {
 					function.setLineCount(function.getLastLineNumber() - function.getFirstLineNumber() + 1);
 				}
 				boolean sameFunction = false;
-				
-				//if function already exists, don't add it to the translation unit}
-				for(CDescriptor cDescriptor : translationUnit.getDeclaredFunctions()) {
-					if(cDescriptor instanceof FunctionDescriptor) {
+
+				// if function already exists, don't add it to the translation unit}
+				for (CDescriptor cDescriptor : translationUnit.getDeclaredFunctions()) {
+					if (cDescriptor instanceof FunctionDescriptor) {
 						FunctionDescriptor declaredFunction = (FunctionDescriptor) cDescriptor;
-						if(declaredFunction.getFullQualifiedName().equals(function.getFullQualifiedName())) {
+						if (declaredFunction.getFullQualifiedName().equals(function.getFullQualifiedName())) {
 							sameFunction = true;
 						}
 					}
 				}
-				if(!sameFunction) {
+				if (!sameFunction) {
 					translationUnit.getDeclaredFunctions().add(function);
 				}
-			} else if(descriptorDeque.peekFirst() instanceof StructDescriptor) {
-				StructDescriptor struct = (StructDescriptor) DequeUtils.getFirstOfType(StructDescriptor.class, this.descriptorDeque);
+			} else if (descriptorDeque.peekFirst() instanceof StructDescriptor) {
+				StructDescriptor struct = (StructDescriptor) DequeUtils.getFirstOfType(StructDescriptor.class,
+						this.descriptorDeque);
 				checkConditionsForElement(StructDescriptor.class);
-				
+
 				boolean sameStruct = false;
-				
-				//if struct already exists, don't add it to the translation unit
-				for(CDescriptor cDescriptor : translationUnit.getDeclaredStructs()) {
-					if(cDescriptor instanceof StructDescriptor) {
-						StructDescriptor declaredStruct = (StructDescriptor) cDescriptor;
-						if(declaredStruct.getFullQualifiedName() != null && struct.getFullQualifiedName() != null) {
-							if(declaredStruct.getFullQualifiedName().equals(struct.getFullQualifiedName())) {
-								sameStruct = true;
+
+				// if struct already exists, don't add it to the translation unit
+				if(struct.getFullQualifiedName() != null) {
+					for (CDescriptor cDescriptor : translationUnit.getDeclaredStructs()) {
+						if (cDescriptor instanceof StructDescriptor) {
+							StructDescriptor declaredStruct = (StructDescriptor) cDescriptor;
+							if (declaredStruct.getFullQualifiedName() != null) {
+								if (declaredStruct.getFullQualifiedName().equals(struct.getFullQualifiedName())) {
+									sameStruct = true;
+								}
 							}
 						}
 					}
 				}
-				if(!sameStruct) {
+				
+				if (!sameStruct) {
 					addToSurroundingElement(struct, false);
 				}
-			} else if(descriptorDeque.peekFirst() instanceof VariableDescriptor) {
-				VariableDescriptor variable = (VariableDescriptor) DequeUtils.getFirstOfType(VariableDescriptor.class, this.descriptorDeque);
+			} else if (descriptorDeque.peekFirst() instanceof VariableDescriptor) {
+				VariableDescriptor variable = (VariableDescriptor) DequeUtils.getFirstOfType(VariableDescriptor.class,
+						this.descriptorDeque);
 				checkConditionsForElement(VariableDescriptor.class);
 				addToSurroundingElement(variable, false);
-			} else if(descriptorDeque.peekFirst() instanceof Declaration) {
-				Declaration declaration = (Declaration) DequeUtils.getFirstOfType(Declaration.class, this.descriptorDeque);
-				if(declaration.getDeclarationType() == DeclarationType.VARIABLE) {
-					if(declaration.getType() != null) {
-						if(declaration.getType().equals("struct") || declaration.getType().equals("enum") || declaration.getType().equals("union")) {
+			} else if (descriptorDeque.peekFirst() instanceof Declaration) {
+				Declaration declaration = (Declaration) DequeUtils.getFirstOfType(Declaration.class,
+						this.descriptorDeque);
+				if (declaration.getDeclarationType() == DeclarationType.VARIABLE) {
+					if (declaration.getType() != null) {
+						if (declaration.getType().equals("struct") || declaration.getType().equals("enum")
+								|| declaration.getType().equals("union")) {
 							checkStructUnionEnum();
 							handleEndElement();
 							return;
 						}
 					}
-					this.descriptorDeque = DequeUtils.replaceFirstElementOfType(Declaration.class, VariableDescriptor.class, this.descriptorDeque, this.context);
-					VariableDescriptor variable = (VariableDescriptor) DequeUtils.getFirstOfType(VariableDescriptor.class, this.descriptorDeque);
+					this.descriptorDeque = DequeUtils.replaceFirstElementOfType(Declaration.class,
+							VariableDescriptor.class, this.descriptorDeque, this.context);
+					VariableDescriptor variable = (VariableDescriptor) DequeUtils
+							.getFirstOfType(VariableDescriptor.class, this.descriptorDeque);
 					checkConditionsForElement(VariableDescriptor.class);
-					
+
 					variable.setName(declaration.getName());
 					TypeDescriptor type = context.getStore().create(TypeDescriptor.class);
 					type.setName(declaration.getType());
 					variable.setTypeSpecifiers(type);
 					variable.setFileName(declaration.getFileName());
 					addToSurroundingElement(variable, false);
-				} else if(declaration.getDeclarationType() == DeclarationType.TYPEDEF){
-					//ignore typedefs
+				} else if (declaration.getDeclarationType() == DeclarationType.TYPEDEF) {
+					// ignore typedefs
 				} else {
-					throw new Exception("Line 328: Declaration with other type than variable not expected. Please check.");
+					throw new Exception(
+							"Line 328: Declaration with other type than variable not expected. Please check.");
 				}
-			} else if(descriptorDeque.peekFirst() instanceof UnionDescriptor) {
-				UnionDescriptor union = (UnionDescriptor) DequeUtils.getFirstOfType(UnionDescriptor.class, this.descriptorDeque);
+			} else if (descriptorDeque.peekFirst() instanceof UnionDescriptor) {
+				UnionDescriptor union = (UnionDescriptor) DequeUtils.getFirstOfType(UnionDescriptor.class,
+						this.descriptorDeque);
 				checkConditionsForElement(UnionDescriptor.class);
-				
+
 				boolean sameUnion = false;
-				
-				//if union already exists, don't add it to the translation unit
-				for(CDescriptor cDescriptor : translationUnit.getDeclaredUnions()) {
-					if(cDescriptor instanceof UnionDescriptor) {
-						UnionDescriptor declaredUnion = (UnionDescriptor) cDescriptor;
-						if(declaredUnion.getFullQualifiedName().equals(union.getFullQualifiedName())) {
-							sameUnion = true;
+
+				// if union already exists, don't add it to the translation unit
+				if(union.getFullQualifiedName() != null) {
+					for (CDescriptor cDescriptor : translationUnit.getDeclaredUnions()) {
+						if (cDescriptor instanceof UnionDescriptor) {
+							UnionDescriptor declaredUnion = (UnionDescriptor) cDescriptor;
+							if (declaredUnion.getFullQualifiedName() != null && declaredUnion.getFullQualifiedName().equals(union.getFullQualifiedName())) {
+								sameUnion = true;
+							}
 						}
 					}
 				}
-				if(!sameUnion) {
+				
+				if (!sameUnion) {
 					addToSurroundingElement(union, false);
 				}
-			} else if(descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
-				FunctionDescriptor functionDescriptor = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, descriptorDeque);
+			} else if (descriptorDeque.peekFirst() instanceof ParameterDescriptor) {
+				FunctionDescriptor functionDescriptor = (FunctionDescriptor) DequeUtils
+						.getFirstOfType(FunctionDescriptor.class, descriptorDeque);
 				ParameterDescriptor parameter = (ParameterDescriptor) this.descriptorDeque.peekFirst();
-				
-				//if function has already been declared, parameter already exists
-				if(!functionDescriptor.getParameters().contains(parameter)) {
+
+				// if function has already been declared, parameter already exists
+				if (!functionDescriptor.getParameters().contains(parameter)) {
 					int index = functionDescriptor.getParameters().size();
 					parameter.setIndex(index);
 					functionDescriptor.getParameters().add(parameter);
 				}
-			} else if(descriptorDeque.peekFirst() instanceof EnumConstantDescriptor) {
-				EnumDescriptor enumDescriptor = (EnumDescriptor) DequeUtils.getFirstOfType(EnumDescriptor.class, this.descriptorDeque);
+			} else if (descriptorDeque.peekFirst() instanceof EnumConstantDescriptor) {
+				EnumDescriptor enumDescriptor = (EnumDescriptor) DequeUtils.getFirstOfType(EnumDescriptor.class,
+						this.descriptorDeque);
 				checkConditionsForElement(EnumConstantDescriptor.class);
-				if(enumDescriptor != null) {
+				if (enumDescriptor != null) {
 					enumDescriptor.getDeclaredConstants().add((EnumConstantDescriptor) descriptorDeque.peekFirst());
 				}
-			} else if(descriptorDeque.peekFirst() instanceof EnumDescriptor) {
+			} else if (descriptorDeque.peekFirst() instanceof EnumDescriptor) {
 				EnumDescriptor enumDescriptor = (EnumDescriptor) descriptorDeque.peekFirst();
 				checkConditionsForElement(EnumDescriptor.class);
 				translationUnit.getDeclaredEnums().add(enumDescriptor);
 			}
 			break;
 		case TagNameConstants.S:
-			if(descriptorDeque.peekFirst() instanceof FunctionCall) {
-				FunctionDescriptor functionDescriptor = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, this.descriptorDeque);
-				if(functionDescriptor != null) {
-					FunctionDescriptor resolvedFunction = resolveFunctionCall((FunctionCall) this.descriptorDeque.peekFirst());
-					if(resolvedFunction != null) {
+			if (descriptorDeque.peekFirst() instanceof FunctionCall) {
+				FunctionDescriptor functionDescriptor = (FunctionDescriptor) DequeUtils
+						.getFirstOfType(FunctionDescriptor.class, this.descriptorDeque);
+				if (functionDescriptor != null) {
+					FunctionDescriptor resolvedFunction = resolveFunctionCall(
+							(FunctionCall) this.descriptorDeque.peekFirst());
+					if (resolvedFunction != null) {
 						functionDescriptor.getInvokedFunctions().add(resolvedFunction);
 					}
 				}
@@ -413,8 +436,8 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 			break;
 		default:
 			break;
-	}
-	this.descriptorDeque.pop();
+		}
+		this.descriptorDeque.pop();
 	}
 	
 	/**
@@ -627,9 +650,9 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 	 * and set the currently stored type to null
 	 * @return TypeDescriptor the generated TypeDescriptor
 	 */
-	private TypeDescriptor createTypeDescriptor() {
+	private TypeDescriptor createTypeDescriptor(String type) {
 		TypeDescriptor typeDescriptor = context.getStore().create(TypeDescriptor.class);
-		typeDescriptor.setName(currentlyStoredType.getName());
+		typeDescriptor.setName(type);
 		this.currentlyStoredType = null;
 		
 		return typeDescriptor;
@@ -698,6 +721,10 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 						}
 					}
 					
+					if(type.contains("typedef")) {
+						currentUnion.setTypedef("typedef");
+					}
+					
 					if(variableDeclaration.getFileName() != null) {
 						currentUnion.setFileName(variableDeclaration.getFileName());
 					} else if(this.currentFile != null) {
@@ -724,7 +751,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 	private void handleParameterDeclaration() {
 		FunctionDescriptor currentFunction = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, descriptorDeque);
 		if(this.currentlyStoredType != null && currentFunction != null) {
-			currentFunction.setReturnType(createTypeDescriptor());
+			currentFunction.setReturnType(createTypeDescriptor(this.currentlyStoredType.getName()));
 		} else if(currentFunction == null) {
 			//A function declaration looks like a variable first, so replace it if you find parameters.
 			Declaration variableDeclaration = (Declaration) DequeUtils.getFirstOfType(Declaration.class, this.descriptorDeque);
@@ -735,7 +762,12 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				if(!StringUtils.isEmpty(name)) {
 					function.setName(name);
 				}
-				function.setReturnType(createTypeDescriptor());
+				if(this.currentlyStoredType != null) {
+					function.setReturnType(createTypeDescriptor(this.currentlyStoredType.getName()));
+				} else if(variableDeclaration.getType() != null) {
+					function.setReturnType(createTypeDescriptor(variableDeclaration.getType()));
+				}
+				
 				this.currentlyStoredType = null;
 			}
 		}
@@ -789,7 +821,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				parameterDescriptor.setName(name);
 				
 				if(this.currentlyStoredType != null) {
-					parameterDescriptor.setTypeSpecifiers(createTypeDescriptor());
+					parameterDescriptor.setTypeSpecifiers(createTypeDescriptor(this.currentlyStoredType.getName()));
 				}
 				break;
 			} else if(currentObject instanceof FunctionArgument) {
@@ -805,7 +837,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 					this.descriptorDeque = DequeUtils.replaceCertainElement(function, sameFunction, this.descriptorDeque);
 				} else {
 					if(this.currentlyStoredType != null) {
-						function.setReturnType(createTypeDescriptor());
+						function.setReturnType(createTypeDescriptor(this.currentlyStoredType.getName()));
 					}
 					function.setName(name);
 					function.setFullQualifiedName(fullQualifiedName);
@@ -887,7 +919,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				variableDescriptor.setName(name);
 				
 				if(this.currentlyStoredType != null) {
-					variableDescriptor.setTypeSpecifiers(createTypeDescriptor());
+					variableDescriptor.setTypeSpecifiers(createTypeDescriptor(this.currentlyStoredType.getName()));
 					this.currentlyStoredType = null;
 				}
 				
@@ -905,12 +937,11 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				} else if(structDescriptor.getName() == null || !structDescriptor.getName().equals(name)) {
 					VariableDescriptor variable = context.getStore().create(VariableDescriptor.class);
 					variable.setName(name);
-					TypeDescriptor type = context.getStore().create(TypeDescriptor.class);
 					String typeString = "struct";
 					if(structDescriptor.getName() != null) {
 						typeString = typeString + " " + structDescriptor.getName();
 					}
-					type.setName(typeString);
+					TypeDescriptor type = createTypeDescriptor(typeString);
 
 					variable.setTypeSpecifiers(type);
 					if(this.currentFile != null) {
@@ -922,7 +953,11 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				break;
 			} else if(currentObject instanceof UnionDescriptor) {
 				UnionDescriptor union = (UnionDescriptor) currentObject;
-				if(union.getName() == null || !union.getName().equals(name)) {
+				
+				//name is name of the typedef for this union
+				if(union.getTypedef() != null && union.getTypedef().equals("typedef")) {
+					union.setTypedef(name);
+				} else if(union.getName() == null || !union.getName().equals(name)) {
 					VariableDescriptor variable = context.getStore().create(VariableDescriptor.class);
 					variable.setName(name);
 					TypeDescriptor type = context.getStore().create(TypeDescriptor.class);

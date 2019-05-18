@@ -5,6 +5,7 @@ import java.util.List;
 import com.buschmais.jqassistant.core.store.api.model.FullQualifiedNameDescriptor;
 import com.buschmais.jqassistant.plugin.common.api.model.NamedDescriptor;
 import com.buschmais.xo.neo4j.api.annotation.Label;
+import com.buschmais.xo.neo4j.api.annotation.Property;
 import com.buschmais.xo.neo4j.api.annotation.Relation;
 
 @Label(value = "Union", usingIndexedPropertyOf = FullQualifiedNameDescriptor.class)
@@ -33,4 +34,8 @@ public interface UnionDescriptor extends CDescriptor, NamedDescriptor, DependsOn
 	@Relation("DECLARES")
 	List<UnionDescriptor> getDeclaredUnions();
 	void setDeclaredUnions(List<UnionDescriptor> declaredUnions);
+	
+	@Property("typedef")
+    String getTypedef();
+    void setTypedef(String typedef);
 }
