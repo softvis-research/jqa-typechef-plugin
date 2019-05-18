@@ -31,4 +31,6 @@ public class AttributeValueConstants {
 	public static final String ID = "de.fosd.typechef.parser.c.Id";
 	public static final String RETURNSTATEMENT = "de.fosd.typechef.parser.c.ReturnStatement";
 	public static final String ASSIGNMENTEXPRESSION = "de.fosd.typechef.parser.c.AssignExpr";
+	public static final String TYPEDEFSPECIFIER = "de.fosd.typechef.parser.c.TypedefSpecifier";
+	public static final String TYPEDEFTYPESPECIFIER = "de.fosd.typechef.parser.c.TypeDefTypeSpecifier";
 }

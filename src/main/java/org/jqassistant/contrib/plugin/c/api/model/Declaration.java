@@ -12,7 +12,8 @@ public class Declaration {
 		FUNCTION,
 		STRUCT,
 		UNION,
-		ENUM
+		ENUM,
+		TYPEDEF
 	}
 
 	public String getName() {
