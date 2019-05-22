@@ -10,7 +10,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
-
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -96,21 +95,42 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
         cAstFileDescriptor.setFileName(item.getFile().getName());
         try {
         	streamReader = inputFactory.createXMLStreamReader(source);
-
+			context.getStore().commitTransaction();
+			context.getStore().beginTransaction();
+			int counter = 0;
             while (streamReader.hasNext()) {
             	//System.out.println("line number: " + streamReader.getLocation().getLineNumber());
                 int eventType = streamReader.next();
                 switch (eventType) {
                 	case XMLStreamConstants.START_ELEMENT:
-                		handleStartElement();
+						counter++;
+						try {
+							handleStartElement();
+						} catch (Exception e) {
+							logger.info(e.getMessage());
+						}
                 		break;
                 	case XMLStreamConstants.END_ELEMENT:
-                		handleEndElement();
+						counter++;
+						try {
+							handleEndElement();
+						} catch (Exception e) {
+							logger.info(e.getMessage());
+						}
                 		break;     
                 	default:
                 		break;
                 }
-            }
+				if(counter % 1000 == 0) {
+					try {
+						context.getStore().commitTransaction();
+					} catch (Exception ignored) {
+					}
+					if (!context.getStore().hasActiveTransaction()) {
+						context.getStore().beginTransaction();
+					}
+				}
+			}
         } catch (Exception e){
         	logger.error(e.getMessage() + streamReader.getLocalName());
         }
