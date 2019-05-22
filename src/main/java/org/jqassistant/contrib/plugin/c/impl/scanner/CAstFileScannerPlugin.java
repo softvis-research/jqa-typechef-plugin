@@ -99,7 +99,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 
             while (streamReader.hasNext()) {
             	//System.out.println("line number: " + streamReader.getLocation().getLineNumber());
-                int eventType = streamReader.next();
+            	int eventType = streamReader.next();
                 switch (eventType) {
                 	case XMLStreamConstants.START_ELEMENT:
                 		handleStartElement();
@@ -262,7 +262,7 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				}
 				break;
 			case TagNameConstants.EXPR:
-				if(streamReader.getAttributeValue(0).equals(AttributeValueConstants.ASSIGNMENTEXPRESSION)) {
+				if(streamReader.getAttributeCount() > 0 && streamReader.getAttributeValue(0).equals(AttributeValueConstants.ASSIGNMENTEXPRESSION)) {
 					this.descriptorDeque.pop();
 					this.descriptorDeque.push("AssignmentExpression");
 				}
