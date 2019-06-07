@@ -11,6 +11,7 @@ import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
+import com.buschmais.jqassistant.core.store.api.Store;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -67,13 +68,14 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 	private ArrayDeque<Object> descriptorDeque;
 	private String functionName;
 	private String currentFile;
+
 	
     @Override
     public void initialize() {
         inputFactory = XMLInputFactory.newInstance();
         inputFactory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
         descriptorDeque = new ArrayDeque<>();
-    }
+	}
 
 	@Override
 	public boolean accepts(FileResource item, String path, Scope scope) throws IOException {
@@ -96,24 +98,44 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
         cAstFileDescriptor.setFileName(item.getFile().getName());
         try {
         	streamReader = inputFactory.createXMLStreamReader(source);
+			context.getStore().commitTransaction();
+			context.getStore().beginTransaction();
+			int counter = 0;
 
             while (streamReader.hasNext()) {
-            	//System.out.println("line number: " + streamReader.getLocation().getLineNumber());
-            	int eventType = streamReader.next();
-                switch (eventType) {
-                	case XMLStreamConstants.START_ELEMENT:
-                		handleStartElement();
-                		break;
-                	case XMLStreamConstants.END_ELEMENT:
-                		handleEndElement();
-                		break;     
-                	default:
-                		break;
-                }
-            }
+				counter++;
+				//System.out.println("line number: " + streamReader.getLocation().getLineNumber());
+				int eventType = streamReader.next();
+				switch (eventType) {
+					case XMLStreamConstants.START_ELEMENT:
+						handleStartElement();
+						break;
+					case XMLStreamConstants.END_ELEMENT:
+						handleEndElement();
+						break;
+					default:
+						break;
+				}
+				if (counter % 4 == 0) {
+					try {
+						context.getStore().commitTransaction();
+
+					} catch (Exception e) {
+						logger.info(e.getMessage());
+						logger.info(streamReader.getLocation().getLineNumber() + "");
+						e.printStackTrace();
+					}
+					if (!context.getStore().hasActiveTransaction()) {
+						context.getStore().beginTransaction();
+					}
+				}
+			}
         } catch (Exception e){
         	logger.error(e.getMessage() + streamReader.getLocalName());
-        }
+        	logger.error(streamReader.getLocation().getLineNumber() + "");
+			logger.error(streamReader.getLocation().getColumnNumber() + "");
+			e.printStackTrace();
+		}
 		return cAstFileDescriptor;
 	}
 
@@ -141,30 +163,37 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 				handleEntryElement();
 				break;
 			case TagNameConstants.NAME:
+				//int count = 0;
+				//int maxTries = 20;
+				//boolean success = false;
+				//while(count < maxTries || success) {
 				try {
 					if(streamReader.getAttributeCount() == 0) {
-						if(this.descriptorDeque.contains("id") || this.descriptorDeque.contains(AttributeValueConstants.TYPEDEFTYPESPECIFIER) 
-								&& DequeUtils.getElementAt(1, this.descriptorDeque).equals("name")) {
-							getElementTextCalled = true;
-							handleNameElement(streamReader.getElementText());
-						} else if(this.descriptorDeque.contains(TagNameConstants.P)) {
-							getElementTextCalled = true;
-							this.functionName = streamReader.getElementText();
-						} else if(this.descriptorDeque.contains("AssignmentExpression")) {
-							getElementTextCalled = true;
-							handleAssignment(streamReader.getElementText());
-						}
-						//if it has been successfully called, pop the element because
-						//the end tag is skipped
-						if(getElementTextCalled) {
-							this.descriptorDeque.pop();
-						}
+							if (this.descriptorDeque.contains("id") || this.descriptorDeque.contains(AttributeValueConstants.TYPEDEFTYPESPECIFIER)
+									&& DequeUtils.getElementAt(1, this.descriptorDeque).equals("name")) {
+								getElementTextCalled = true;
+								//streamReader.isCharacters()
+								handleNameElement(streamReader.getElementText());
+							} else if (this.descriptorDeque.contains(TagNameConstants.P)) {
+								getElementTextCalled = true;
+								this.functionName = streamReader.getElementText();
+							} else if (this.descriptorDeque.contains("AssignmentExpression")) {
+								getElementTextCalled = true;
+								handleAssignment(streamReader.getElementText());
+							}
+							//if it has been successfully called, pop the element because
+							//the end tag is skipped
+							if (getElementTextCalled) {
+								this.descriptorDeque.pop();
+							}
 					}
 				} catch (XMLStreamException e) {
 					//if getElementText has been called on an element with child tags, 
 					//it skips the next tag, so add a dummy element
 					logger.error(e.getMessage());
+					logger.error(streamReader.getLocation().getLineNumber() + "");
 					this.descriptorDeque.push("dummy");
+					//break;
 				}
 				break;
 			case TagNameConstants.VALUE:
@@ -749,31 +778,34 @@ public class CAstFileScannerPlugin extends AbstractScannerPlugin<FileResource, C
 	}
 	
 	private void handleParameterDeclaration() {
-		FunctionDescriptor currentFunction = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, descriptorDeque);
-		if(this.currentlyStoredType != null && currentFunction != null) {
-			currentFunction.setReturnType(createTypeDescriptor(this.currentlyStoredType.getName()));
-		} else if(currentFunction == null) {
-			//A function declaration looks like a variable first, so replace it if you find parameters.
-			Declaration variableDeclaration = (Declaration) DequeUtils.getFirstOfType(Declaration.class, this.descriptorDeque);
-			if(variableDeclaration != null) {
-				String name =  variableDeclaration.getName();
-				this.descriptorDeque = DequeUtils.replaceFirstElementOfType(Declaration.class, FunctionDescriptor.class, this.descriptorDeque, this.context);
-				FunctionDescriptor function = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, this.descriptorDeque);
-				if(!StringUtils.isEmpty(name)) {
-					function.setName(name);
+			FunctionDescriptor currentFunction = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, descriptorDeque);
+			if (this.currentlyStoredType != null && currentFunction != null) {
+				currentFunction.setReturnType(createTypeDescriptor(this.currentlyStoredType.getName()));
+			} else if (currentFunction == null) {
+				//A function declaration looks like a variable first, so replace it if you find parameters.
+				Declaration variableDeclaration = (Declaration) DequeUtils.getFirstOfType(Declaration.class, this.descriptorDeque);
+				if (variableDeclaration != null) {
+					String name = variableDeclaration.getName();
+					this.descriptorDeque = DequeUtils.replaceFirstElementOfType(Declaration.class, FunctionDescriptor.class, this.descriptorDeque, this.context);
+					FunctionDescriptor function = (FunctionDescriptor) DequeUtils.getFirstOfType(FunctionDescriptor.class, this.descriptorDeque);
+					if (!StringUtils.isEmpty(name)) {
+						function.setName(name);
+					}
+					if (this.currentlyStoredType != null) {
+						function.setReturnType(createTypeDescriptor(this.currentlyStoredType.getName()));
+					} else if (variableDeclaration.getType() != null) {
+						function.setReturnType(createTypeDescriptor(variableDeclaration.getType()));
+					}
+
+					this.currentlyStoredType = null;
 				}
-				if(this.currentlyStoredType != null) {
-					function.setReturnType(createTypeDescriptor(this.currentlyStoredType.getName()));
-				} else if(variableDeclaration.getType() != null) {
-					function.setReturnType(createTypeDescriptor(variableDeclaration.getType()));
-				}
-				
-				this.currentlyStoredType = null;
 			}
-		}
-		ParameterDescriptor parameterDescriptor = context.getStore().create(ParameterDescriptor.class);
-		this.descriptorDeque.pop();
-		descriptorDeque.push(parameterDescriptor);
+			Store store = context.getStore();
+			ParameterDescriptor parameterDescriptor = store.create(ParameterDescriptor.class);
+
+			this.descriptorDeque.pop();
+
+			descriptorDeque.push(parameterDescriptor);
 	}
 	
 	/**
